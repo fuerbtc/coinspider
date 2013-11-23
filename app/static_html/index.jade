@@ -1,0 +1,81 @@
+extends templates/html
+
+block env
+  - var title = 'Dashboard'
+  - var icon = 'fa fa-dashboard'
+
+block css
+  link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.css")
+
+block content
+  div.row
+    div.col-lg-12
+      div(class="panel-group",id="exchangerPanel")
+        div(class="panel panel-default")
+          div(class="panel-heading clearfix")
+            div(class="icons")
+              i(class="fa fa-btc")
+            div(class="panel-title") itcoins Exchanger
+            div(class="toolbar")
+              ul.nav
+                li
+                  span.message
+                    Update in 3s...
+                li
+                  a(id="",class="")
+                    i(class="fa fa-refresh")
+                li
+                  a(class="accordion-toggle minimize-box",
+                  data-toggle="collapse",
+                  data-parent="#exchangerPanel",
+                  href="#collapsibleExchanger")
+                    i(class="fa fa-chevron-up")
+          div(id="collapsibleExchanger", class="panel-collapse collapse in")
+            div.panel-body
+              form.form-horizontal
+                div.input-group
+                  span(class="input-group-addon") Selecciona Exchanger
+                  select(multiple="multiple",
+                        size="10",
+                        class="form-control ch-select",
+                        data-placeholder="..."
+                        id="exchangers")
+
+                      option(selected="true",value="abc") Mt.Gox
+                      option(selected="true",value="cde") Bitmap
+                      option(value="fgh") BTC China
+                div.stats
+                  table.table
+                    thead
+                      tr
+                        th #
+                        th Exchanger
+                        th Price
+                    tbody
+                      tr.warning
+                        td 1
+                        td Mt.Gox
+                        td 1200
+                          span.currency $
+                        tr.success
+                          td 1
+                          td Mt.Gox
+                          td 1200
+                            span.currency $
+                        tr
+                          td 1
+                          td Mt.Gox
+                          td 1200
+                            span.currency $
+                        tr.danger
+                          td 1
+                          td Mt.Gox
+                          td 1200
+                            span.currency $
+                        tr.active
+                          td 1
+                          td Mt.Gox
+                          td 1200
+                            span.currency $
+                div.jumbotron
+                  h1 Stats empty
