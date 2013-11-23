@@ -1,0 +1,10 @@
+node_modules
+dist
+.tmp
+.sass-cache
+app/bower_components
+
+# Idea Files
+# Based on http://devnet.jetbrains.com/docs/DOC-1186
+.idea/workspace.xml
+.idea/tasks.xml

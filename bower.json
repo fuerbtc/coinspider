@@ -1,0 +1,17 @@
+{
+  "name": "btc-board",
+  "version": "0.3.0",
+  "dependencies": {
+    "sass-bootstrap": "~3.0.0",
+    "requirejs": "~2.1.8",
+    "requirejs-text": "~2.0.10",
+    "requirejs-i18n": "~2.0.4",
+    "underscore": "~1.5.0",
+    "backbone": "~1.0.0",
+    "modernizr": "~2.6.2",
+    "jquery": "~1.10.2"
+  },
+  "devDependencies": {}
+}
+
+

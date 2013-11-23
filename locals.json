@@ -1,0 +1,28 @@
+{
+  "api" : {
+    "cdn" : {
+      "jquery" : "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ,
+      "backbone" : "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js" ,
+      "underscore" : "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js",
+      "text" : "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.js",
+      "requirejs" : "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js" ,
+      "i18n" : "//cdnjs.cloudflare.com/ajax/libs/require-i18n/2.0.4/i18n.js",
+      "modernizr" : "//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js",
+      "fontAwesome" : "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.min.css"
+    },
+    "local" : {
+      "jquery" : "/scripts/vendor/jquery-1.10.2.min.js" ,
+      "backbone" : "/scripts/vendor/backbone-1.0.0.min.js",
+      "requirejs" : "/scripts/vendor/require-2.1.8.min.js" ,
+      "underscore" : "/scripts/vendor/underscore-1.5.2.min.js",
+      "text" : "scripts/vendor/require-text-2.0.10.min.js",
+      "i18n" : "scripts/vendor/require-i18n-2.0.4.min.js",
+      "modernizr" : "scripts/vendor/modernizr-2.6.2.min.js"
+    }
+  },
+
+  "app" : {
+     "author" : "Philippe Mindugui",
+     "description" : "BitCoin Watcher"
+  }
+}
