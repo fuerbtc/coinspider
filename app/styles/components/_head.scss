@@ -1,0 +1,23 @@
+/* Header Section */
+.top {
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+
+  .main-bar {
+    padding: 10px;
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+      color: #bababa;
+      @media (min-width: $screen-tablet) {
+        margin-top: 5px;
+      }
+
+      span {
+        margin-left: 0.3em;
+      }
+    }
+  }
+}
+/** END header.head bar */
