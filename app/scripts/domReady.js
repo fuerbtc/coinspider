@@ -14,14 +14,6 @@ define(['jquery','chosen','bootstrap'], function($){
                     }
                 });
             });
-
-
-            /*-- Chosen --*/
-            $(".ch-select").chosen();
-            $(".ch-select-deselect").chosen({
-                allow_single_deselect: true
-            });
-            /*-- End Chose --*/
         });
 
     }

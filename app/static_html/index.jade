@@ -33,17 +33,7 @@ block content
           div(id="collapsibleExchanger", class="panel-collapse collapse in")
             div.panel-body
               form.form-horizontal
-                div.input-group
-                  span(class="input-group-addon") Selecciona Exchanger
-                  select(multiple="multiple",
-                        size="10",
-                        class="form-control ch-select",
-                        data-placeholder="..."
-                        id="exchangers")
-
-                      option(selected="true",value="abc") Mt.Gox
-                      option(selected="true",value="cde") Bitmap
-                      option(value="fgh") BTC China
+                div(class="input-group",id="exchangers-box")
                 div.stats
                   table.table
                     thead

@@ -24,9 +24,10 @@ require.config({
         underscore: ['//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min','vendor/underscore-1.5.2.min'],
         chosen: ['//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min', 'vendor/jquery-chosen-1.0.min'],
         bootstrap : ['//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min', 'vendor/bootstrap-3.0.2.min'],
-        crossdomain : ['vendor/jquery-xdomainajax-0.11']
+        localStorage : ['//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min','vendor/backbone.localStorage-1.1.7.min'],
+        crossdomain : 'vendor/jquery-xdomainajax-0.11',
         //'requirejs-i18n': '../bower_components/requirejs-i18n/i18n',
-        //'requirejs-text': '../bower_components/requirejs-text/text',
+        'text': ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min']
         //requirejs: '../bower_components/requirejs/require',
     },
     shim: {

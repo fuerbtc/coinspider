@@ -1,18 +1,27 @@
 define([
     'jquery',
     'underscore',
-    'backbone'
-], function($, _, Backbone){
+    'backbone',
+    'vm',
+    'views/select'
+], function($, _, Backbone,Vm,selectView){
 
     var AppView = Backbone.View.extends({
+        el : $('exchangersPanel'),
 
-        //Comenzar leyendo lo que es un model,view, collection y un router.
-        //en http://backbonetutorials.com/
+        initialize: function(){
+
+        },
+
+        render : function() {
+            var me = this;
+            var selectView = Vm.create(me,'SelectView',selectView);
+        }
+
 
 
          //Ver la parte donde se invoca a otros cachos de views. A partir de linea 22
         //https://github.com/thomasdavis/backboneboilerplate/blob/gh-pages/js/views/app.js
-
 
         //Concepto para actualizar la view
         //http://stackoverflow.com/questions/8731915/binding-render-callback-in-backbone-js
