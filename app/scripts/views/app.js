@@ -4,18 +4,22 @@ define([
     'backbone',
     'vm',
     'views/select'
-], function($, _, Backbone,Vm,selectView){
+], function($, _, Backbone,Vm,SelectView){
 
-    var AppView = Backbone.View.extends({
-        el : $('exchangersPanel'),
+    var AppView = Backbone.View.extend({
+        el : $('#exchangersPanel'),
 
         initialize: function(){
+            if (this.options.tickers === undefined){
+                debug.debug("Lanzar excepcion!!!");
+            }
 
         },
 
         render : function() {
             var me = this;
-            var selectView = Vm.create(me,'SelectView',selectView);
+            var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
+            selectView.render();
         }
 
 
@@ -47,8 +51,7 @@ define([
         //Si pillas una idea de actualizacion dinamica
         //http://jsfiddle.net/CoryDanielson/phw4t/6/
 
-
-
     });
 
+    return AppView;
 });

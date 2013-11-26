@@ -1,11 +1,9 @@
-<script type="text/template">
   <span class="input-group-addon">Selecciona Exchanger</span>
   <select id="exchangers" multiple="multiple" size="10" class="form-control ch-select" data-placeholder="...">
     <% _.each(tickers,function(ticker) { %>
-    <option value="<%= ticker.get('symbol') %>"><%= ticker.get('name') %></option>
+    <option value="<%= ticker.symbol %>"><%= ticker.name %></option>
     <% }); %>
   </select>
-</script>
 
 
 

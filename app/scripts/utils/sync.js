@@ -111,7 +111,7 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
         },
 
         getTickers : function() {
-            return Tickers;
+            return tickers;
         },
 
         getProvider : function(symbol){
@@ -152,7 +152,7 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
                 );
 
                 debug.debug("Updating ticker " + provider.name);
-                tickers.set(ticker);
+                tickers.add(ticker);
             }
         },
 
@@ -162,7 +162,7 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
         loadTickers : function(){
             for (var key in providers){
                 if (providers.hasOwnProperty(key)){
-                    this.loadTicker(key);
+                    this.loadTicker(providers[key]);
                 }
             }
         }

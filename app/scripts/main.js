@@ -53,16 +53,22 @@ require(['jquery',
     'domReady',
     'views/app',
     'router',
-    'vm'],
-    function ($,dom,AppView,Router,Vm) {
+    'vm',
+    'utils/sync'],
+    function ($,dom,AppView,Router,Vm,Sync) {
         'use strict';
         debug.debug('Running BitcoinWatch');
 
         debug.debug('Loading DOM features');
         dom.ready($);
 
+        debug.debug('Loading Information about providers');
+        Sync.init();
+        var tickerList = Sync.getTickers();
+
         debug.debug('Loading Backbone Engine');
-        var appView = Vm.create({}, 'AppView', AppView);
+
+        var appView = Vm.create({}, 'AppView', AppView, {tickers: tickerList});
         appView.render();
         Router.initialize({appView: appView});  // The router now has a copy of all main appview
 });

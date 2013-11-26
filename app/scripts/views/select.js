@@ -1,15 +1,22 @@
-define(['jquery','backbone','underscore','text!templates/select.html'],function($,Backbone,_,selectTemplate){
+define([
+    'jquery',
+    'backbone',
+    'underscore',
+    'text!templates/select.html'
+],function($,Backbone,_,selectTemplate){
 
     var select = Backbone.View.extend({
-        el: $('#exchangers-box'),
+        //el: $('#exchangers-box'),
+        el: '#exchangers-box',
         template : _.template(selectTemplate),
 
         initialize: function() {
-            this.listenTo(this.collection,'reset',this.render)
-            this.collection.fetch();
+            this.listenTo(this.collection,'reset',this.render);
+            debug.debug("Initialized SelectView");
         },
+
         render: function() {
-            this.el.html(this.template({ tickers: this.collection }));
+            this.$el.html(this.template({ tickers: this.collection.toJSON() }));
 
             //Una vez renderizado, invoco al Plugin Jquery Chosen
             /*-- Chosen --*/
