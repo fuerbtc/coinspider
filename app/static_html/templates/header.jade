@@ -1,0 +1,27 @@
+// header
+nav(class="navbar navbar-inverse navbar-static-top")
+  // Brand and toggle get grouped for better mobile display
+  header.navbar-header
+    button(type="button", class="navbar-toggle", data-toggle="collapse", data-target=".navbar-ex1-collapse")
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    a(href="index.html", class="navbar-brand")
+      img(src="/images/logo.png", alt="Bitcoins")
+
+  // Menu
+  div(class="menu collapse navbar-collapse navbar-ex1-collapse")
+    // .nav
+    ul(class="nav navbar-nav")
+      li(class="item #{ title.lastIndexOf('Dashboard') != -1 ? 'active' : '' }")
+        a(href="index.html")
+          i(class="fa fa-dashboard")
+          span Dashboard
+      li(class="item #{ title.lastIndexOf('Acerca de') != -1 ? 'active' : '' }")
+        a(href="about.html")
+          i(class="fa fa-cogs")
+          span Acerca de
+    // end .nav
+  //End Menu
+// end header

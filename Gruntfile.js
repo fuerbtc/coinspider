@@ -43,7 +43,7 @@ module.exports = function (grunt) {
             },
             //Transform Jade Templates into Html
             jade: {
-                files: ['<%= yeoman.app %>/static_html/*.jade'],
+                files: ['<%= yeoman.app %>/static_html/**/*.jade'],
                 tasks: ['jade']
             }
         },
