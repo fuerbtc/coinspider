@@ -61,4 +61,30 @@
     height: auto;
   }
 
+  .stats {
+
+    font-size: 1.5em;
+
+    tr:hover {
+      background-color: whitesmoke;
+      cursor: pointer;
+    }
+
+    td {
+      .up {
+        color: #468847;
+        font-weight: bold;
+      }
+
+      .down {
+        color: #b94a48;
+        font-weight: bold;
+      }
+
+      .diff {
+        margin-left: 5px;
+        font-size: 0.8em;
+      }
+    }
+  }
 }
