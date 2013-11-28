@@ -3,23 +3,27 @@ define([
     'underscore',
     'backbone',
     'vm',
-    'views/select'
-], function($, _, Backbone,Vm,SelectView){
+    'utils/environment',
+    'views/select',
+    'views/tableStats'
+], function($, _, Backbone,Vm, Environment,SelectView,TableStatsView){
 
     var AppView = Backbone.View.extend({
         el : $('#exchangersPanel'),
 
         initialize: function(){
             if (this.options.tickers === undefined){
-                debug.debug("Lanzar excepcion!!!");
+                throw new Error("No providers found");
             }
-
         },
 
         render : function() {
             var me = this;
             var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
             selectView.render();
+
+            var tableStats =  Vm.create(me,'TableStatsView',TableStatsView,{collection: this.options.tickers});
+            tableStats.render();
         }
 
 

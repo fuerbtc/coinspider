@@ -1,7 +1,17 @@
 /**
  * Synchronization Process with Providers
  */
-define(['jquery','backbone','models/ticker','collections/tickers','utils/providers','crossdomain'],function($,Backbone,TickerClass,TickersClass, providers){
+define([
+    'jquery',
+    'backbone',
+    'underscore',
+    'events',
+    'utils/environment',
+    'models/ticker',
+    'collections/tickers',
+    'utils/providers',
+    'crossdomain'
+],function($,Backbone,_,Events,Environment,TickerClass,TickersClass, providers){
 
     var tickers = new TickersClass();
 
@@ -13,6 +23,10 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
             this.register();
 
             debug.debug("Loading Tickers ...");
+
+            //Obtengo los tickers guardados en el localStorage
+            tickers.fetch();
+
             //Inicializo todos los providers en la Collecion
             this.loadTickers();
 
@@ -64,6 +78,22 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
                 var adapterData = currentProvider.adapter(data);
 
                 this.save(currentProvider,adapterData);
+            });
+
+            Events.on('coinspider-add-ticker',function(id){
+                debug.debug("Updated model "+ id);
+                tickers.get(id).save({status : Environment.TICKER_ENABLED });
+
+            });
+
+            Events.on('coinspider-remove-ticker',function(id){
+                debug.debug("Updated model "+ id);
+                tickers.get(id).save({status : Environment.TICKER_DISABLED });
+            });
+
+            tickers.on('change:status',function(model, options){
+               //this is collection
+               debug.debug("ok !! se invoca !!! aaaa");
             });
         },
 
@@ -117,7 +147,7 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
         getProvider : function(symbol){
             var currentProvider = {};
             if (providers[provider] === undefined) {
-                throw new ReferenceError('Provider ' + symbol + ' is not defined');
+                throw new ReferenceError('Ticker ' + symbol + ' is not defined');
             }else {
                 currentProvider = providers[provider];
             }
@@ -130,29 +160,27 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
          * @param provider
          */
         loadTicker : function(provider){
-
             if (provider.id !== undefined){
-                debug.debug("Loading provider: " + provider.symbol);
+                debug.debug("Loading Ticker: " + provider.symbol);
                 var ticker = tickers.get(provider.id);
 
                 if (ticker === undefined){
-                    debug.debug("Ticker undefined")
                     ticker = new TickerClass();
+                    ticker.set (
+                        {
+                            id : provider.id,
+                            name : provider.name,
+                            symbol : provider.symbol,
+                            siteUrl : provider.siteUrl,
+                            iconUrl : provider.iconUrl,
+                            adapter : provider.adapter
+                        }
+                    );
+                    tickers.create(ticker);
+                    debug.debug("Created for first time ...")
                 }
 
-                ticker.set (
-                    {
-                        id : provider.id,
-                        name : provider.name,
-                        symbol : provider.symbol,
-                        siteUrl : provider.siteUrl,
-                        iconUrl : provider.iconUrl,
-                        adapter : provider.adapter
-                    }
-                );
-
-                debug.debug("Updating ticker " + provider.name);
-                tickers.add(ticker);
+                debug.debug("Ready " + ticker.get('name'));
             }
         },
 
@@ -166,6 +194,8 @@ define(['jquery','backbone','models/ticker','collections/tickers','utils/provide
                 }
             }
         }
+
+
     };
 
     return sync;

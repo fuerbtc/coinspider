@@ -16,7 +16,7 @@
  *
  * **/
 
-define(['backbone','utils/enviroment'],function(Backbone,Environment){
+define(['backbone','utils/environment'],function(Backbone,Environment){
 
     var Ticker = Backbone.Model.extend({
         defaults: function() {

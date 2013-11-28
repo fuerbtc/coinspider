@@ -1,7 +1,8 @@
   <span class="input-group-addon">Selecciona Exchanger</span>
   <select id="exchangers" multiple="multiple" size="10" class="form-control ch-select" data-placeholder="Mt.Gox, Bitstamp, Btc-E y muchos mas ...">
     <% _.each(tickers,function(ticker) { %>
-    <option value="<%= ticker.symbol %>"><%= ticker.name %></option>
+      <% var selected = ticker.status ? "selected" : "";%>
+      <option value="<%= ticker.id %>" <%= selected %> ><%= ticker.name %></option>
     <% }); %>
   </select>
 

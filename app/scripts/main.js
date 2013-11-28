@@ -52,23 +52,23 @@ require.config({
 require(['jquery',
     'domReady',
     'views/app',
-    'router',
     'vm',
     'utils/sync'],
-    function ($,dom,AppView,Router,Vm,Sync) {
+    function ($,dom,AppView,Vm,Sync) {
         'use strict';
-        debug.debug('Running BitcoinWatch');
+        debug.debug('Running CoinSpider');
 
-        debug.debug('Loading DOM features');
         dom.ready($);
+        debug.debug('Loaded DOM features');
 
-        debug.debug('Loading Information about providers');
+
         Sync.init();
         var tickerList = Sync.getTickers();
+        debug.debug('Loaded information about providers');
 
-        debug.debug('Loading Backbone Engine');
 
         var appView = Vm.create({}, 'AppView', AppView, {tickers: tickerList});
         appView.render();
-        Router.initialize({appView: appView});  // The router now has a copy of all main appview
+        //Router.initialize({appView: appView});  // The router now has a copy of all main appview
+        debug.debug('Loaded Backbone Engine');
 });

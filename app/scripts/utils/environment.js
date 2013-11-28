@@ -4,10 +4,10 @@
 
 define([],function(){
     var constants = {
-        TICKER_ENABLED : 1,
-        TICKER_DISABLED: 0
+        TICKER_ENABLED : true,
+        TICKER_DISABLED: false,
+        DEFAULT_VALUE : 0
     }
 
     return constants;
-
 });
