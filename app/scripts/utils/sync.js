@@ -8,12 +8,16 @@ define([
     'events',
     'utils/environment',
     'models/ticker',
+    'models/config',
     'collections/tickers',
+    'collections/configs',
     'utils/providers',
     'crossdomain'
-],function($,Backbone,_,Events,Environment,TickerClass,TickersClass, providers){
+],function($,Backbone,_,Events,Environment,TickerClass,ConfigClass,TickersClass,ConfigsClass, providers){
 
     var tickers = new TickersClass();
+    var configs = new ConfigsClass();
+
 
     var sync = {
 
@@ -22,12 +26,10 @@ define([
             debug.debug("Registering events ...");
             this.register();
 
-            debug.debug("Loading Tickers ...");
+            //Inicializo la configuracion
+            this.loadConfiguration();
 
-            //Obtengo los tickers guardados en el localStorage
-            tickers.fetch();
-
-            //Inicializo todos los providers en la Collecion
+            //Inicializo todos los providers en la Collection
             this.loadTickers();
 
             return this;
@@ -188,14 +190,36 @@ define([
          * Carga todos los Tickers en la Coleccion.
          */
         loadTickers : function(){
+            debug.debug("Loading Tickers ...");
+            //Obtengo los tickers guardados en el localStorage
+            tickers.fetch();
+            debug.debug("Loaded from localstorage " + tickers.length + " tickers");
+
             for (var key in providers){
                 if (providers.hasOwnProperty(key)){
                     this.loadTicker(providers[key]);
                 }
             }
+        },
+
+        loadConfiguration : function () {
+            debug.debug("Loading Configuration ...");
+            //Obtengo la configuracion del localStorage
+            configs.fetch();
+
+            if (configs.get(Environment.INSTANCE_CONFIG) === undefined){
+                debug.debug("Not found configuration.")
+                var config = new ConfigClass();
+                configs.create(config);
+                debug.debug("Created a default one")
+            }
+
+            debug.debug("Loaded Configuration ...");
+        },
+
+        getConfiguration : function() {
+          return configs;
         }
-
-
     };
 
     return sync;

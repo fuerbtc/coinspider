@@ -6,7 +6,7 @@ define([
     'events',
     'utils/environment',
     'text!templates/table.html',
-], function($,Backbone,_,TickerClass,Events,Environment,tableTemplate){
+], function($,Backbone,_,TickersClass,Events,Environment,tableTemplate){
 
     var row = Backbone.View.extend({
         tagName : 'tr',
@@ -40,14 +40,34 @@ define([
             Events.on('coinspider-add-ticker',this.add);
             Events.on('coinspider-remove-ticker',this.remove);
 
+            //A la coleccion tendria que agregarle
+            //unos eventos de cambio de propiedades del modelo
+            //Actualizo toda la fila!! Por lo que busca solo el cambio de la hora y ya
+
+            //Luego haremos otra vista que se encargue del reloj
+            //Donde cada 15 sec. llama a los providers activos
+            //y actualiza el modelo y salva.
+
+            // Y se registra tambien el click para actualizar... Agregar efecto de girar.
+
+            // Con esto pulir la actulizacion de la tabla
+
+            // Agregar otra vista para la configuracion. 3 parametros. Tiempo, Alertas de porcentaje de subida y bajada.
+
             debug.debug("Initialized TableView");
         },
 
 
 
-        add : function(id) {
+        add : function(model) {
             debug.debug("Añadida la fila");
-            var ticker = this.collection.get(id);
+
+            var ticker  = {};
+            if (model instanceof Object){
+                ticker = model;
+            }else {
+                ticker = this.collection.get(model);
+            }
 
             if (ticker !== undefined){
                 var rowView = new this.rowViewClass({
@@ -64,9 +84,14 @@ define([
 
         },
 
-        remove : function(id) {
+        remove : function(model) {
             debug.debug("Removida la fila");
-            var ticker = this.collection.get(id);
+            var ticker  = {};
+            if (model instanceof Object){
+                ticker = model;
+            }else {
+                ticker = this.collection.get(model);
+            }
 
             if (ticker !== undefined){
                 var viewToRemove = _(this._rowViews).select(function(cv) { return cv.model === ticker; })[0];
@@ -81,7 +106,7 @@ define([
 
         boot : function (model){
             if (model.get('status')){
-                this.add(model.get('id'));
+                this.add(model);
             }
         },
 

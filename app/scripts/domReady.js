@@ -15,7 +15,6 @@ define(['jquery','chosen','bootstrap'], function($){
                 });
             });
         });
-
     }
 
     return {

@@ -13,6 +13,9 @@ define([
         el : $('#exchangersPanel'),
 
         initialize: function(){
+            if (this.options.configuration === undefined){
+                throw new Error("No configuration found");
+            }
             if (this.options.tickers === undefined){
                 throw new Error("No providers found");
             }
@@ -21,7 +24,9 @@ define([
         render : function() {
             var me = this;
 
-            var configView = Vm.create(me,'ConfigView',ConfigView);
+            var config =this.options.configuration.get(Environment.INSTANCE_CONFIG);
+
+            var configView = Vm.create(me,'ConfigView',ConfigView,{model : config} );
 
             var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
             selectView.render();
