@@ -34,7 +34,7 @@ define([
             var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
             selectView.render();
 
-            var tableStats =  Vm.create(me,'TableStatsView',TableStatsView,{collection: this.options.tickers});
+            var tableStats =  Vm.create(me,'TableStatsView',TableStatsView,{collection: this.options.tickers, config: config});
             tableStats.render();
         }
     });

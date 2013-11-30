@@ -6,23 +6,27 @@ define([
     'events',
     'utils/environment',
     'text!templates/table.html',
-], function($,Backbone,_,TickersClass,Events,Environment,tableTemplate){
+    'text!templates/row.html',
+], function($,Backbone,_,TickersClass,Events,Environment,tableTemplate,rowTemplate){
 
     var row = Backbone.View.extend({
         tagName : 'tr',
-        className : 'row',
+        template: _.template(rowTemplate),
 
         initialize : function() {
             if (this.model === undefined){
                 throw new Error("No model attached to this row");
+            } else if (this.options.config === undefined){
+                throw new Error("No config attached to this row");
             }
 
-            this.model.on("change:date",this.render);
+            this.model.on("change:update",this.render,this);
             debug.debug("Initialized RowView");
         },
 
-        render : function() {
-            debug.debug("Renderizo los datos al actualizarse este modelo " + this.model.get('name') + ": " + this.model.get('last'));
+        render: function() {
+            this.$el.html(this.template({ticker : this.model.attributes, config: this.options.config.attributes}));
+            return this;
         }
     });
 
@@ -37,22 +41,8 @@ define([
 
             this.collection.each(this.boot);
 
-            Events.on('coinspider-add-ticker',this.add);
-            Events.on('coinspider-remove-ticker',this.remove);
-
-            //A la coleccion tendria que agregarle
-            //unos eventos de cambio de propiedades del modelo
-            //Actualizo toda la fila!! Por lo que busca solo el cambio de la hora y ya
-
-            //Luego haremos otra vista que se encargue del reloj
-            //Donde cada 15 sec. llama a los providers activos
-            //y actualiza el modelo y salva.
-
-            // Y se registra tambien el click para actualizar... Agregar efecto de girar.
-
-            // Con esto pulir la actulizacion de la tabla
-
-            // Agregar otra vista para la configuracion. 3 parametros. Tiempo, Alertas de porcentaje de subida y bajada.
+            Events.on(Environment.EVENT_ENABLE_TICKER,this.add,this);
+            Events.on(Environment.EVENT_DISABLE_TICKER,this.remove,this);
 
             debug.debug("Initialized TableView");
         },
@@ -60,7 +50,7 @@ define([
 
 
         add : function(model) {
-            debug.debug("Añadida la fila");
+            debug.debug("Adding row to the table");
 
             var ticker  = {};
             if (model instanceof Object){
@@ -71,14 +61,15 @@ define([
 
             if (ticker !== undefined){
                 var rowView = new this.rowViewClass({
-                    model : ticker
+                    model : ticker,
+                    config : this.options.config
                 });
 
                 this._rowViews.push(rowView);
 
                 if (this._rendered) {
-                    debug.debug("Printing row inside table");
-                    //$(this.el).append(rowView.render().el);
+                    debug.debug("Adding row inside table");
+                    $(this.el).find('#exchangers-table tbody').append(rowView.render().el);
                 }
             }
 
@@ -99,7 +90,7 @@ define([
 
                 if (this._rendered) {
                     debug.debug("Removing row inside table");
-                    //$(viewToRemove.el).remove();
+                    $(viewToRemove.el).remove();
                 }
             }
         },
@@ -113,18 +104,22 @@ define([
         render : function() {
             //When collection is empty. show Jumbotron
             if (this.collection.getEnables().length <= 0 ){
-                this.$el.find('.jumbotron').fadeIn('slow');
+                this.$el.find('#exchangers-table').fadeOut('slow');
+                this.$el.find('#exchangers-empty').fadeIn('slow');
+            }else {
+                this.$el.find('#exchangers-empty').fadeOut('slow');
+                var $table = this.$el.find('#exchangers-table');
+                $table.fadeIn('slow');
+
+                this._rendered = true;
+
+                var $body = $table.find('tbody');
+                $body.empty();
+
+                _(this._rowViews).each(function(childView) {
+                    $body.append(childView.render().el);
+                });
             }
-
-            var that = this;
-            this._rendered = true;
-
-//            $(this.el).empty();
-
-//            _(this._rowViews).each(function(childView) {
-//                $(that.el).append(childView.render().el);
-//            });
-
             return this;
         }
     });
