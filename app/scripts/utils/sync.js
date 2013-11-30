@@ -61,19 +61,6 @@ define([
                 debug.debug("Fired updating model")
                 this.updateTicker(jsonTicker,model);
             },this);
-
-
-
-//            $('body').on('btc-update-provider', function(event,data,symbol){
-//                //Obtengo el Proveedor
-//                var currentProvider = me.getProvider(symbol);
-//
-//                //Se adapta  la data obtenida del proveedor
-//                var adapterData = currentProvider.adapter(data);
-//
-//                this.save(currentProvider,adapterData);
-//            });
-
         },
 
         /**
@@ -259,24 +246,3 @@ define([
 
     return sync;
 });
-
-
-//Pasa de trabajar con dos listas. Trabaja solamente con la Colleccion de Tickers.
-//Lo que si puedes tener es un archivo a parte javascript con tus proveedores
-//Y luego lo que debes hacer es cargar esos proveedores como modelos y meterlos
-//en la collecion y salvar. Como el localstorage es persistente, se solucionan muchos
-//temas de golpe...
-
-
-//b) TENDRAS QUE CREAR OTRA COLLECION QUE SOLO COGA DEL LOCALSTORAGE LOS ELEMENTOS CON UN ESTADO
-//ESA COLECCION SERA PARA LA TABLA , CONSTRUYES LA VIEW, ETC
-
-//a) TENDRAS QUE CONSTRUIR UNA VIEW CON ESTA COLECCION PARA CONSTRUIR LA SELECT. Y ACTUALIZAR EL ESTADO
-//CUANDO SE SELECCIONA O UN SELECCIONE
-
-//EL REFRESH CADA 10 SEC.TIENE QUE ACTUALIZAR LOS PROVIDERS QUE ESTAN LA COLLECION de B. Supongo que como
-//parte de este metodo
-
-//
-
-// Otra cosa puede ser. Calculo matematico y

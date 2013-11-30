@@ -58,41 +58,7 @@ define([
                 }
                 Events.trigger(Environment.EVENT_DISABLE_TICKER,obj.deselected);
             }
-
-
-
-
-            //la coleccion debe escuchar por cambios y deberia actualizar la collecion
-
-            //se deberia
-
-
-            //Y luego invocar un evento que va actualizar otra collecion...
-            //Esa otra collecions esta en una vista encargada de pintar la tabla.
-            //La invocacion del evento es en base a esta otra web
-            //http://lostechies.com/derickbailey/2011/07/19/references-routing-and-the-event-aggregator-coordinating-views-in-backbone-js/
-
-            //Se supone entonces que al quitar o reponer elementos de esa lista
-            //la tabla se renderizara de acorde a esto. La tabla y la vista tienen que estar sincronizadas
-            //siguiendo las indicaciones de esta web
-            //PARTE 1 - HAZLO AHORA : http://liquidmedia.org/blog/2011/02/backbone-js-part-3/
-            //PARTE 2 - HAZ LA OTRA VISTA DEL CONTADOR -
-            //PARTE 3 - HAZ LA VISTA PARA CONFIGURACION. NUMERO DE SEGUNDOS. VALORES DE PORCENTAJE PARA AVISAR.
         }
-
-        //Tiene que existir una vista que se encarga del contador
-        //El contador leera los elementos seleccionados de la select
-        //y actualizara los valores en el localstorage
-
-        //TODOS
-        // SI EN LOS PROVIDERS ESTA DEFINIDO, SE ACTIVA POR DEFECTO EN LA SELECT
-        // CUANDO UN ELEMENTO SE SELECCIONA/DESELECCIONA COPIARLO A OTRA LISTA, ESTA OTRA LISTA
-        // DEBE ESTAR SYNCRONIZADA CON LA TABLA PARA AGREGAR O QUITAR LA INFORMACION DEL PROVEEDOR
-        // COMO PARTE DE LA IMPLEMENTACION DE LA TABLA DEBE JUGAR CON COLORCITOS Y EFECTO JAVASCRIPTS
-
-        //TIENE QUE EXISTIR LUEGO UN TIMER QUE....ACTUALIZE LA INFORMACION EN LOCALSTORAGE Y AVISAR A LA OTRA
-        //COLLECCION QUE DEBE ACTUALIZAR...
-
     });
 
     return select;
