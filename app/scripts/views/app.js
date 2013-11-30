@@ -6,8 +6,9 @@ define([
     'utils/environment',
     'views/select',
     'views/tableStats',
-    'views/config'
-], function($, _, Backbone,Vm, Environment,SelectView,TableStatsView,ConfigView){
+    'views/config',
+    'views/timer'
+], function($, _, Backbone,Vm, Environment,SelectView,TableStatsView,ConfigView,TimerView){
 
     var AppView = Backbone.View.extend({
         el : $('#exchangersPanel'),
@@ -25,8 +26,10 @@ define([
             var me = this;
 
             var config =this.options.configuration.get(Environment.INSTANCE_CONFIG);
-
             var configView = Vm.create(me,'ConfigView',ConfigView,{model : config} );
+
+            var timerView = Vm.create(me,'TimerView', TimerView,{model : config} );
+            timerView.render();
 
             var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
             selectView.render();

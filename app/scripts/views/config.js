@@ -4,7 +4,7 @@ define([
     'underscore',
     'events',
     'nouislider'
-], function($,Backbone,_,ConfigClass,Events){
+], function($,Backbone,_,Events){
 
     var config = Backbone.View.extend({
 
@@ -22,13 +22,13 @@ define([
 
             //Initialize UiSlider
             //Para Refresco
-            $('#refreshTime_Slider').noUiSlider({
+            $('#refreshTimer_Slider').noUiSlider({
                 range: [10, 60]
-                ,start: model.get('refreshTime')
+                ,start: model.get('refreshTimer')
                 ,step: 5
                 ,handles: 1
                 ,serialization: {
-                    to: [ $("#refreshTimeStatus"), 'html' ],
+                    to: [ $("#refreshTimerStatus"), 'html' ],
                     resolution : 1
                 }
             }).change (me.save);
@@ -83,6 +83,11 @@ define([
             debug.debug ("Updating property " + propertyName + " with value " + value);
             this.model.save(propertyName, value);
             debug.debug("Saved! ");
+
+
+            Events.trigger('coinspider-update-config');
+
+            //Desde aqui tenemos que lanzar un trigger avisando que la configuracion a cambiado.
         }
     });
 
