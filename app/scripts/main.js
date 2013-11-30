@@ -26,6 +26,7 @@ require.config({
         bootstrap : ['//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min', 'vendor/bootstrap-3.0.2.min'],
         localStorage : ['//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min','vendor/backbone.localStorage-1.1.7.min'],
         crossdomain : 'vendor/jquery-xdomainajax-0.11',
+        nouislider : ['//cdnjs.cloudflare.com/ajax/libs/noUiSlider/4.3.0/jquery.nouislider.min.js','vendor/jquery-nouislider-4.3.0.min'],
         //'requirejs-i18n': '../bower_components/requirejs-i18n/i18n',
         'text': ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min']
         //requirejs: '../bower_components/requirejs/require',
@@ -43,6 +44,7 @@ require.config({
         },
         chosen : ['jquery'],
         crossdomain : ['jquery'],
+        nouislider :  ['jquery'],
         bootstrap : {
             deps : ['jquery']
         }
@@ -56,19 +58,19 @@ require(['jquery',
     'utils/sync'],
     function ($,dom,AppView,Vm,Sync) {
         'use strict';
+
         debug.debug('Running CoinSpider');
+        $(document).ready(function(){
+            dom.ready($);
+            debug.debug('Loaded DOM features');
 
-        dom.ready($);
-        debug.debug('Loaded DOM features');
+            Sync.init();
+            var tickerList = Sync.getTickers();
+            debug.debug('Loaded information about providers');
 
-
-        Sync.init();
-        var tickerList = Sync.getTickers();
-        debug.debug('Loaded information about providers');
-
-
-        var appView = Vm.create({}, 'AppView', AppView, {tickers: tickerList});
-        appView.render();
-        //Router.initialize({appView: appView});  // The router now has a copy of all main appview
-        debug.debug('Loaded Backbone Engine');
+            var appView = Vm.create({}, 'AppView', AppView, {tickers: tickerList});
+            appView.render();
+            //Router.initialize({appView: appView});  // The router now has a copy of all main appview
+            debug.debug('Loaded Backbone Engine');
+        });
 });

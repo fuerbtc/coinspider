@@ -6,6 +6,7 @@ block env
 
 block css
   link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.css")
+  link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/noUiSlider/4.3.0/jquery.nouislider.min.css")
 
 block content
   div.row
@@ -21,9 +22,12 @@ block content
                 li
                   span.message
                     Update in 3s...
-                li
+                li.action
                   a(id="",class="")
                     i(class="fa fa-refresh")
+                li.action
+                  a(id="configAction",class="")
+                    i(class="fa fa-gear")
                 li
                   a(class="accordion-toggle minimize-box",
                   data-toggle="collapse",
@@ -38,6 +42,33 @@ block content
                   div(class="jumbotron" , style="display:none")
                     h1
                       | Gracias satoshi ....
+  div(class="modal fade", id="configModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button(type="button",class="close", data-dismiss="modal", aria-hidden="true") &times;
+          h4(class="modal-title", id="myModalLabel") Configuracion
+        div.modal-body
+          div.propertie#refreshTime
+            div.message
+              | Actualizar cada
+              span#refreshTimeStatus 0
+              | segundos
+            div.slider#refreshSlider
+          div.propertie#alertUp
+            div.message
+              | Alertar si sube mas de
+              span#alertUpStatus 0
+              | &#37;
+            div#alertUpSlider
+          div.propertie#alertDown
+            div.message
+              | Alertas si baja mas de
+              span#alertDownStatus 0
+              | &#37;
+            div#alertDownSlider
+
+
 
 
 
