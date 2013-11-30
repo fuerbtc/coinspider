@@ -64,9 +64,9 @@ require(['jquery',
             dom.ready($);
             debug.debug('Loaded DOM features');
 
-            Sync.init();
-            var config = Sync.getConfiguration();
-            var tickerList = Sync.getTickers();
+            var sync = new Sync();
+            var config = sync.getConfiguration();
+            var tickerList = sync.getTickers();
 
             debug.debug('Loaded information about providers');
 

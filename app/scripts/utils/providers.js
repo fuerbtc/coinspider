@@ -29,7 +29,7 @@ define([],function(){
                     result.buy = data.data.buy.value;
                     result.sell = data.data.sell.value;
                     //MtGox retorna el tiempo en unidades de microsegundos
-                    result.time = new Date(parseInt(data.data.now / 1000));
+                    result.update = new Date(parseInt(data.data.now / 1000));
                 }
 
                 return result;
@@ -51,7 +51,7 @@ define([],function(){
                     result.last = data.last;
                     result.buy = data.ask;
                     result.sell = data.bid;
-                    result.time = new Date(data.timestamp);
+                    result.update = new Date(data.timestamp);
                 }
 
                 return result;
@@ -73,7 +73,7 @@ define([],function(){
                     result.last = data.ticker.last;
                     result.buy = data.ticker.buy;
                     result.sell = data.ticker.sell;
-                    result.time = new Date(data.ticker.updated);
+                    result.update = new Date(data.ticker.updated);
                 }
 
                 return result;

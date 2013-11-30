@@ -33,6 +33,11 @@
   .nav {
     .action{
       cursor: pointer;
+
+      a.working {
+        background-color: #eeeeee;
+        color: #2a6496;
+      }
     }
   }
 

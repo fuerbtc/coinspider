@@ -1,3 +1,7 @@
 <span class="message">
+  <% if (time > 0) { %>
   actualización en <%= time %>s ...
+  <% } else { %>
+  actualizando ...
+  <% } %>
 </span>

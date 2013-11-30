@@ -67,11 +67,9 @@ define([
         },
 
         save : function(event){
-
             if(event.target === undefined){
                 return; //exit with nothing
             }
-
             //El elemento dom debe cumplir con la regla:
             //El identificador debe llamarse igual a la propiedad en el modelo
             //pero debe incluirse el caracter '_' para avisar a este algoritmo dinamico
@@ -84,10 +82,9 @@ define([
             this.model.save(propertyName, value);
             debug.debug("Saved! ");
 
-
-            Events.trigger('coinspider-update-config');
-
-            //Desde aqui tenemos que lanzar un trigger avisando que la configuracion a cambiado.
+            //Si es necesario se lanza, pero las vistas deben tener acceso al modelo de configuracion
+            //y escuchar cuando se actualiza alguna propiedad
+            //Events.trigger('coinspider-update-config');
         }
     });
 

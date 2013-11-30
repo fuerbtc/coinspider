@@ -112,7 +112,7 @@ define([
 
         render : function() {
             //When collection is empty. show Jumbotron
-            if (this.collection.length <= 0 ){
+            if (this.collection.getEnables().length <= 0 ){
                 this.$el.find('.jumbotron').fadeIn('slow');
             }
 

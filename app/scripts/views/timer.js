@@ -12,21 +12,19 @@ define([
     var timer = Backbone.View.extend({
         el : '#messages',
         template : _.template(timerTemplate),
-        currentTimer : Environment.DEFAULT_REFRESH_TIME,
 
-
-        initialize : function(){ //Evito tener que comprobar si me viene un modelo. Es explicito que se añade o el modelo o la collecion
-
+        initialize : function(){
             if (this.model === undefined){
                 throw new Error("Not configuration founded");
             }
 
             _(this).bindAll('refresh','updateTimer');
-
             this.currentTimer = this.getRefreshTimer();
 
-            window.setTimeout(this.refresh,1000);
-            Events.on('coinspider-update-config',this.updateTimer);
+            this.model.on('change:refreshTimer',this.updateTimer, this);
+            Events.on(Environment.EVENT_STOP_TIMER,this.disableTimer,this);
+            Events.on(Environment.EVENT_START_TIMER,this.enableTimer,this);
+            Events.on(Environment.EVENT_UPDATE_TICKERS_FINISH, this.renderDone,this);
         },
 
         render : function(){
@@ -35,13 +33,19 @@ define([
 
         refresh : function (){
             this.currentTimer--;
-
-            if(this.currentTimer <= 0){
-                debug.debug("Ejecuto llamadas a providers!!!");
-                this.currentTimer = this.getRefreshTimer();
+            if (this.currentTimer >= 0){
+                if(this.currentTimer == 0){
+                    //Paro la llamada a timeout
+                    this.renderWorking();
+                    //Lanzo el evento!
+                    debug.debug("Refreshing tickers");
+                    Events.trigger(Environment.EVENT_UPDATE_TICKERS);
+                }else {
+                    window.setTimeout(this.refresh,1000);
+                }
+                debug.debug("Estoy haciendo algo");
+                this.render()
             }
-            window.setTimeout(this.refresh,1000);
-            this.render()
         },
 
         updateTimer : function (){
@@ -50,9 +54,29 @@ define([
 
         getRefreshTimer : function(){
             return this.model.get('refreshTimer');
+        },
+
+        renderWorking: function (){
+            $('#refreshAction a').addClass('working').find('i').addClass('animated rotateOut');
+        },
+
+        renderDone: function () {
+            $('#refreshAction a').removeClass('working').find('i').removeClass('animated rotateOut');
+            //this.enableTimer();
+        },
+
+        disableTimer : function(){
+            $('#refreshAction').fadeOut('fast');
+            $('#messages').fadeOut('fast');
+            this.currentTimer = -15;
+        },
+
+        enableTimer : function() {
+            $('#refreshAction').fadeIn('fast');
+            $('#messages').fadeIn('fast');
+            this.currentTimer = this.getRefreshTimer();
+            window.setTimeout(this.refresh,1000);
         }
-
-
     });
 
     return timer;

@@ -13,39 +13,84 @@ define([
     'collections/configs',
     'utils/providers',
     'crossdomain'
-],function($,Backbone,_,Events,Environment,TickerClass,ConfigClass,TickersClass,ConfigsClass, providers){
+],function($,Backbone,_,Events,Environment,TickerClass,ConfigClass,TickersClass,ConfigsClass, Providers){
 
     var tickers = new TickersClass();
     var configs = new ConfigsClass();
 
+    var sync = Backbone.Model.extend({
 
-    var sync = {
 
-        init : function (){
+        initialize : function() {
             //Register event to save data
+            _(this).bindAll('refreshTicker');
+
+
             debug.debug("Registering events ...");
-            this.register();
+            this.registerEvents();
 
             //Inicializo la configuracion
-            this.loadConfiguration();
+            this.initConfiguration();
 
             //Inicializo todos los providers en la Collection
-            this.loadTickers();
+            this.initTickers(true);
+        },
 
-            return this;
+        /**
+         * Registra los eventos que definidos en el objeto Sync
+         *
+         */
+        registerEvents : function () {
+            Events.on(Environment.EVENT_ENABLE_TICKER,function(id){
+                debug.debug("Enabled model "+ id);
+                tickers.get(id).save({status : Environment.TICKER_ENABLE });
+            },this);
+
+            Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
+                debug.debug("Disabled model "+ id);
+                tickers.get(id).save({status : Environment.TICKER_DISABLE });
+
+            },this);
+
+            Events.on(Environment.EVENT_UPDATE_TICKERS,function(){
+                debug.debug("Fired refreshing enabled tickers");
+                this.refreshTickers(Environment.REFRESH_ENABLE_TICKERS);
+            },this);
+
+            Events.on(Environment.EVENT_UPDATE_TICKER,function(jsonTicker,model){
+                debug.debug("Fired updating model")
+                this.updateTicker(jsonTicker,model);
+            },this);
+
+
+
+//            $('body').on('btc-update-provider', function(event,data,symbol){
+//                //Obtengo el Proveedor
+//                var currentProvider = me.getProvider(symbol);
+//
+//                //Se adapta  la data obtenida del proveedor
+//                var adapterData = currentProvider.adapter(data);
+//
+//                this.save(currentProvider,adapterData);
+//            });
+
         },
 
         /**
          * Hace una query al Api del proveedor. Como el Json es asincrono, se dispara un trigger
          * que invoca una funcion que se encarga de actualizar el LocalStorage
          *
-         * @param symbol - Identificador del Provider
+         * @param Ticker - Objeto ticker
          * @returns {boolean}
          */
-        refresh : function (symbol){
-            var currentProvider = this.getProvider(symbol);
+        refreshTicker : function (model){
+
+            //Updating model
+            debug.debug("Updating model ... ");
+            var me = this;
+
             $.ajax({
-                url: currentProvider.url,
+                url: model.get('feedUrl'),
                 type: 'GET',
                 success: function(data) {
                     var jsonTicker = {};
@@ -56,90 +101,63 @@ define([
                             jsonTicker = {};
                         }
                     }
-                    $('body').trigger('btc-update-provider', [jsonTicker, currentProvider.symbol]);
+
+                    debug.debug("OK 200 - Received data successfully");
+                    Events.trigger(Environment.EVENT_UPDATE_TICKER, jsonTicker, model);
+                    me.checkLastTrigger();
+                },
+                error : function(data){
+                    debug.debug("BUMP !!!")
+                    me.checkLastTrigger();
                 }
-            });
-
-            return this;
-        },
-
-        /**
-         * Registra el evento que se encarga de almacenar el valor consultado
-         *
-         * @data - Objeto Json tal y como lo envia el provider.
-         * @symbol - Id del Provider
-         */
-        register : function () {
-            var me = this;
-
-            $('body').on('btc-update-provider', function(event,data,symbol){
-                //Obtengo el Proveedor
-                var currentProvider = me.getProvider(symbol);
-
-                //Se adapta  la data obtenida del proveedor
-                var adapterData = currentProvider.adapter(data);
-
-                this.save(currentProvider,adapterData);
-            });
-
-            Events.on('coinspider-add-ticker',function(id){
-                debug.debug("Updated model "+ id);
-                tickers.get(id).save({status : Environment.TICKER_ENABLED });
-
-            });
-
-            Events.on('coinspider-remove-ticker',function(id){
-                debug.debug("Updated model "+ id);
-                tickers.get(id).save({status : Environment.TICKER_DISABLED });
-            });
-
-            tickers.on('change:status',function(model, options){
-               //this is collection
-               debug.debug("ok !! se invoca !!! aaaa");
             });
         },
 
         /**
          * Actualiza todos los Proveedores.
          */
-        refreshAll : function () {
-            for (var key in providers){
-                if (providers.hasOwnProperty(key)){
-                    this.refresh(key);
-                }
+        refreshTickers : function (type) {
+            debug.debug("Updating tickers information");
+
+            switch (type){
+                default:
+                case Environment.REFRESH_ALL_TICKERS:
+                    debug.debug("Updating all ...")
+                    tickers.each(this.refreshTicker);
+                    this.lastTrigger = tickers.length;
+                    break;
+                case Environment.REFRESH_ENABLE_TICKERS:
+                    debug.debug("Updating enables ...")
+                    var enableTickers = tickers.getEnables();
+                    this.lastTrigger = enableTickers.length;
+                    _.each(enableTickers,this.refreshTicker);
+                    break;
             }
         },
+
 
         /**
          * Guardar en el LocalStorage la data de una manera generica
          * para poder ser usado como si viene de un solo sitio por Backbone
          *
-         * @provider - El objeto provider del que podras sacar informacion estatica como el nombre, url,
-         *             del provider
-         *            {
-         *              id : '66'
-         *              symbol : 'mtgox',
-         *              url : 'https://data.mtgox.com/api/2/BTCUSD/money/ticker_fast',
-         *              siteUrl : 'https://mtgox.com',
-         *              iconUrl : 'https://www.mtgox.com/favicon.ico',
-         *              name : 'Mt.Gox',
-         *              ...
-         *            }
+         * @model - Modelo a actualizar
          *
-         *
-         * @data - Es el adaptador
-         *           {
-         *              last : 0,
-         *              buy : 0,
-         *              sell : 0,
-         *              time : new Date(),
-         *           }
-         *
+         * @data - Es el json que viene desde el proveedor. El cual debes adaptarlo al modelo.
          *
          */
-        save : function (provider, data) {
-         //Save accede a la collecion y busca el objeto del modelo,
-         //si no esta lo guarda. Si esta, actualiza.
+        updateTicker : function (data, model) {
+            //Save accede a la collecion y busca el objeto del modelo,
+            //si no esta lo guarda. Si esta, actualiza.
+            var provider = this.getProvider(model.get('symbol'));
+            if (provider){
+                var adaptedData = provider.adapter(data);
+
+                model.save(adaptedData);
+                debug.debug("Saved data " + model.get('name')
+                    + "| Last " + model.get('last')
+                    + "| Buy " + model.get('buy')
+                    + "| Sell " + model.get('sell'));
+            }
         },
 
         getTickers : function() {
@@ -147,26 +165,24 @@ define([
         },
 
         getProvider : function(symbol){
-            var currentProvider = {};
-            if (providers[provider] === undefined) {
-                throw new ReferenceError('Ticker ' + symbol + ' is not defined');
-            }else {
-                currentProvider = providers[provider];
+            var currentProvider = false;
+            if (Providers[symbol] !== undefined) {
+                currentProvider = Providers[symbol];
             }
 
             return currentProvider;
         },
 
         /**
-         * Carga Ticker Model en Ticker Collection a partir de la descripcion de un provider
+         * Crea o añade un Ticker en TickerCollection a partir de la descripcion correspondiente definida en Providers
          * @param provider
          */
-        loadTicker : function(provider){
+        initTicker : function(provider,override){
             if (provider.id !== undefined){
                 debug.debug("Loading Ticker: " + provider.symbol);
                 var ticker = tickers.get(provider.id);
 
-                if (ticker === undefined){
+                if (ticker === undefined || override){
                     ticker = new TickerClass();
                     ticker.set (
                         {
@@ -175,7 +191,7 @@ define([
                             symbol : provider.symbol,
                             siteUrl : provider.siteUrl,
                             iconUrl : provider.iconUrl,
-                            adapter : provider.adapter
+                            feedUrl : provider.url,
                         }
                     );
                     tickers.create(ticker);
@@ -187,22 +203,26 @@ define([
         },
 
         /**
-         * Carga todos los Tickers en la Coleccion.
+         * Inicializa todos los tickers en TickerCollection a partir de la informacion definida en Providers
          */
-        loadTickers : function(){
+        initTickers : function(override){
             debug.debug("Loading Tickers ...");
             //Obtengo los tickers guardados en el localStorage
             tickers.fetch();
             debug.debug("Loaded from localstorage " + tickers.length + " tickers");
 
-            for (var key in providers){
-                if (providers.hasOwnProperty(key)){
-                    this.loadTicker(providers[key]);
+            //Busco alguno nuevo
+            for (var key in Providers){
+                if (Providers.hasOwnProperty(key)){
+                    this.initTicker(Providers[key],override);
                 }
             }
         },
 
-        loadConfiguration : function () {
+        /**
+         * Inicializa configuracion del sistema
+         */
+        initConfiguration : function () {
             debug.debug("Loading Configuration ...");
             //Obtengo la configuracion del localStorage
             configs.fetch();
@@ -217,10 +237,25 @@ define([
             debug.debug("Loaded Configuration ...");
         },
 
+        /**
+         * Devuelve la collecion con la configuracion. Se sigue este principio,ya que
+         * utilizamos una implementacion de LocalStorage en Backbone. Esta implementacion
+         * solo funciona a traves de colecciones.
+         *
+         * @returns {collections.configs}
+         */
         getConfiguration : function() {
-          return configs;
+            return configs;
+        },
+
+        checkLastTrigger : function() {
+            this.lastTrigger--;
+            if (this.lastTrigger <= 0){
+                debug.debug("Triggering Event Update Tickers Finish");
+                Events.trigger(Environment.EVENT_UPDATE_TICKERS_FINISH);
+            }
         }
-    };
+    })
 
     return sync;
 });
