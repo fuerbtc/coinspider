@@ -5,8 +5,9 @@ define([
     'vm',
     'utils/environment',
     'views/select',
-    'views/tableStats'
-], function($, _, Backbone,Vm, Environment,SelectView,TableStatsView){
+    'views/tableStats',
+    'views/config'
+], function($, _, Backbone,Vm, Environment,SelectView,TableStatsView,ConfigView){
 
     var AppView = Backbone.View.extend({
         el : $('#exchangersPanel'),
@@ -19,11 +20,16 @@ define([
 
         render : function() {
             var me = this;
+
+            var configView = Vm.create(me,'ConfigView',ConfigView);
+
             var selectView = Vm.create(me,'SelectView',SelectView, {collection: this.options.tickers});
             selectView.render();
 
             var tableStats =  Vm.create(me,'TableStatsView',TableStatsView,{collection: this.options.tickers});
             tableStats.render();
+
+
         }
 
 
