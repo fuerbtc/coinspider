@@ -1,10 +1,10 @@
 /**  Config Collection Class **
  */
 
-define(['backbone','models/config','localStorage'],function(Backbone,ConfigClass){
+define(['backbone','utils/environment','models/config','localStorage'],function(Backbone,Environment,ConfigClass){
     var Configs = Backbone.Collection.extend({
         model: ConfigClass,
-        localStorage: new Backbone.LocalStorage("bitcoins-board-config")
+        localStorage: new Backbone.LocalStorage(Environment.STORAGE_CONFIG);
     });
 
     return Configs;

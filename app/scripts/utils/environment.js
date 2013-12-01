@@ -23,12 +23,13 @@ define([],function(){
         EVENT_START_TIMER : 'coinspider-start-timer',
         EVENT_UPDATE_TICKER : 'coinspider-update-ticker',
 
-
         //DECISION MAKERS
         REFRESH_ALL_TICKERS : '1',
-        REFRESH_ENABLE_TICKERS : '2'
+        REFRESH_ENABLE_TICKERS : '2',
 
-
+        //LocalStorage Collections
+        STORAGE_TICKERS  : 'coinspider-ls-tickers',
+        STORAGE_CONFIG   : 'coinspider-ls-config'
     }
 
     return constants;

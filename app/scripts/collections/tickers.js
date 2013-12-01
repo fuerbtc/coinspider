@@ -1,10 +1,10 @@
 /**  Ticker Collection Class **
  */
 
-define(['backbone','models/ticker','localStorage'],function(Backbone,Ticker){
+define(['backbone','utils/environment','models/ticker','localStorage'],function(Backbone,Environment,TickerClass){
     var Tickers = Backbone.Collection.extend({
-        model: Ticker,
-        localStorage: new Backbone.LocalStorage("bitcoins-board"),
+        model: TickerClass,
+        localStorage: new Backbone.LocalStorage(Environment.STORAGE_TICKERS),
 
         getEnables : function(){
             return this.filter(function(ticker){
