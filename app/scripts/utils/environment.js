@@ -1,5 +1,5 @@
 /**
- * Application Environment Constants
+ * Application Environment Constant and Application Default Values
  */
 
 define([],function(){

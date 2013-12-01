@@ -1,5 +1,5 @@
 /**
- * Synchronization Process with Providers
+ * CoinSpider Kernel Object
  */
 define([
     'jquery',
@@ -22,58 +22,155 @@ define([
 
 
         initialize : function() {
-            //Register event to save data
+
+            // Binding object with 'this' context
             _(this).bindAll('refreshTicker');
 
-
-            debug.debug("Registering events ...");
+            debug.debug("[Sync] Registering events ...");
             this.registerEvents();
 
             //Inicializo la configuracion
+            debug.debug("[Sync] Initializing configuration ...");
             this.initConfiguration();
 
             //Inicializo todos los providers en la Collection
+            debug.debug("[Sync] Initializing Tickers ...");
             this.initTickers(true);
         },
 
         /**
-         * Registra los eventos que definidos en el objeto Sync
+         * Registra los eventos definidos en el Kernel
          *
          */
         registerEvents : function () {
             Events.on(Environment.EVENT_ENABLE_TICKER,function(id){
-                debug.debug("Enabled model "+ id);
+                debug.debug("[Sync] - EVENT_ENABLE_TICKER - Model enabled : "+ id);
                 tickers.get(id).save({status : Environment.TICKER_ENABLE });
             },this);
 
             Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
-                debug.debug("Disabled model "+ id);
+                debug.debug("[Sync] - EVENT_DISABLE_TICKER - Model disabled : "+ id);
                 tickers.get(id).save({status : Environment.TICKER_DISABLE });
 
             },this);
 
             Events.on(Environment.EVENT_UPDATE_TICKERS,function(){
-                debug.debug("Fired refreshing enabled tickers");
+                debug.debug("[Sync] - EVENT_UPDATE_TICKERS - Refreshing Tickers ...");
                 this.refreshTickers(Environment.REFRESH_ENABLE_TICKERS);
             },this);
 
-            Events.on(Environment.EVENT_UPDATE_TICKER,function(jsonTicker,model){
-                debug.debug("Fired updating model")
-                this.updateTicker(jsonTicker,model);
-            },this);
+//            Events.on(Environment.EVENT_UPDATE_TICKER,function(jsonTicker,model){
+//                debug.debug("[Sync] - EVENT_UPDATE_TICKER - Refreshing Ticker ...")
+//                this.updateTicker(jsonTicker,model);
+//            },this);
         },
 
         /**
-         * Hace una query al Api del proveedor. Como el Json es asincrono, se dispara un trigger
-         * que invoca una funcion que se encarga de actualizar el LocalStorage
+         * Inicializa configuracion del sistema
+         */
+        initConfiguration : function () {
+            //Obtengo la configuracion del localStorage
+            debug.debug("[Sync] Fetch config collection ...");
+            configs.fetch();
+
+
+            if (configs.get(Environment.INSTANCE_CONFIG) === undefined){
+                debug.debug("[Sync] Not configuration founded.")
+                var config = new ConfigClass();
+                configs.create(config);
+                debug.debug("[Sync] Configuration object created");
+            }
+
+            debug.debug("[Sync] Configuration loaded");
+        },
+
+        /**
+         * A partir de la informacion definida en providers.js se inicializa los tickers en TickerCollection
          *
-         * @param Ticker - Objeto ticker
+         * @param override Indica al sistema que sobreescriba con valores por defecto la informacion almacenada en localstorage
+         */
+        initTickers : function(override){
+            //Obtengo los tickers guardados en el localStorage
+            debug.debug("[Sync] Fetch ticker collection ...");
+            tickers.fetch();
+            debug.debug("[Sync] Loaded " + tickers.length + " tickers from LocalStorage");
+
+            //Searching for new providers
+            debug.debug("[Sync] Searching new provider definition. Override = " + override);
+            for (var key in Providers){
+                if (Providers.hasOwnProperty(key)){
+                    this.initTicker(Providers[key],override);
+                }
+            }
+        },
+
+        /**
+         * Crea o sobreescribe un Ticker en TickerCollection a partir de la descripcion definida providers.js
+         * @param provider El objeto Provider. For more information read provider.js
+         */
+        initTicker : function(provider,override){
+            if (provider.id !== undefined){
+                debug.debug("[Sync] Loading Ticker : " + provider.symbol);
+                var ticker = tickers.get(provider.id);
+
+                var defaultData = {
+                    id : provider.id,
+                    name : provider.name,
+                    symbol : provider.symbol,
+                    siteUrl : provider.siteUrl,
+                    iconUrl : provider.iconUrl,
+                    feedUrl : provider.feedUrl
+                };
+
+                if (ticker === undefined){
+                    ticker = new TickerClass();
+                    ticker.set(defaultData);
+                    tickers.create(ticker);
+                    debug.debug("[Sync] Created " + provider.name);
+                }else if (override){
+                    ticker.save(defaultData);
+                    debug.debug("[Sync] Overrided " + provider.name);
+                }
+
+                debug.debug("[Sync] Ready Ticker " + ticker.get('name'));
+            }
+        },
+
+        /**
+         * Refresca los Tickers. Representa el evento EVENT_UPDATE_TICKERS. Este evento se dispara cada vez que
+         * expira el tiempo de espera o el usuario pulsa sobre el boton refrescar.
+         *
+         * @param type - Por defecto refresca todos los tickers definidos en providers. Pero tambien se puede
+         * especificar que refresca solo los activos (Environment.REFRESH_ENABLE_TICKERS)
+         */
+        refreshTickers : function (type) {
+            debug.debug("[Sync] Updating tickers information ... ");
+
+            switch (type){
+                default:
+                case Environment.REFRESH_ALL_TICKERS:
+                    debug.debug("[Sync] Updating all tickers ...")
+                    tickers.each(this.refreshTicker);
+                    this.lastTrigger = tickers.length; //Numero de veces que se debe esperar antes de enviar el evento que indica que la actualizacion ha terminado
+                    break;
+                case Environment.REFRESH_ENABLE_TICKERS:
+                    debug.debug("[Sync] Updating tickers enabled ...")
+                    var enableTickers = tickers.getEnables();
+                    this.lastTrigger = enableTickers.length; //Numero de veces que se debe esperar antes de enviar el evento que indica que la actualizacion ha terminado
+                    _.each(enableTickers,this.refreshTicker);
+                    break;
+            }
+        },
+
+        /**
+         * Hace una query al Api del proveedor. Como el Json es asincrono, se invoca una funcion
+         * encargada de actualizar el modelo
+         *
+         * @param Ticker - Ticker
          * @returns {boolean}
          */
         refreshTicker : function (model){
-
-            //Updating model
-            debug.debug("Updating model ... ");
+            debug.debug("[Sync] Updating model " + model.get('name'));
             var me = this;
 
             $.ajax({
@@ -89,47 +186,26 @@ define([
                         }
                     }
 
-                    debug.debug("OK 200 - Received data successfully");
-                    Events.trigger(Environment.EVENT_UPDATE_TICKER, jsonTicker, model);
+                    debug.debug("[Sync] Success - Data received. ");
+                    me.updateTicker(jsonTicker, model);
                     me.checkLastTrigger();
                 },
                 error : function(data){
-                    debug.debug("BUMP !!!")
+                    debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get('id') + " Name:" + model.get('name'));
                     me.checkLastTrigger();
                 }
             });
         },
 
-        /**
-         * Actualiza todos los Proveedores.
-         */
-        refreshTickers : function (type) {
-            debug.debug("Updating tickers information");
-
-            switch (type){
-                default:
-                case Environment.REFRESH_ALL_TICKERS:
-                    debug.debug("Updating all ...")
-                    tickers.each(this.refreshTicker);
-                    this.lastTrigger = tickers.length;
-                    break;
-                case Environment.REFRESH_ENABLE_TICKERS:
-                    debug.debug("Updating enables ...")
-                    var enableTickers = tickers.getEnables();
-                    this.lastTrigger = enableTickers.length;
-                    _.each(enableTickers,this.refreshTicker);
-                    break;
-            }
-        },
 
 
         /**
-         * Guardar en el LocalStorage la data de una manera generica
-         * para poder ser usado como si viene de un solo sitio por Backbone
+         * Actualiza el modelo con los datos recibidos. Los datos recibidos se adaptan con la funcion adapter
+         * provista por cada Proveedor.
          *
-         * @model - Modelo a actualizar
+         * @model - Modelo que se actualiza
          *
-         * @data - Es el json que viene desde el proveedor. El cual debes adaptarlo al modelo.
+         * @data - Es el objeto Json recibido desde el proveedor, el cual debe adaptarse al modelo.
          *
          */
         updateTicker : function (data, model) {
@@ -137,95 +213,42 @@ define([
             //si no esta lo guarda. Si esta, actualiza.
             var provider = this.getProvider(model.get('symbol'));
             if (provider){
+                debug.debug("[Sync] Adapting data received");
                 var adaptedData = provider.adapter(data);
 
                 model.save(adaptedData);
-                debug.debug("Saved data " + model.get('name')
-                    + "| Last " + model.get('last')
-                    + "| Buy " + model.get('buy')
-                    + "| Sell " + model.get('sell'));
+                debug.debug("[Sync] Saved data:  " + model.get('name') + "| Last " + model.get('last') + "| Buy " + model.get('buy') + "| Sell " + model.get('sell'));
             }
         },
 
+
+        /**
+         * Devuelve toda la coleccion de Tickers. Se sigue este principio ya que
+         * utilizamos una implementacion de LocalStorage en Backbone. Esta implementacion
+         * solo funciona a traves de colecciones.
+         * @returns {collections.tickers}
+         */
         getTickers : function() {
             return tickers;
         },
 
+        /**
+         * A partir del symbol del proveedor se localiza el objeto definido en providers.js
+         * @param symbol
+         * @returns {boolean}
+         */
         getProvider : function(symbol){
             var currentProvider = false;
             if (Providers[symbol] !== undefined) {
                 currentProvider = Providers[symbol];
             }
-
             return currentProvider;
         },
 
-        /**
-         * Crea o añade un Ticker en TickerCollection a partir de la descripcion correspondiente definida en Providers
-         * @param provider
-         */
-        initTicker : function(provider,override){
-            if (provider.id !== undefined){
-                debug.debug("Loading Ticker: " + provider.symbol);
-                var ticker = tickers.get(provider.id);
 
-                if (ticker === undefined || override){
-                    ticker = new TickerClass();
-                    ticker.set (
-                        {
-                            id : provider.id,
-                            name : provider.name,
-                            symbol : provider.symbol,
-                            siteUrl : provider.siteUrl,
-                            iconUrl : provider.iconUrl,
-                            feedUrl : provider.url,
-                        }
-                    );
-                    tickers.create(ticker);
-                    debug.debug("Created for first time ...")
-                }
-
-                debug.debug("Ready " + ticker.get('name'));
-            }
-        },
 
         /**
-         * Inicializa todos los tickers en TickerCollection a partir de la informacion definida en Providers
-         */
-        initTickers : function(override){
-            debug.debug("Loading Tickers ...");
-            //Obtengo los tickers guardados en el localStorage
-            tickers.fetch();
-            debug.debug("Loaded from localstorage " + tickers.length + " tickers");
-
-            //Busco alguno nuevo
-            for (var key in Providers){
-                if (Providers.hasOwnProperty(key)){
-                    this.initTicker(Providers[key],override);
-                }
-            }
-        },
-
-        /**
-         * Inicializa configuracion del sistema
-         */
-        initConfiguration : function () {
-            debug.debug("Loading Configuration ...");
-            //Obtengo la configuracion del localStorage
-            configs.fetch();
-
-            if (configs.get(Environment.INSTANCE_CONFIG) === undefined){
-                debug.debug("Not found configuration.")
-                var config = new ConfigClass();
-                configs.create(config);
-                debug.debug("Created a default one")
-            }
-
-            debug.debug("Loaded Configuration ...");
-        },
-
-        /**
-         * Devuelve la collecion con la configuracion. Se sigue este principio,ya que
+         * Devuelve la coleccion que contiene la configuracion. Se sigue este principio ya que
          * utilizamos una implementacion de LocalStorage en Backbone. Esta implementacion
          * solo funciona a traves de colecciones.
          *
@@ -235,10 +258,15 @@ define([
             return configs;
         },
 
-        checkLastTrigger : function() {
+        /**
+         * Funcion utilitaria que controla cuando se debe avisar a las vistas que el proceso de actualizacion ha terminado
+         * @private
+         */
+        _checkLastTrigger : function() {
             this.lastTrigger--;
             if (this.lastTrigger <= 0){
-                debug.debug("Triggering Event Update Tickers Finish");
+                debug.debug("[Sync] Refresh tickers has finished");
+                debug.debug("[Sync] Triggering EVENT_UPDATE_TICKERS_FINISH");
                 Events.trigger(Environment.EVENT_UPDATE_TICKERS_FINISH);
             }
         }
