@@ -41,8 +41,7 @@ define([
 
             this.collection.each(this.boot);
 
-            Events.on(Environment.EVENT_ENABLE_TICKER,this.add,this);
-            Events.on(Environment.EVENT_DISABLE_TICKER,this.remove,this);
+            this.listenTo(this.collection,"change",this.onChangeModel);
 
             debug.debug("[TableView] Initialized TableView");
         },
@@ -117,6 +116,19 @@ define([
                 });
             }
             return this;
+        },
+
+        onChangeModel : function (elem){
+            debug.debug("[TableView] Model Updated")
+            if (elem.changed.status !== undefined){
+                if (elem.changed.status){
+                    debug.debug("[TableView] Adding to table");
+                    this.add(elem);
+                }else {
+                    debug.debug("[TableView] Removing from table");
+                    this.remove(elem);
+                }
+            }
         }
     });
 

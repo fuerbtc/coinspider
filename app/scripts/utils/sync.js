@@ -187,11 +187,11 @@ define([
 
                     debug.debug("[Sync] Success - Data received. ");
                     me.updateTicker(jsonTicker, model);
-                    me.checkLastTrigger();
+                    me._checkLastTrigger();
                 },
                 error : function(data){
                     debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get('id') + " Name:" + model.get('name'));
-                    me.checkLastTrigger();
+                    me._checkLastTrigger();
                 }
             });
         },
