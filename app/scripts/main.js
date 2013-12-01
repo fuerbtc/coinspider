@@ -59,20 +59,20 @@ require(['jquery',
     function ($,dom,AppView,Vm,Sync) {
         'use strict';
 
-        debug.debug('Running CoinSpider');
+        debug.debug('[Main] Running CoinSpider');
         $(document).ready(function(){
             dom.ready($);
-            debug.debug('Loaded DOM features');
+            debug.debug('[Main] Loaded DOM features');
 
             var sync = new Sync();
             var config = sync.getConfiguration();
             var tickerList = sync.getTickers();
 
-            debug.debug('Loaded information about providers');
+            debug.debug('[Main] Loaded information about providers');
 
             var appView = Vm.create({}, 'AppView', AppView, {configuration: config, tickers: tickerList});
             appView.render();
             //Router.initialize({appView: appView});  // The router now has a copy of all main appview
-            debug.debug('Loaded Backbone Engine');
+            debug.debug('[Main] Loaded Backbone Engine');
         });
 });

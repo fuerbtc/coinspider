@@ -12,7 +12,7 @@ define([
 
         initialize : function (){
             if (this.model == null){
-                throw new Error("No configuration loaded");
+                throw new Error("[ConfigView] No configuration loaded");
             }
 
             _(this).bindAll('save');
@@ -55,7 +55,7 @@ define([
                 }
             }).change (me.save);
 
-            debug.debug("Initialized ConfigView");
+            debug.debug("[ConfigView] Initialized ConfigView");
         },
 
         events : {
@@ -64,6 +64,8 @@ define([
 
         render : function(){
             $('#configModal').modal();
+            debug.debug("[ConfigView] Rendered ConfigView");
+            return this;
         },
 
         save : function(event){
@@ -78,9 +80,9 @@ define([
             var id = $elem.attr('id');
             var value = $elem.val(); // En base al plugin UISlider invocar val obtienes el valor del slider
             var propertyName = id != null ? id.split('_')[0] : '';
-            debug.debug ("Updating property " + propertyName + " with value " + value);
+
             this.model.save(propertyName, value);
-            debug.debug("Saved! ");
+            debug.debug ("[ConfigView] Updated config property " + propertyName + " [" + value + "]");
 
             //Si es necesario se lanza, pero las vistas deben tener acceso al modelo de configuracion
             //y escuchar cuando se actualiza alguna propiedad

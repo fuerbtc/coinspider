@@ -51,7 +51,6 @@ define([
             Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_DISABLE_TICKER - Model disabled : "+ id);
                 tickers.get(id).save({status : Environment.TICKER_DISABLE });
-
             },this);
 
             Events.on(Environment.EVENT_UPDATE_TICKERS,function(){

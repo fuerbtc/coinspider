@@ -15,13 +15,13 @@ define([
 
         initialize : function() {
             if (this.model === undefined){
-                throw new Error("No model attached to this row");
+                throw new Error("[RowView] No model attached to this row");
             } else if (this.options.config === undefined){
-                throw new Error("No config attached to this row");
+                throw new Error("[RowView] No config attached to this row");
             }
 
             this.model.on("change:update",this.render,this);
-            debug.debug("Initialized RowView");
+            debug.debug("[RowView] Initialized RowView");
         },
 
         render: function() {
@@ -44,14 +44,12 @@ define([
             Events.on(Environment.EVENT_ENABLE_TICKER,this.add,this);
             Events.on(Environment.EVENT_DISABLE_TICKER,this.remove,this);
 
-            debug.debug("Initialized TableView");
+            debug.debug("[TableView] Initialized TableView");
         },
 
 
 
         add : function(model) {
-            debug.debug("Adding row to the table");
-
             var ticker  = {};
             if (model instanceof Object){
                 ticker = model;
@@ -68,7 +66,7 @@ define([
                 this._rowViews.push(rowView);
 
                 if (this._rendered) {
-                    debug.debug("Adding row inside table");
+                    debug.debug("[TableView] Adding row ");
                     $(this.el).find('#exchangers-table tbody').append(rowView.render().el);
                 }
             }
@@ -76,7 +74,6 @@ define([
         },
 
         remove : function(model) {
-            debug.debug("Removida la fila");
             var ticker  = {};
             if (model instanceof Object){
                 ticker = model;
@@ -89,7 +86,7 @@ define([
                 this._rowViews = _(this._rowViews).without(viewToRemove);
 
                 if (this._rendered) {
-                    debug.debug("Removing row inside table");
+                    debug.debug("[TableView] Removing row inside table");
                     $(viewToRemove.el).remove();
                 }
             }
@@ -110,7 +107,6 @@ define([
                 this.$el.find('#exchangers-empty').fadeOut('slow');
                 var $table = this.$el.find('#exchangers-table');
                 $table.fadeIn('slow');
-
                 this._rendered = true;
 
                 var $body = $table.find('tbody');
