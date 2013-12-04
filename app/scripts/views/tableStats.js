@@ -67,6 +67,8 @@ define([
                 if (this._rendered) {
                     debug.debug("[TableView] Adding row ");
                     $(this.el).find('#exchangers-table tbody').append(rowView.render().el);
+                }else {
+                    this.render();
                 }
             }
 
@@ -87,6 +89,10 @@ define([
                 if (this._rendered) {
                     debug.debug("[TableView] Removing row inside table");
                     $(viewToRemove.el).remove();
+
+                    if (this._rowViews.length <= 0){
+                       this.render();
+                    }
                 }
             }
         },
@@ -98,22 +104,27 @@ define([
         },
 
         render : function() {
+            var me = this;
             //When collection is empty. show Jumbotron
             if (this.collection.getEnables().length <= 0 ){
-                this.$el.find('#exchangers-table').fadeOut('slow');
-                this.$el.find('#exchangers-empty').fadeIn('slow');
-            }else {
-                this.$el.find('#exchangers-empty').fadeOut('slow');
-                var $table = this.$el.find('#exchangers-table');
-                $table.fadeIn('slow');
-                this._rendered = true;
-
-                var $body = $table.find('tbody');
-                $body.empty();
-
-                _(this._rowViews).each(function(childView) {
-                    $body.append(childView.render().el);
+                this.$el.find('#exchangers-table').fadeOut('slow',function(){
+                    me.$el.find('#exchangers-empty').fadeIn('slow'); //Chaining fadein
+                    me._rendered = false;
                 });
+            }else {
+                this.$el.find('#exchangers-empty').fadeOut('slow',function(){
+                    var $table = me.$el.find('#exchangers-table');
+                    $table.fadeIn('slow');
+                    me._rendered = true;
+
+                    var $body = $table.find('tbody');
+                    $body.empty();
+
+                    _(me._rowViews).each(function(childView) {
+                        $body.append(childView.render().el);
+                    });
+                });
+
             }
             return this;
         },
