@@ -51,16 +51,6 @@ define([
             var alertUp = config.get('alertUp');
             var alertDown = config.get('alertDown');
 
-            var formatDate = function(date){
-                var update = new Date();
-                if (typeof date == String){
-                    update = new Date(date);
-                }
-
-                return update.getDay() + "/" + update.getMonth() + "/" + update.getYear() + " " + update.getHours() + ":" + update.getMinutes() + ":" + update.getSeconds();
-
-            }
-
             var getCss = function(current, previous){
                 //If current is higher than previous is GOOD!!!
                 return current > previous ? Environment.CSS_SUCCESS : Environment.CSS_ERROR;
@@ -85,7 +75,7 @@ define([
             attributes.last = market.last;
             attributes.buy = market.buy;
             attributes.sell = market.sell;
-            attributes.update = formatDate(market.update);
+            attributes.update = market.update;
             attributes.name = this.model.get("name");
             attributes.iconUrl = this.model.get("iconUrl");
             attributes.siteUrl = this.model.get("siteUrl");
@@ -110,11 +100,6 @@ define([
         applyTransition: function(){
             $("#row-"+this.model.get("symbol") + " span").each(function(){
                 $(this).removeClass(Environment.CSS_SUCCESS + " " + Environment.CSS_ERROR);
-                debug.debug("Hola carambola");
-                debug.debug("Hola carambola");
-                debug.debug("Hola carambola");
-
-
             });
         }
 

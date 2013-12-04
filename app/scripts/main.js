@@ -28,7 +28,9 @@ require.config({
         crossdomain : 'vendor/jquery-xdomainajax-0.11',
         nouislider : ['//cdnjs.cloudflare.com/ajax/libs/noUiSlider/4.3.0/jquery.nouislider.min','vendor/jquery-nouislider-4.3.0.min'],
         //'requirejs-i18n': '../bower_components/requirejs-i18n/i18n',
-        'text': ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min']
+        'text': ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min'],
+        'moment' : ['//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min','vendor/moment-2.4.0.min'],
+        'moment_es' :  ['//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/es', 'vendor/moment_es-2.4.0' ]
         //requirejs: '../bower_components/requirejs/require',
     },
     shim: {

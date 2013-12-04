@@ -29,7 +29,11 @@
  *
  * You can return a boolean in case unexpected 'data' content.
  */
-define([],function(){
+define(["utils/environment",'moment','moment_es'],function(Environment,moment){
+
+    moment.lang('es');
+
+
     var providers = {
 
         mtgox : {
@@ -51,7 +55,8 @@ define([],function(){
                     result.buy = data.data.buy.value;
                     result.sell = data.data.sell.value;
                     //MtGox retorna el tiempo en unidades de microsegundos
-                    result.update = new Date(parseInt(data.data.now / 1000));
+                    //Guardo el String porque LocalStorage no almacena Objectos Date
+                    result.update = moment(new Date(parseInt(data.data.now / 1000))).format(Environment.DEFAULT_FORMAT_DATE);
                 }
 
                 return result;
@@ -73,7 +78,7 @@ define([],function(){
                     result.last = data.last;
                     result.buy = data.ask;
                     result.sell = data.bid;
-                    result.update = new Date(data.timestamp);
+                    result.update = moment(new Date(parseInt(data.timestamp)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
                 }
 
                 return result;
@@ -95,7 +100,7 @@ define([],function(){
                     result.last = data.ticker.last;
                     result.buy = data.ticker.buy;
                     result.sell = data.ticker.sell;
-                    result.update = new Date(data.ticker.updated);
+                    result.update = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
                 }
 
                 return result;
