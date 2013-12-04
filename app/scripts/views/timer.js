@@ -54,8 +54,8 @@ define([
                 }else {
                     debug.debug("tick ...");
                     window.setTimeout(this.refresh,1000);
-                    this.render();
                 }
+                this.render();
             }
         },
 

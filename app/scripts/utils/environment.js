@@ -10,6 +10,10 @@ define([],function(){
         DEFAULT_ALERT_UP_PERCENT : 5,
         DEFAULT_ALERT_DOWN_PERCENT : 5,
         DEFAULT_REFRESH_TIME : 15, //SECONDS
+        DEFAULT_CURRENCY : '$',
+        DOLAR: '$',
+        EURO : '€',
+        DEFAULT_CONVERSION : '1,3545',
 
         //Identificadores estaticos para acceder a modelos
         INSTANCE_CONFIG : 1,
@@ -29,7 +33,13 @@ define([],function(){
 
         //LocalStorage Collections
         STORAGE_TICKERS  : 'coinspider-ls-tickers',
-        STORAGE_CONFIG   : 'coinspider-ls-config'
+        STORAGE_CONFIG   : 'coinspider-ls-config',
+
+        CSS_SUCCESS : 'success',
+        CSS_ERROR : 'danger',
+
+        DEFAULT_FORMAT_DATE : 'yyyy-MM-dd hh:mm:ss'
+
     }
 
     return constants;

@@ -7,11 +7,19 @@
  *     symbol : '',
  *     siteUrl : '',
  *     iconUrl : '',
- *     last : '',
- *     buy : '',
- *     sell : '',
- *     date : ''
  *     adapter : '',
+ *     market : {
+ *         last : '',
+ *         buy : '',
+ *         sell : '',
+ *         date : ''
+ *     },
+ *     previousMarket : {
+ *         last : '',
+ *         buy : '',
+ *         sell : '',
+ *         date : ''
+ *     }
  * }
  *
  * **/
@@ -26,11 +34,19 @@ define(['backbone','utils/environment'],function(Backbone,Environment){
                 siteUrl: 'http://google.com',
                 iconUrl : 'https://github.com/bitcoin/bitcoin/raw/master/share/pixmaps/bitcoin.ico',
                 feedUrl : 'http://google.com',
-                last : 0,
-                buy : 0,
-                sell : 0,
-                update : new Date(),
-                status : Environment.TICKER_DISABLE
+                status : Environment.TICKER_DISABLE,
+                market : {
+                    last : 0,
+                    buy : 0,
+                    sell : 0,
+                    update : new Date()
+                },
+                previousMarket : {
+                    last : 0,
+                    buy : 0,
+                    sell : 0,
+                    update : new Date()
+                }
             }
         }
 

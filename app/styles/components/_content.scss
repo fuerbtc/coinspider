@@ -95,6 +95,16 @@
       .diff {
         margin-left: 5px;
         font-size: 0.8em;
+        display: none;
+        &.up {
+          display: inline;
+          color: $green;
+        }
+
+        &.down {
+          display: inline;
+          color: $red;
+        }
       }
     }
   }
@@ -103,6 +113,24 @@
     img ,
     h1 {
       display: inline-block;
+    }
+  }
+
+  .price {
+    -webkit-transition: background-color 3s ease-out;
+    -moz-transition: background-color 3s ease-out;
+    -o-transition: background-color 3s ease-out;
+    -ms-transition: background-color 3s ease-out;
+    transition: background-color 3s ease-out;
+
+    &.danger {
+      background-color: $red_background;
+      border-color: $red_border;
+    }
+
+    &.success {
+      background-color: $green_background;
+      border-color: $green_border;
     }
   }
 }

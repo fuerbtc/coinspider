@@ -215,8 +215,16 @@ define([
                 debug.debug("[Sync] Adapting data received");
                 var adaptedData = provider.adapter(data);
 
-                model.save(adaptedData);
-                debug.debug("[Sync] Saved data:  " + model.get('name') + "| Last " + model.get('last') + "| Buy " + model.get('buy') + "| Sell " + model.get('sell'));
+                //Last Market
+                var previous = model.get('market');
+
+                model.save({
+                    'previousMarket' : previous,
+                    'market' : adaptedData
+                });
+
+                var market = model.get('market');
+                debug.debug("[Sync] Saved data:  " + model.get('name') + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
             }
         },
 

@@ -13,6 +13,7 @@ define([
         tagName : 'tr',
         template: _.template(rowTemplate),
 
+
         initialize : function() {
             if (this.model === undefined){
                 throw new Error("[RowView] No model attached to this row");
@@ -20,14 +21,103 @@ define([
                 throw new Error("[RowView] No config attached to this row");
             }
 
-            this.model.on("change:update",this.render,this);
+            _(this).bindAll('applyTransition');
+            this.model.on("change:market",this.render,this);
+
             debug.debug("[RowView] Initialized RowView");
+
         },
 
         render: function() {
-            this.$el.html(this.template({ticker : this.model.attributes, config: this.options.config.attributes}));
+            this.el.id = "row-" + this.model.get("symbol");
+            this.$el.html(this.template({ticker : this.properties()}));
+
+            //Aplico funcion para transicion
+            var me = this;
+            setTimeout(function(){
+                me.applyTransition();
+            },1000);
+
+
             return this;
+        },
+
+        properties : function(){
+
+            var attributes = {};
+            var market = this.model.get('market');
+            var previous = this.model.get('previousMarket');
+            var config = this.options.config;
+            var alertUp = config.get('alertUp');
+            var alertDown = config.get('alertDown');
+
+            var formatDate = function(date){
+                var update = new Date();
+                if (typeof date == String){
+                    update = new Date(date);
+                }
+
+                return update.getDay() + "/" + update.getMonth() + "/" + update.getYear() + " " + update.getHours() + ":" + update.getMinutes() + ":" + update.getSeconds();
+
+            }
+
+            var getCss = function(current, previous){
+                //If current is higher than previous is GOOD!!!
+                return current > previous ? Environment.CSS_SUCCESS : Environment.CSS_ERROR;
+            }
+
+            var getAlert = function(current, previous){
+
+                var percentage = ((current - previous) / 100).toFixed(2);
+                var alert = {
+                    css : "",
+                    percentage : percentage
+                };
+
+                if (percentage < 0 && Math.abs(percentage) > alertDown ){
+                    alert.css = "down";
+                }else if (percentage > 0 && Math.abs(percentage) > alertUp) {
+                    alert.css = "up";
+                }
+                return alert;
+            }
+
+            attributes.last = market.last;
+            attributes.buy = market.buy;
+            attributes.sell = market.sell;
+            attributes.update = formatDate(market.update);
+            attributes.name = this.model.get("name");
+            attributes.iconUrl = this.model.get("iconUrl");
+            attributes.siteUrl = this.model.get("siteUrl");
+            attributes.currency = config.get('currency');
+            attributes.symbol = this.model.get("symbol");
+
+            attributes.css = {
+                'last' : getCss(market.last,previous.last),
+                'buy' : getCss(market.buy,previous.buy),
+                'sell' : getCss(market.sell,previous.sell)
+            };
+
+            attributes.alert = {
+                'last' : getAlert(market.last,previous.last),
+                'buy' : getAlert(market.buy,previous.buy),
+                'sell' : getAlert(market.sell,previous.sell)
+            }
+
+            return attributes;
+        },
+
+        applyTransition: function(){
+            $("#row-"+this.model.get("symbol") + " span").each(function(){
+                $(this).removeClass(Environment.CSS_SUCCESS + " " + Environment.CSS_ERROR);
+                debug.debug("Hola carambola");
+                debug.debug("Hola carambola");
+                debug.debug("Hola carambola");
+
+
+            });
         }
+
     });
 
 

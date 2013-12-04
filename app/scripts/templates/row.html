@@ -1,20 +1,33 @@
+  <%
+    var getHtmlCurrency = function(){
+      return "<span class='currency'>" + ticker.currency + "</span>"
+    }
+
+    var getHtmlDiff = function(alert){
+      return "<span class='diff " + alert.css + "'><i class='fa fa-arrow-" + alert.css + "'></i>("+ alert.percentage + ")</span></span>";
+    }
+  %>
+
   <td class="icon">
     <img src="<%= ticker.iconUrl %>" alt="<%= ticker.name %>">
   </td>
   <td class="name">
-    <%= ticker.name %>
+    <a href="<%= ticker.siteUrl %>" title="<%= ticker.name %>" target="_blank"><%= ticker.name %></a>
   </td>
   <td class="last">
-    <%= ticker.last %> <span class="currency">$</span>
+    <span class="price <%=ticker.css.last%>  <%= ticker.alert.last.css %>"><%= ticker.last %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.alert.last) %>
   </td>
   <td class="buy">
-    <%= ticker.buy %> <span class="currency">$</span>
+    <span class="price <%=ticker.css.buy%> <%= ticker.alert.buy.css %>"><%= ticker.buy %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.alert.buy) %>
+
   </td>
   <td class="sell">
-    <%= ticker.sell %><span class="currency">$</span>
+    <span class="price <%=ticker.css.sell%> <%= ticker.alert.sell.css %>"><%= ticker.sell %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.alert.sell) %>
   </td>
   <td class="update">
     <%= ticker.update %>
   </td>
 
-  <!--<span class="up">506<span class="currency">$</span><span class="diff"><i class="fa fa-arrow-up"></i>(+3.5%)</span></span>-->
