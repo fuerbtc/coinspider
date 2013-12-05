@@ -1,4 +1,4 @@
-extends templates/html
+extends templates/simple
 
 block env
   - var title = 'Acerca de'
@@ -6,77 +6,73 @@ block env
 
 
 block content
-  article.markdown-body.entry-content(itemprop='mainContentOfPage')
-    h2
-      a.anchor(name='coinspider', href='#coinspider')
-        span.octicon.octicon-link
-      | CoinSpider
-      p
-        | This tool was designed primarily to learn
-        a(href='http://backbonejs.org/') Backbone.js
-        | ,
-        | a Javascript library based on the
-        a(href='http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter') model-view-presenter
-        | application design paradigm (yes, i'm a geek person).
-      p
-        | Besides due to my huge interest in
-        a(href='http://coinmarketcap.com/') crypto-currencies
-        | , I found it appropriate
-        | to initiate a project involving these two subjects.
-      p
-        | So here we are: A tool based on HTML and Javascript (you can run it in your own computer)
-        | that help you track the current value of the most important crypto-currencies on the market.
-      p
-        | If you like what I'm doing and you want to motivate me to create/improve features,
-        | feel free to make a donation to one of my following wallets:
+  div.about
+    h2 CoinSpider
+    p
+      | Esta herramienta fue diseñada en primer lugar para aprender a utilizar
+      a(href='http://backbonejs.org/') Backbone.js
+      |, una libreria Javascript basada en el patrón de diseño
+      a(href='http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter') MVP
+      | (model-view-presenter).
+    p
+      | Además, debido a mi gran interés por las
+      a(href='http://coinmarketcap.com/') cripto-monedas
+      | , me pareció apropiado iniciar un proyecto en el que pudiese investigar ambos  temas.
+    p
+      | De tal manera, esta herramienta basada en HTML y Javascript (tu puedes ejecutarla en tu ordenador)
+      | te permite conocer el valor actual de las más importantes cripto-monedas del mercado.
+    p
+      | Si te gusta lo que hago y quieres motivarme a crear/mejorar funcionalidades,
+      | puedes hacer una pequeña donación en alguna de mis siguientes carteras:
       ul
         li
-          | BTC ->
+          | BTC
           code 1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V
         li
-          | LTC ->
+          | LTC
           code LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n
-      h2
-        a.anchor(name='crypto-currencies-supported', href='#crypto-currencies-supported')
-          span.octicon.octicon-link
-        | Crypto Currencies Supported
+    p
+      | Coinspider soporta de momento las siguientes cripto-monedas:
       ul
         li BTC / Mt.Gox
         li BTC / Bitstamp
         li BTC / Btc-e
-      h2
-        a.anchor(name='getting-started', href='#getting-started')
-          span.octicon.octicon-link
-        | Getting started
-      p Just click on live version and have fun!
-      h2
-        a.anchor(name='development', href='#development')
-          span.octicon.octicon-link
-        | Development
-      p Feel free to contribute to the project. Is based on Node.js work philosophy
-      pre.
+        li trabajando en muchas mas
+    h2 Desarrollo
+    p
+      | Siente libre de colaborar con el proyecto. CoinSpider está basado en la filosfía de desarrollo Node.js
+    pre.
+      $ git clone https://github.com/fuerbtc/coinspider.git
+      $ cd coinspider
+      $ bower install
+      $ grunt
+      $ cd dist/
+      $ open index.html
 
-      h2
-        a.anchor(name='todos', href='#todos')
-          span.octicon.octicon-link
-        | TODOS
+    h2 Cosas por hacer
+    ul
+      li Agregar mas cripto monedas
+      li Soporte para idiomas
+      li Calculadora de comisiones
+
+    h2 Log de cambios
+    p v0.1
+    ul
+      li Release pública
+
+    h2 Autor
+    p
+      |Creado por
+      a(href="https://github.com/fuerbtc") Philippe Mindugui
+    p
+      | Contacto
+      code fuerbtc@gmx.de
+    p
+      | Donaciones
       ul
-        li i18n Support
-        li Fee Exchange Calculator
-        li Support more crypto-currencies
-      h2
-        a.anchor(name='changelog', href='#changelog')
-          span.octicon.octicon-link
-        | Changelog
-      p v0.1
-      ul
-        li Public release
-      p Created by Philippe Mindugui
-      p
-        | Contact:
-        code fuerbtc@gmx.de
-      p
-        | Donate: BTC
-        code 1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V
-        | | LTC
-        code LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n
+        li
+          | BTC
+          code 1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V
+        li
+          | LTC
+          code LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n

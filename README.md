@@ -16,15 +16,22 @@ feel free to make a donation to one of my following wallets:
 * BTC -> `1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V`
 * LTC -> `LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n`
 
-## Crypto Currencies Supported
+Currently CoinSpider support the following crypto-currencies:
 
 * BTC / Mt.Gox
 * BTC / Bitstamp
 * BTC / Btc-e
+* more incoming...
 
 ## Getting started
 
 Just [click here](http://fuerbtc.github.io/coinspider) and have fun!
+
+## TODOS
+
+- i18n Support
+- Fee Exchange Calculator
+- Add more crypto-currencies
 
 ## Development
 
@@ -37,23 +44,19 @@ Feel free to contribute to the project. Is it based on Node.js development philo
     $ cd dist/
     $ open index.html
 
-## TODOS
-
-- i18n Support
-- Fee Exchange Calculator
-- Add more crypto-currencies
-
-## Licensing
-
-This tool has an open-sourced software licensed under the [MIT License](http://opensource.org/licenses/MIT)
-
 ## Changelog
 
 v0.1
 - Public release
+
+## Author
 
 Created by Philippe Mindugui
 
 Contact: `fuerbtc@gmx.de`
 
 Donate: BTC `1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V` | LTC `LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n`
+
+## Licensing
+
+This tool has an open-sourced software licensed under the [MIT License](http://opensource.org/licenses/MIT)

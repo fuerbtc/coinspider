@@ -1,0 +1,60 @@
+!!! 5
+//if lt IE 7
+  <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+  <html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+  <html class="no-js lt-ie9">
+//if gt IE 8
+  <!--> <html class="no-js"> <!--
+block env
+head
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible", content="IE=edge")
+  title CoinSpider | #{title}
+  meta(name="description", content= app.description)
+  meta(name="author", content= app.author)
+  meta(name="revisit-after", content="")
+  meta(name="viewport", content="width=device-width, initial-scale=1")
+  // Place favicon.ico and apple-touch-icon.png in the root directory
+  block css
+  include css
+  include scripts_head
+
+body
+  //if lt IE 10
+  p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+
+  div.wrap
+    // header.top
+    div.top
+      include header
+    // end header.top
+    // content
+    div.content
+      // outer
+      div.outer
+        // inner
+        div.inner
+          // inside
+          block content
+          // end inside
+        //end inner
+      //end outer
+    //end content
+
+    // footer
+    footer.bottom
+      span Si te gusta lo que hago y quieres motivarme a crear/mejorar funcionalidades, puedes hacer una pequeña donación
+      div.wallet
+        | BTC
+        i(class="fa fa-hand-o-right")
+        | 1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V
+      div.wallet
+        | LTC
+        i(class="fa fa-hand-o-right")
+        | LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n
+    //end fotter
+
+  include ga
+  include scripts_bottom
