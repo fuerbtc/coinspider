@@ -8,16 +8,13 @@ Besides due to my huge interest in [crypto-currencies](http://coinmarketcap.com/
 to initiate a project involving these two subjects.
 
 So here we are: A tool based on HTML and Javascript (you can run it in your own computer)
-that help you track the current value of the most important crypto-currencies in the market.
-
-As a plus, this tool also help you to make estimates about how much you would have to sell/buy
-in an exchanger to make profit.
+that help you track the current value of the most important crypto-currencies on the market.
 
 If you like what I'm doing and you want to motivate me to create/improve features,
 feel free to make a donation to one of my following wallets:
 
-* BTC -> 1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V
-* LTC -> LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n
+* BTC -> `1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V`
+* LTC -> `LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n`
 
 ## Crypto Currencies Supported
 
