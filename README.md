@@ -28,7 +28,7 @@ Just [click here](http://fuerbtc.github.io/coinspider) and have fun!
 
 ## Development
 
-Feel free to contribute to the project. Is based on Node.js work philosophy
+Feel free to contribute to the project. Is it based on Node.js development philosophy
 
     $ git clone https://github.com/fuerbtc/coinspider.git
     $ cd coinspider
@@ -41,7 +41,7 @@ Feel free to contribute to the project. Is based on Node.js work philosophy
 
 - i18n Support
 - Fee Exchange Calculator
-- Support more crypto-currencies
+- Add more crypto-currencies
 
 ## Licensing
 
