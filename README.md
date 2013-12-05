@@ -49,5 +49,7 @@ v0.1
 - Public release
 
 Created by Philippe Mindugui
+
 Contact: `fuerbtc@gmx.de`
+
 Donate: BTC `1QKMjANav8JVB5TjiRQUj3rYN6bK9iDw8V` | LTC `LR74uDwYggPkSHiVKjjK9AdSzj6Qt9WB8n`
