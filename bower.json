@@ -1,6 +1,6 @@
 {
-  "name": "btc-board",
-  "version": "0.3.0",
+  "name": "coinspider",
+  "version": "0.1.0",
   "dependencies": {
     "sass-bootstrap": "~3.0.0",
     "requirejs": "~2.1.8",

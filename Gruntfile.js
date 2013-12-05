@@ -176,9 +176,17 @@ module.exports = function (grunt) {
                     wrap: true,
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
                     paths: {
-                        jquery: 'empty:',
-                        backbone: 'empty:',
-                        underscore: 'empty:'
+                        jquery: 'vendor/jquery-1.10.2.min',
+                        backbone: 'vendor/backbone-1.0.0.min',
+                        underscore: 'vendor/underscore-1.5.2.min',
+                        bootstrap : 'vendor/bootstrap-3.0.2.min',
+                        localStorage : 'vendor/backbone.localStorage-1.1.7.min',
+                        crossdomain : 'vendor/jquery-xdomainajax-0.11',
+                        nouislider : 'vendor/jquery-nouislider-4.3.0.min',
+                        text : 'vendor/require-text-2.0.10.min',
+                        moment: 'vendor/moment-2.4.0.min',
+                        moment_es : 'vendor/moment_es-2.4.0',
+                        chosen : 'vendor/jquery-chosen-1.0.min'
                     }
                 }
             }

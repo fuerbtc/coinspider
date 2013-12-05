@@ -24,7 +24,7 @@ feel free to make a donation to one of my following wallets:
 
 ## Getting started
 
-Just click on live version and have fun!
+Just [click here](http://fuerbtc.github.io/coinspider) and have fun!
 
 ## Development
 
@@ -42,6 +42,10 @@ Feel free to contribute to the project. Is based on Node.js work philosophy
 - i18n Support
 - Fee Exchange Calculator
 - Support more crypto-currencies
+
+## Licensing
+
+This tool has an open-sourced software licensed under the [MIT License](http://opensource.org/licenses/MIT)
 
 ## Changelog
 
