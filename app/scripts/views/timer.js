@@ -33,6 +33,12 @@ define([
             //Registro de evento para saber cuando el kernel ha terminado de actualizar
             Events.on(Environment.EVENT_UPDATE_TICKERS_FINISH, this.renderDone,this);
 
+            //Permitir al usuario actualizacion manual
+            var me = this;
+            $('#refreshAction').bind('click',function(event){
+                me.currentTimer = 1;
+            });
+
             debug.debug("[TimerView] Initialized TimerView");
         },
 

@@ -45,12 +45,15 @@ define([
         registerEvents : function () {
             Events.on(Environment.EVENT_ENABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_ENABLE_TICKER - Model enabled : "+ id);
-                tickers.get(id).save({status : Environment.TICKER_ENABLE });
+                var model = tickers.get(id);
+                model.save({status : Environment.TICKER_ENABLE });
+                this.refreshTicker(model);
             },this);
 
             Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_DISABLE_TICKER - Model disabled : "+ id);
                 tickers.get(id).save({status : Environment.TICKER_DISABLE });
+
             },this);
 
             Events.on(Environment.EVENT_UPDATE_TICKERS,function(){

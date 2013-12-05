@@ -38,7 +38,7 @@ define([],function(){
         CSS_SUCCESS : 'success',
         CSS_ERROR : 'danger',
 
-        DEFAULT_FORMAT_DATE : 'DD/MM/YYYY, h:mm:ss a'
+        DEFAULT_FORMAT_DATE : 'h:mm:ss a'
 
     }
 
