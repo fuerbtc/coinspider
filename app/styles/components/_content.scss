@@ -134,3 +134,43 @@
     }
   }
 }
+
+footer.bottom {
+  color: white;
+  text-align: center;
+  padding: 10px;
+
+  .wallet {
+    i {
+      margin: 0 10px;
+    }
+  }
+}
+
+/**
+* Configuration
+*/
+.config {
+  .property {
+    margin-bottom: 1.3em;
+
+    .message {
+      margin-bottom: 0.5em;
+      span {
+        margin: 0 0.2em;
+      }
+    }
+
+    .noUi-base {
+      height: 10px;
+    }
+
+    .noUi-handle {
+      width: 16px;
+      height: 16px;
+      left: -4px;
+      cursor: pointer;
+    }
+  }
+
+}

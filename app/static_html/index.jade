@@ -15,16 +15,15 @@ block content
         div(class="panel panel-default")
           div(class="panel-heading clearfix")
             div(class="icons")
-              i(class="fa fa-btc")
-            div(class="panel-title") itcoin Exchangers
+            div(class="panel-title") Exchangers
             div(class="toolbar")
               ul.nav
                 li#messages
                 li#refreshAction.action
-                  a(class="")
+                  a(title="Actualizar")
                     i(class="fa fa-refresh")
                 li.action
-                  a(id="configAction",class="",title="Configuracion")
+                  a(id="configAction",title="Configuracion")
                     i(class="fa fa-gear")
                 li
                   a(class="accordion-toggle minimize-box",
@@ -51,28 +50,30 @@ block content
                     img(src="/images/leprechaun.png")
                     h1
                       | Bienvenido a CoinSpider!
-  div(class="modal fade", id="configModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+  div(class="modal fade config", id="configModal", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
     div.modal-dialog
       div.modal-content
         div.modal-header
           button(type="button",class="close", data-dismiss="modal", aria-hidden="true") &times;
-          h4(class="modal-title", id="myModalLabel") Configuracion
+          h4(class="modal-title", id="myModalLabel") Configuración
         div.modal-body
-          div.propertie#refreshTimer
+          div.property#refreshTimer
             div.message
               | Actualizar cada
               span#refreshTimerStatus 0
               | segundos
             div.slider#refreshTimer_Slider
-          div.propertie#alertUp
+          div.property#alertUp
             div.message
-              | Alertar si sube mas de
+              | Alertar si sube más de
               span#alertUpStatus 0
               | &#37;
             div.slider#alertUp_Slider
-          div.propertie#alertDown
+          div.property#alertDown
             div.message
-              | Alertas si baja mas de
+              | Alertar si baja más de
               span#alertDownStatus 0
               | &#37;
             div.slider#alertDown_Slider
+
+

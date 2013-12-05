@@ -7,8 +7,8 @@ define([],function(){
         TICKER_ENABLE : true,
         TICKER_DISABLE: false,
         DEFAULT_VALUE : 0,
-        DEFAULT_ALERT_UP_PERCENT : 5,
-        DEFAULT_ALERT_DOWN_PERCENT : 5,
+        DEFAULT_ALERT_UP_PERCENT : 0,
+        DEFAULT_ALERT_DOWN_PERCENT : 0,
         DEFAULT_REFRESH_TIME : 15, //SECONDS
         DEFAULT_CURRENCY : '$',
         DOLAR: '$',
@@ -39,7 +39,6 @@ define([],function(){
         CSS_ERROR : 'danger',
 
         DEFAULT_FORMAT_DATE : 'h:mm:ss a'
-
     }
 
     return constants;
