@@ -62,18 +62,37 @@ block content
               | Actualizar cada
               span#refreshTimerStatus 0
               | segundos
-            div.slider#refreshTimer_Slider
+            div.value
+              div.slider#refreshTimer_Slider
           div.property#alertUp
             div.message
               | Alertar si sube más de
               span#alertUpStatus 0
               | &#37;
-            div.slider#alertUp_Slider
+            div.value
+              div.slider#alertUp_Slider
           div.property#alertDown
             div.message
               | Alertar si baja más de
               span#alertDownStatus 0
-              | &#37;
-            div.slider#alertDown_Slider
-
-
+              | &#37;&nbsp;&nbsp;
+            div.value
+              div.slider#alertDown_Slider
+          div.property#messageCounter
+            div.message
+              | Activar contador regresivo
+            div.value
+              div.onoffswitch
+                input(type="checkbox", name="msgCounterSwitch", class="onoffswitch-checkbox", id="messageCounterSwitch", checked)
+                label(class="onoffswitch-label", for="messageCounterSwitch")
+                  div.onoffswitch-inner
+                  div.onoffswitch-switch
+          div.property#log
+            div.message
+              | Activar logs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            div.value
+              div.onoffswitch
+                input(type="checkbox", name="logsSwitch", class="onoffswitch-checkbox", id="logSwitch")
+                label(class="onoffswitch-label", for="logSwitch")
+                  div.onoffswitch-inner
+                  div.onoffswitch-switch
