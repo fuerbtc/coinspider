@@ -10,7 +10,7 @@
  * @info http://james.padolsey.com/javascript/cross-domain-requests-with-jquery/
  */
 
-jQuery.ajax = (function(_ajax){
+jQuery.CrossDomainAjax = (function(_ajax){
 
     var protocol = location.protocol,
         hostname = location.hostname,
@@ -27,9 +27,7 @@ jQuery.ajax = (function(_ajax){
         var url = o.url;
 
         if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
-
             // Manipulate options so that JSONP-x request is made to YQL
-
             o.url = YQL;
             o.dataType = 'json';
 
@@ -52,14 +50,12 @@ jQuery.ajax = (function(_ajax){
 
             o.success = (function(_success){
                 return function(data) {
-
                     if (_success) {
                         // Fake XHR callback.
-                        _success.call(this, {
-                            responseText: (data || '')
-                        }, 'success');
+                        // query.results.html.body.p - Es un JSON enviado por YQL que debo parsear nuevamente
+                        // para obtener el resultado deseado
+                        _success.call(this, JSON.parse(data.query.results.html.body.p), 'success');
                     }
-
                 };
             })(o.success);
 
@@ -68,5 +64,4 @@ jQuery.ajax = (function(_ajax){
         return _ajax.apply(this, arguments);
 
     };
-
 })(jQuery.ajax);

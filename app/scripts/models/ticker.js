@@ -39,14 +39,17 @@ define(['backbone','utils/environment'],function(Backbone,Environment){
                     last : 0,
                     buy : 0,
                     sell : 0,
+                    volume : 0,
                     update : 0
                 },
                 previousMarket : {
                     last : 0,
                     buy : 0,
                     sell : 0,
+                    volume: 0,
                     update : 0
-                }
+                },
+                crossdomain : false
             }
         }
 

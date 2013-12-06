@@ -39,11 +39,11 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
         mtgox : {
             id : '66',
             symbol : 'mtgox',
-            feedUrl : 'https://data.mtgox.com/api/2/BTCUSD/money/ticker_fast',
+            feedUrl : 'http://data.mtgox.com/api/1/BTCUSD/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/mtgoxUSD.html',
             iconUrl : 'https://www.mtgox.com/favicon.ico',
             name : 'Mt.Gox',
-
+            crossdomain : true,
 
             adapter : function (data){
                 var result = false;
@@ -51,12 +51,13 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
                 if (data.result == "success"){
                     result = {};
                     //Mt.Gox envia 5 decimales
-                    result.last = data.data.last.value;
-                    result.buy = data.data.buy.value;
-                    result.sell = data.data.sell.value;
+                    result[Environment.PROPERTY_TICKER_LAST] = data.return.last.value;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.return.buy.value;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.return.sell.value;
                     //MtGox retorna el tiempo en unidades de microsegundos
                     //Guardo el String porque LocalStorage no almacena Objectos Date
-                    result.update = moment(new Date(parseInt(data.data.now / 1000))).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(parseInt(data.return.now / 1000))).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.return.vol.value;
                 }
 
                 return result;
@@ -69,16 +70,18 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             siteUrl : 'http://bitcoincharts.com/markets/bitstampUSD.html',
             iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
             name : 'Bitstamp',
+            crossdomain: false,
             adapter : function (data){
                 var result = false;
 
                 if (data.last != undefined){
                     result = {};
                     //Envian dos decimales
-                    result.last = data.last;
-                    result.buy = data.ask;
-                    result.sell = data.bid;
-                    result.update = moment(new Date(parseInt(data.timestamp)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_LAST] = data.last;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.ask;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.bid;
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(parseInt(data.timestamp)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.volume;
                 }
 
                 return result;
@@ -91,38 +94,41 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             siteUrl : 'http://bitcoincharts.com/markets/btceUSD.html',
             iconUrl : 'https://btc-e.com/favicon.ico',
             name : 'Btc-e BTC',
+            crossdomain: false,
             adapter : function (data){
                 var result = false;
 
                 if (data.ticker != undefined){
                     result = {};
                     //Envian 5 decimales
-                    result.last = data.ticker.last;
-                    result.buy = data.ticker.buy;
-                    result.sell = data.ticker.sell;
-                    result.update = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_LAST] = data.ticker.last;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.ticker.buy;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.ticker.sell;
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.ticker.vol_cur;
                 }
 
                 return result;
             }
         },
-        localbtc : {
-            id : '99',
-            symbol : 'localbtc',
-            feedUrl :  'https://btc-e.com/api/2/btc_usd/ticker',
-            siteUrl : 'http://bitcoincharts.com/markets/localbtcUSD.html',
-            iconUrl : 'https://btc-e.com/favicon.ico',
-            name : 'Btc-e BTC',
+        xbtusd : {
+            id : '100',
+            symbol : 'xbtusd',
+            feedUrl :  'https://www.itbit.com/api/feeds/ticker/XBTUSD',
+            siteUrl : 'https://www.itbit.com',
+            iconUrl : 'https://www.itbit.com/favicon.ico',
+            name : 'itBit',
+            crossdomain: false,
             adapter : function (data){
                 var result = false;
 
-                if (data.ticker != undefined){
+                if (data.bid != undefined){
                     result = {};
-                    //Envian 5 decimales
-                    result.last = data.ticker.last;
-                    result.buy = data.ticker.buy;
-                    result.sell = data.ticker.sell;
-                    result.update = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_LAST] = data.open;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.ask;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.bid;
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(data.currentTime)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.volume;
                 }
 
                 return result;

@@ -53,6 +53,7 @@ define([],function(){
         PROPERTY_CONFIG_ALERT_UP : 'alertUp',
         PROPERTY_CONFIG_ALERT_DOWN : 'alertDown',
 
+
         PROPERTY_TICKER_NAME : 'name',
         PROPERTY_TICKER_SYMBOL : 'symbol',
         PROPERTY_TICKER_SITE_URL : 'siteUrl',
@@ -63,8 +64,11 @@ define([],function(){
         PROPERTY_TICKER_LAST : 'last',
         PROPERTY_TICKER_BUY : 'buy',
         PROPERTY_TICKER_SELL : 'sell',
+        PROPERTY_TICKER_VOLUME : 'volume',
         PROPERTY_TICKER_UPDATE : 'update',
-        PROPERTY_TICKER_PREVIOUS_MARKET : 'previousMarket'
+        PROPERTY_TICKER_PREVIOUS_MARKET : 'previousMarket',
+        PROPERTY_TICKER_CROSS_DOMAIN : 'crossdomain'
+
     }
 
     return constants;

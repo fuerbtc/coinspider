@@ -83,14 +83,15 @@ define([
                 debug.debug("[Sync] Loading Ticker : " + provider.symbol);
                 var ticker = tickers.get(provider.id);
 
-                var defaultData = {
-                    id : provider.id,
-                    name : provider.name,
-                    symbol : provider.symbol,
-                    siteUrl : provider.siteUrl,
-                    iconUrl : provider.iconUrl,
-                    feedUrl : provider.feedUrl
-                };
+                var defaultData = {};
+                defaultData[Environment.PROPERTY_ID] = provider.id;
+                defaultData[Environment.PROPERTY_TICKER_NAME] = provider.name;
+                defaultData[Environment.PROPERTY_TICKER_SYMBOL] = provider.symbol;
+                defaultData[Environment.PROPERTY_TICKER_SITE_URL] = provider.siteUrl;
+                defaultData[Environment.PROPERTY_TICKER_ICON_URL] = provider.iconUrl;
+                defaultData[Environment.PROPERTY_TICKER_FEED_URL] = provider.feedUrl;
+                defaultData[Environment.PROPERTY_TICKER_VOLUME] = provider.volume;
+                defaultData[Environment.PROPERTY_TICKER_CROSS_DOMAIN] = provider.crossdomain;
 
                 if (ticker === undefined){
                     ticker = new TickerClass();
@@ -102,7 +103,7 @@ define([
                     debug.debug("[Sync] Overrided " + provider.name);
                 }
 
-                debug.debug("[Sync] Ready Ticker " + ticker.get('name'));
+                debug.debug("[Sync] Ready Ticker " + ticker.get(Environment.PROPERTY_TICKER_NAME));
             }
         },
 
@@ -143,22 +144,26 @@ define([
             debug.debug("[Sync] Updating model " + model.get(Environment.PROPERTY_TICKER_NAME));
             var me = this;
 
-            $.ajax({
+            var reqEngine = null;
+            var isCrossDomain = model.get(Environment.PROPERTY_TICKER_CROSS_DOMAIN);
+
+            if (isCrossDomain){
+                reqEngine = $.ajax;
+            } else {
+                reqEngine = $.CrossDomainAjax;
+            }
+
+            reqEngine({
                 url: model.get(Environment.PROPERTY_TICKER_FEED_URL),
                 type: 'GET',
                 success: function(data) {
-                    var jsonTicker = {};
-                    if (data && data.responseText.query !== undefined){
-                        try {
-                            jsonTicker = JSON.parse(data.responseText.query.results.html.body.p);
-                        }catch (Exception) {
-                            jsonTicker = {};
-                        }
+                    if (data){
+                        debug.debug("[Sync] Success - Data received. ");
+                        me.updateTicker(data, model);
+                        me._checkLastTrigger();
+                    }else {
+                        debug.debug("[Sync] Success - BUT NO DATA RECEIVED. ");
                     }
-
-                    debug.debug("[Sync] Success - Data received. ");
-                    me.updateTicker(jsonTicker, model);
-                    me._checkLastTrigger();
                 },
                 error : function(data){
                     debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get(Environment.PROPERTY_ID) + " Name:" + model.get(Environment.PROPERTY_TICKER_NAME));

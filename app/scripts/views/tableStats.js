@@ -45,11 +45,11 @@ define([
         properties : function(){
 
             var attributes = {};
-            var market = this.model.get('market');
-            var previous = this.model.get('previousMarket');
+            var market = this.model.get(Environment.PROPERTY_TICKER_MARKET);
+            var previous = this.model.get(Environment.PROPERTY_TICKER_PREVIOUS_MARKET);
             var config = this.options.config;
-            var alertUp = config.get('alertUp');
-            var alertDown = config.get('alertDown');
+            var alertUp = config.get(Environment.PROPERTY_CONFIG_ALERT_UP);
+            var alertDown = config.get(Environment.PROPERTY_CONFIG_ALERT_DOWN);
 
             var getCss = function(current, previous){
                 //If current is higher than previous is GOOD!!!
@@ -72,15 +72,17 @@ define([
                 return alert;
             }
 
-            attributes.last = market.last;
-            attributes.buy = market.buy;
-            attributes.sell = market.sell;
-            attributes.update = market.update;
-            attributes.name = this.model.get("name");
-            attributes.iconUrl = this.model.get("iconUrl");
-            attributes.siteUrl = this.model.get("siteUrl");
+            attributes.last = market[Environment.PROPERTY_TICKER_LAST];
+            attributes.buy = market[Environment.PROPERTY_TICKER_BUY];
+            attributes.sell = market[Environment.PROPERTY_TICKER_SELL];
+            attributes.update = market[Environment.PROPERTY_TICKER_UPDATE];
+            attributes.volume = market[Environment.PROPERTY_TICKER_VOLUME];
+            attributes.name = this.model.get(Environment.PROPERTY_TICKER_NAME);
+            attributes.iconUrl = this.model.get(Environment.PROPERTY_TICKER_ICON_URL);
+            attributes.siteUrl = this.model.get(Environment.PROPERTY_TICKER_SITE_URL);
             attributes.currency = config.get('currency');
-            attributes.symbol = this.model.get("symbol");
+            attributes.symbol = this.model.get(Environment.PROPERTY_TICKER_SYMBOL);
+
 
             attributes.css = {
                 'last' : getCss(market.last,previous.last),

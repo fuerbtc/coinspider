@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CrossDomain Check</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"> </script>
+
+  <script type="text/javascript" >
+
+    $(document).ready (function(){
+      $.ajax({
+        url: 'http://data.mtgox.com/api/1/BTCUSD/ticker',
+        type: 'GET',
+        success: function(data) {
+          console.log("response OK");
+          $('#message').html("gOOD");
+          console.log(data);
+        },
+        error : function(data){
+          console.log("FIAL!!!");
+          $('#message').html("Fial");
+        }
+      });
+    });
+
+  </script>
+
+
+</head>
+<body>
+<div id="message"></div>
+</body>
+
+</html>

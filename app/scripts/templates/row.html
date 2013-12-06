@@ -27,6 +27,9 @@
     <span class="price <%=ticker.css.sell%> <%= ticker.alert.sell.css %>"><%= ticker.sell %><%= getHtmlCurrency()%></span>
     <%= getHtmlDiff(ticker.alert.sell) %>
   </td>
+  <td class="volume">
+    <%= ticker.volume %>
+  </td>
   <td class="update">
     <%= ticker.update %>
   </td>
