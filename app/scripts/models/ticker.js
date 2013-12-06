@@ -39,13 +39,13 @@ define(['backbone','utils/environment'],function(Backbone,Environment){
                     last : 0,
                     buy : 0,
                     sell : 0,
-                    update : new Date()
+                    update : 0
                 },
                 previousMarket : {
                     last : 0,
                     buy : 0,
                     sell : 0,
-                    update : new Date()
+                    update : 0
                 }
             }
         }

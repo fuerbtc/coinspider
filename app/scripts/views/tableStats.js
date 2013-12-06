@@ -29,7 +29,7 @@ define([
         },
 
         render: function() {
-            this.el.id = "row-" + this.model.get("symbol");
+            this.el.id = "row-" + this.model.get(Environment.PROPERTY_TICKER_SYMBOL);
             this.$el.html(this.template({ticker : this.properties()}));
 
             //Aplico funcion para transicion
@@ -173,7 +173,7 @@ define([
         },
 
         boot : function (model){
-            if (model.get('status')){
+            if (model.get(Environment.PROPERTY_TICKER_STATUS)){
                 this.add(model);
             }
         },

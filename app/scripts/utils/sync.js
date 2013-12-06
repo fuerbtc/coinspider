@@ -140,11 +140,11 @@ define([
          * @returns {boolean}
          */
         refreshTicker : function (model){
-            debug.debug("[Sync] Updating model " + model.get('name'));
+            debug.debug("[Sync] Updating model " + model.get(Environment.PROPERTY_TICKER_NAME));
             var me = this;
 
             $.ajax({
-                url: model.get('feedUrl'),
+                url: model.get(Environment.PROPERTY_TICKER_FEED_URL),
                 type: 'GET',
                 success: function(data) {
                     var jsonTicker = {};
@@ -161,7 +161,7 @@ define([
                     me._checkLastTrigger();
                 },
                 error : function(data){
-                    debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get('id') + " Name:" + model.get('name'));
+                    debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get(Environment.PROPERTY_ID) + " Name:" + model.get(Environment.PROPERTY_TICKER_NAME));
                     me._checkLastTrigger();
                 }
             });
@@ -179,21 +179,21 @@ define([
         updateTicker : function (data, model) {
             //Save accede a la collecion y busca el objeto del modelo,
             //si no esta lo guarda. Si esta, actualiza.
-            var provider = this.getProvider(model.get('symbol'));
+            var provider = this.getProvider(model.get(Environment.PROPERTY_TICKER_SYMBOL));
             if (provider){
                 debug.debug("[Sync] Adapting data received");
                 var adaptedData = provider.adapter(data);
 
                 //Last Market
-                var previous = model.get('market');
+                var previous = model.get(Environment.PROPERTY_TICKER_PREVIOUS_MARKET);
 
                 model.save({
                     'previousMarket' : previous,
                     'market' : adaptedData
                 });
 
-                var market = model.get('market');
-                debug.debug("[Sync] Saved data:  " + model.get('name') + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
+                var market = model.get(Environment.PROPERTY_TICKER_MARKET);
+                debug.debug("[Sync] Saved data:  " + model.get(Environment.PROPERTY_TICKER_NAME) + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
             }
         },
 

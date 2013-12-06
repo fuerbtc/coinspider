@@ -25,7 +25,7 @@ define([
             //Para Refresco
             $('#refreshTimer_Slider').noUiSlider({
                 range: [10, 60]
-                ,start: model.get('refreshTimer')
+                ,start: model.get(Environment.PROPERTY_CONFIG_REFRESH_TIMER)
                 ,step: 5
                 ,handles: 1
                 ,serialization: {
@@ -36,7 +36,7 @@ define([
 
             $('#alertUp_Slider').noUiSlider({
                 range: [0, 20]
-                ,start: model.get('alertUp')
+                ,start: model.get(Environment.PROPERTY_CONFIG_ALERT_UP)
                 ,step: 1
                 ,handles: 1
                 ,serialization: {
@@ -47,7 +47,7 @@ define([
 
             $('#alertDown_Slider').noUiSlider({
                 range: [0, 20]
-                ,start: model.get('alertDown')
+                ,start: model.get(Environment.PROPERTY_CONFIG_ALERT_DOWN)
                 ,step: 1
                 ,handles: 1
                 ,serialization: {

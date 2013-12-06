@@ -77,7 +77,7 @@ define([
         },
 
         getRefreshTimer : function(){
-            return this.model.get('refreshTimer');
+            return this.model.get(Environment.PROPERTY_CONFIG_REFRESH_TIMER);
         },
 
         getDisableMessageCounter : function (){

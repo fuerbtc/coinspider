@@ -45,8 +45,26 @@ define([],function(){
 
         DEFAULT_FORMAT_DATE : 'h:mm:ss a',
 
+        //Property Descriptors
+        PROPERTY_ID : 'id',
         PROPERTY_CONFIG_ENABLE_LOG : 'enableLog',
-        PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER : 'enableMessageCounter'
+        PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER : 'enableMessageCounter',
+        PROPERTY_CONFIG_REFRESH_TIMER : 'refreshTimer',
+        PROPERTY_CONFIG_ALERT_UP : 'alertUp',
+        PROPERTY_CONFIG_ALERT_DOWN : 'alertDown',
+
+        PROPERTY_TICKER_NAME : 'name',
+        PROPERTY_TICKER_SYMBOL : 'symbol',
+        PROPERTY_TICKER_SITE_URL : 'siteUrl',
+        PROPERTY_TICKER_ICON_URL : 'iconUrl',
+        PROPERTY_TICKER_FEED_URL : 'feedUrl',
+        PROPERTY_TICKER_STATUS : 'status',
+        PROPERTY_TICKER_MARKET : 'market',
+        PROPERTY_TICKER_LAST : 'last',
+        PROPERTY_TICKER_BUY : 'buy',
+        PROPERTY_TICKER_SELL : 'sell',
+        PROPERTY_TICKER_UPDATE : 'update',
+        PROPERTY_TICKER_PREVIOUS_MARKET : 'previousMarket'
     }
 
     return constants;
