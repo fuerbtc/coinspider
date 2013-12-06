@@ -8,18 +8,14 @@ define([
     'events',
     'utils/environment',
     'models/ticker',
-    'models/config',
     'collections/tickers',
-    'collections/configs',
     'utils/providers',
     'crossdomain'
-],function($,Backbone,_,Events,Environment,TickerClass,ConfigClass,TickersClass,ConfigsClass, Providers){
+],function($,Backbone,_,Events,Environment,TickerClass,TickersClass,Providers){
 
     var tickers = new TickersClass();
-    var configs = new ConfigsClass();
 
     var sync = Backbone.Model.extend({
-
 
         initialize : function() {
 
@@ -28,10 +24,6 @@ define([
 
             debug.debug("[Sync] Registering events ...");
             this.registerEvents();
-
-            //Inicializo la configuracion
-            debug.debug("[Sync] Initializing configuration ...");
-            this.initConfiguration();
 
             //Inicializo todos los providers en la Collection
             debug.debug("[Sync] Initializing Tickers ...");
@@ -60,30 +52,6 @@ define([
                 debug.debug("[Sync] - EVENT_UPDATE_TICKERS - Refreshing Tickers ...");
                 this.refreshTickers(Environment.REFRESH_ENABLE_TICKERS);
             },this);
-
-//            Events.on(Environment.EVENT_UPDATE_TICKER,function(jsonTicker,model){
-//                debug.debug("[Sync] - EVENT_UPDATE_TICKER - Refreshing Ticker ...")
-//                this.updateTicker(jsonTicker,model);
-//            },this);
-        },
-
-        /**
-         * Inicializa configuracion del sistema
-         */
-        initConfiguration : function () {
-            //Obtengo la configuracion del localStorage
-            debug.debug("[Sync] Fetch config collection ...");
-            configs.fetch();
-
-
-            if (configs.get(Environment.INSTANCE_CONFIG) === undefined){
-                debug.debug("[Sync] Not configuration founded.")
-                var config = new ConfigClass();
-                configs.create(config);
-                debug.debug("[Sync] Configuration object created");
-            }
-
-            debug.debug("[Sync] Configuration loaded");
         },
 
         /**
@@ -199,8 +167,6 @@ define([
             });
         },
 
-
-
         /**
          * Actualiza el modelo con los datos recibidos. Los datos recibidos se adaptan con la funcion adapter
          * provista por cada Proveedor.
@@ -231,7 +197,6 @@ define([
             }
         },
 
-
         /**
          * Devuelve toda la coleccion de Tickers. Se sigue este principio ya que
          * utilizamos una implementacion de LocalStorage en Backbone. Esta implementacion
@@ -253,19 +218,6 @@ define([
                 currentProvider = Providers[symbol];
             }
             return currentProvider;
-        },
-
-
-
-        /**
-         * Devuelve la coleccion que contiene la configuracion. Se sigue este principio ya que
-         * utilizamos una implementacion de LocalStorage en Backbone. Esta implementacion
-         * solo funciona a traves de colecciones.
-         *
-         * @returns {collections.configs}
-         */
-        getConfiguration : function() {
-            return configs;
         },
 
         /**

@@ -21,8 +21,14 @@ define([
             _(this).bindAll('refresh','updateTimer');
             this.currentTimer = this.getRefreshTimer();
 
+            //Desactivo o no el Message Counter
+            this.isDisabledMessageCounter = true;
+            this.disableMessageCounter(this.model,this.model.get(Environment.PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER));
+
             //Al cambiar la propiedad de la configuracion se debe actualizar el timer
             this.model.on('change:refreshTimer',this.updateTimer, this);
+
+            this.model.on('change:'+Environment.PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER,this.disableMessageCounter,this);
 
             //Registro de Evento para detener el Timer
             Events.on(Environment.EVENT_STOP_TIMER,this.disableTimer,this);
@@ -74,6 +80,10 @@ define([
             return this.model.get('refreshTimer');
         },
 
+        getDisableMessageCounter : function (){
+            return this.model.get(Environment.PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER);
+        },
+
         renderWorking: function (){
             $('#refreshAction a').addClass('working').find('i').addClass('animated rotateOut');
         },
@@ -82,6 +92,19 @@ define([
             $('#refreshAction a').removeClass('working').find('i').removeClass('animated rotateOut');
             this.enableTimer();
             debug.debug("[TimerView] - EVENT_UPDATE_TICKERS_FINISH - Timer started again ...");
+        },
+
+        disableMessageCounter : function(model,status){
+            if (status){
+                $('#messages').fadeIn('fast');
+                this.isDisabledMessageCounter = false;
+                debug.debug("[TimerView] - Message Counter has been disabled ...");
+            }else {
+                $('#messages').fadeOut('fast');
+                this.isDisabledMessageCounter = true;
+                debug.debug("[TimerView] - Message Counter has been enabled ...");
+            }
+
         },
 
         disableTimer : function(){
@@ -93,7 +116,7 @@ define([
 
         enableTimer : function() {
             $('#refreshAction').fadeIn('fast');
-            $('#messages').fadeIn('fast');
+            if (!this.isDisabledMessageCounter) $('#messages').fadeIn('fast');
             this.currentTimer = this.getRefreshTimer();
             window.setTimeout(this.refresh,1000);
             debug.debug("[TimerView] - EVENT_START_TIMER - Timer started ...");

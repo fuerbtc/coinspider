@@ -10,6 +10,8 @@
  * http://paulirish.com/
  */
 window.debug=(function(){var i=this,b=Array.prototype.slice,d=i.console,h={},f,g,m=9,c=["error","warn","info","debug","log"],l="assert clear count dir dirxml exception group groupCollapsed groupEnd profile profileEnd table time timeEnd trace".split(" "),j=l.length,a=[];while(--j>=0){(function(n){h[n]=function(){m!==0&&d&&d[n]&&d[n].apply(d,arguments)}})(l[j])}j=c.length;while(--j>=0){(function(n,o){h[o]=function(){var q=b.call(arguments),p=[o].concat(q);a.push(p);e(p);if(!d||!k(n)){return}d.firebug?d[o].apply(i,q):d[o]?d[o](q):d.log(q)}})(j,c[j])}function e(n){if(f&&(g||!d||!d.log)){f.apply(i,n)}}h.setLevel=function(n){m=typeof n==="number"?n:9};function k(n){return m>0?m>n:c.length+m<=n}h.setCallback=function(){var o=b.call(arguments),n=a.length,p=n;f=o.shift()||null;g=typeof o[0]==="boolean"?o.shift():false;p-=typeof o[0]==="number"?o.shift():n;while(p<n){e(a[p++])}};return h})();
+debug.setLevel(0); //Log Disable by default
+
 
 /**
  * Require.js Configuration
@@ -57,9 +59,31 @@ require(['jquery',
     'domReady',
     'views/app',
     'vm',
-    'utils/sync'],
-    function ($,dom,AppView,Vm,Sync) {
+    'utils/sync',
+    'collections/configs',
+    'models/config',
+    'utils/environment'],
+    function ($,dom,AppView,Vm,Sync,ConfigCollection,Config,Environment) {
         'use strict';
+
+        var configs = new ConfigCollection();
+        /**
+         * Inicializa configuracion del sistema
+         */
+
+        configs.fetch();
+        var config = configs.get(Environment.INSTANCE_CONFIG);
+
+        if (config === undefined){
+            console.log("[Main] Coinspider running for the first time :)");
+            var config = new Config();
+            configs.create(config);
+        }
+
+        if (config.get(Environment.PROPERTY_CONFIG_ENABLE_LOG)){
+           debug.setLevel(Environment.LOG_ENABLE);
+        }
+        debug.debug("[Sync] Configuration loaded");
 
         debug.debug('[Main] Running CoinSpider');
         $(document).ready(function(){
@@ -67,12 +91,11 @@ require(['jquery',
             debug.debug('[Main] Loaded DOM features');
 
             var sync = new Sync();
-            var config = sync.getConfiguration();
             var tickerList = sync.getTickers();
 
             debug.debug('[Main] Loaded information about providers');
 
-            var appView = Vm.create({}, 'AppView', AppView, {configuration: config, tickers: tickerList});
+            var appView = Vm.create({}, 'AppView', AppView, {configurations: configs, tickers: tickerList});
             appView.render();
             //Router.initialize({appView: appView});  // The router now has a copy of all main appview
             debug.debug('[Main] Loaded Backbone Engine');

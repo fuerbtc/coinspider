@@ -14,8 +14,8 @@ define([
         el : $('#exchangersPanel'),
 
         initialize: function(){
-            if (this.options.configuration === undefined){
-                throw new Error("[AppView] No configuration found");
+            if (this.options.configurations === undefined){
+                throw new Error("[AppView] No configurations found");
             }
             if (this.options.tickers === undefined){
                 throw new Error("[AppView] No providers found");
@@ -26,7 +26,7 @@ define([
             var me = this;
 
             debug.debug("[AppView] Loading Views");
-            var config =this.options.configuration.get(Environment.INSTANCE_CONFIG);
+            var config =this.options.configurations.get(Environment.INSTANCE_CONFIG);
             var configView = Vm.create(me,'ConfigView',ConfigView,{model : config} );
             //No se renderiza ConfigView porque es el usuario que debe pulsar en el boton de
 

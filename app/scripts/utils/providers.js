@@ -40,7 +40,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             id : '66',
             symbol : 'mtgox',
             feedUrl : 'https://data.mtgox.com/api/2/BTCUSD/money/ticker_fast',
-            siteUrl : 'https://mtgox.com',
+            siteUrl : 'http://bitcoincharts.com/markets/mtgoxUSD.html',
             iconUrl : 'https://www.mtgox.com/favicon.ico',
             name : 'Mt.Gox',
 
@@ -65,8 +65,8 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
         bitstamp : {
             id : '77',
             symbol : 'bitstamp',
-            feedUrl :  'https://www.bitstamp.net/api/ticker/',
-            siteUrl : 'https://www.bitstamp.net/',
+            feedUrl :  'https://www.bitstamp.net/api/ticker',
+            siteUrl : 'http://bitcoincharts.com/markets/bitstampUSD.html',
             iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
             name : 'Bitstamp',
             adapter : function (data){
@@ -84,13 +84,13 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
                 return result;
             }
         },
-        btce : {
+        btcebtc : {
             id : '88',
-            symbol : 'btce',
+            symbol : 'btcebtc',
             feedUrl :  'https://btc-e.com/api/2/btc_usd/ticker',
-            siteUrl : 'https://btc-e.com',
+            siteUrl : 'http://bitcoincharts.com/markets/btceUSD.html',
             iconUrl : 'https://btc-e.com/favicon.ico',
-            name : 'Btc-e',
+            name : 'Btc-e BTC',
             adapter : function (data){
                 var result = false;
 
@@ -105,7 +105,28 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
 
                 return result;
             }
+        },
+        localbtc : {
+            id : '99',
+            symbol : 'localbtc',
+            feedUrl :  'https://btc-e.com/api/2/btc_usd/ticker',
+            siteUrl : 'http://bitcoincharts.com/markets/localbtcUSD.html',
+            iconUrl : 'https://btc-e.com/favicon.ico',
+            name : 'Btc-e BTC',
+            adapter : function (data){
+                var result = false;
 
+                if (data.ticker != undefined){
+                    result = {};
+                    //Envian 5 decimales
+                    result.last = data.ticker.last;
+                    result.buy = data.ticker.buy;
+                    result.sell = data.ticker.sell;
+                    result.update = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                }
+
+                return result;
+            }
         }
     };
 
