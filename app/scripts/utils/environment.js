@@ -16,6 +16,7 @@ define([],function(){
         EURO : 'EUR',
         DEFAULT_CONVERSION : '1,3545',
         DEFAULT_SCALE_DECIMAL : "3",
+        VERSION : "version",
 
         LOG_ENABLE : 4,
         LOG_DISABLE : 0,

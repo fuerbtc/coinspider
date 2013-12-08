@@ -33,7 +33,6 @@ require.config({
         moment : ['//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min','vendor/moment-2.4.0.min'],
         moment_es :  ['//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/es', 'vendor/moment_es-2.4.0' ],
         chosen: ['//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min', 'vendor/jquery-chosen-1.0.min']
-        //requirejs: '../bower_components/requirejs/require',
     },
     shim: {
         underscore: {
@@ -66,6 +65,8 @@ require(['jquery',
     function ($,dom,AppView,Vm,Sync,ConfigCollection,Config,Environment) {
         'use strict';
 
+        var version = "0.1";
+
         var configs = new ConfigCollection();
         /**
          * Inicializa configuracion del sistema
@@ -75,8 +76,8 @@ require(['jquery',
         var config = configs.get(Environment.INSTANCE_CONFIG);
 
         if (config === undefined){
-            console.log("[Main] Coinspider running for the first time :)");
-            var config = new Config();
+            console.log("[Main] Coinspider running config for the first time :)");
+            config = new Config();
             configs.create(config);
         }
 
@@ -84,6 +85,14 @@ require(['jquery',
            debug.setLevel(Environment.LOG_ENABLE);
         }
         debug.debug("[Sync] Configuration loaded");
+
+        if (config.get(Environment.VERSION) !== version){
+            window.localStorage.clear();
+            var obj = {};
+            obj[Environment.VERSION] = version;
+            config.save(obj);
+            console.log("[Main] Coinspider has detected new version " + version);
+        }
 
         debug.debug('[Main] Running CoinSpider');
         $(document).ready(function(){

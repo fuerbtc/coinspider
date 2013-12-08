@@ -13,7 +13,8 @@ define(['backbone','utils/environment'],function(Backbone,Environment){
                 currency : Environment.DEFAULT_CURRENCY,
                 currency_rate : Environment.DEFAULT_CONVERSION,
                 enableMessageCounter : Environment.DEFAULT_ENABLE_MESSAGE_COUNTER,
-                enableLog : Environment.LOG_DISABLE
+                enableLog : Environment.LOG_DISABLE,
+                version : Environment.DEFAULT_VALUE
             }
         }
     });
