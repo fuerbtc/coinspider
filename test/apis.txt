@@ -1,0 +1,78 @@
+MERCADO EUR
+
+MtGox (Japan)
+=====
+El API 2 no incluye volumen
+https://data.mtgox.com/api/2/BTCUSD/money/ticker_fast
+https://data.mtgox.com/api/2/BTCEUR/money/ticker_fast
+
+El API 1 si incluye el volumen
+http://data.mtgox.com/api/1/BTCUSD/ticker
+
+Bitstamp (Slovenia)
+========
+Conversion rate Eur Usd
+https://www.bitstamp.net/api/eur_usd/
+
+Ticker
+https://www.bitstamp.net/api/ticker/
+
+BTC-E (Rusia)
+=============
+Ticker
+======
+https://btc-e.com/api/2/btc_usd/ticker
+https://btc-e.com/api/2/btc_eur/ticker
+
+BTC China (China)
+=================
+
+Ticker pero viene en Yuanes. No se incluye este exchanger haste que se implemente el conversor
+https://vip.btcchina.com/bc/ticker
+
+
+Bitcoin.de (Germany)
+Scrapper de la web
+
+
+LocalBitcoins
+-------------
+https://localbitcoins.com/api/payment_methods/
+https://localbitcoins.com/api/payment_methods/es
+
+https://localbitcoins.com/buy-bitcoins-online/eur/okpay/.json
+
+https://localbitcoins.com/buy-bitcoins-online/es/spain/.json
+https://localbitcoins.com/buy-bitcoins-online/es/spain/okpay/.json
+https://localbitcoins.com/buy-bitcoins-online/USD/.json
+
+
+Crypsy - Basado solo en crypto currency
+https://www.cryptsy.com/pages/api
+
+Cavirtex - Exchanger en Canada
+https://www.cavirtex.com - Dolares Canadienses
+
+
+https://api.bitcoinaverage.com/ Tiene tremenda fuente de datos...
+
+Bitfinex
+https://bitfinex.com/
+Tienes el problema de que los rates vienen en una request y el volumen en otro. Hay que pensar en separar requests...
+
+
+
+MERCADO EUR
+
+BitcoinCentral
+https://bitcoin-central.net/api/data/eur/ticker
+https://bitcoin-central.net/1386333774592/favicon.png
+
+MERCADO INGLES
+
+MERCADO CANADIENSE
+
+
+
+
+
