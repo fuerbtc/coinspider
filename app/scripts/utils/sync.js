@@ -189,14 +189,15 @@ define([
                 debug.debug("[Sync] Adapting data received");
                 var adaptedData = provider.adapter(data);
 
-                //Last Market
-                var previous = model.get(Environment.PROPERTY_TICKER_PREVIOUS_MARKET);
+                //Guardar ultimo mercado!
+                var previous = model.get(Environment.PROPERTY_TICKER_MARKET);
 
                 model.save({
                     'previousMarket' : previous,
                     'market' : adaptedData
                 });
 
+                //Get new market
                 var market = model.get(Environment.PROPERTY_TICKER_MARKET);
                 debug.debug("[Sync] Saved data:  " + model.get(Environment.PROPERTY_TICKER_NAME) + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
             }
