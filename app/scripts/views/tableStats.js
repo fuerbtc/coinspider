@@ -52,7 +52,7 @@ define([
             var alertDown = config.get(Environment.PROPERTY_CONFIG_ALERT_DOWN);
 
             var getCss = function(current, previous){
-                var percentage = ((current - previous) / 100).toFixed(2);
+                var percentage = ((current - previous) / 100).toFixed(Environment.DEFAULT_NUMBER_DECIMAL);
                 var alert = {
                     cssPrice : "",
                     cssAlert : "",
@@ -73,11 +73,16 @@ define([
                 return alert;
             }
 
-            attributes.last = market[Environment.PROPERTY_TICKER_LAST];
-            attributes.buy = market[Environment.PROPERTY_TICKER_BUY];
-            attributes.sell = market[Environment.PROPERTY_TICKER_SELL];
+            var getFormattedNumber = function(val){
+                return parseFloat(val).toFixed(Environment.DEFAULT_NUMBER_DECIMAL);
+            }
+
+
+            attributes.last = getFormattedNumber(market[Environment.PROPERTY_TICKER_LAST]);
+            attributes.buy = getFormattedNumber(market[Environment.PROPERTY_TICKER_BUY]);
+            attributes.sell = getFormattedNumber(market[Environment.PROPERTY_TICKER_SELL]);
             attributes.update = market[Environment.PROPERTY_TICKER_UPDATE];
-            attributes.volume = market[Environment.PROPERTY_TICKER_VOLUME];
+            attributes.volume = getFormattedNumber(market[Environment.PROPERTY_TICKER_VOLUME]);
             attributes.name = this.model.get(Environment.PROPERTY_TICKER_NAME);
             attributes.iconUrl = this.model.get(Environment.PROPERTY_TICKER_ICON_URL);
             attributes.siteUrl = this.model.get(Environment.PROPERTY_TICKER_SITE_URL);
@@ -85,9 +90,9 @@ define([
             attributes.symbol = this.model.get(Environment.PROPERTY_TICKER_SYMBOL);
 
             attributes.css = {
-                'last' : getCss(market.last,previous.last),
-                'buy' : getCss(market.buy,previous.buy),
-                'sell' : getCss(market.sell,previous.sell)
+                'last' : getCss(market[Environment.PROPERTY_TICKER_LAST],previous[Environment.PROPERTY_TICKER_LAST]),
+                'buy' : getCss(market[Environment.PROPERTY_TICKER_BUY],previous[Environment.PROPERTY_TICKER_BUY]),
+                'sell' : getCss(market[Environment.PROPERTY_TICKER_SELL],previous[Environment.PROPERTY_TICKER_SELL])
             };
 
             return attributes;

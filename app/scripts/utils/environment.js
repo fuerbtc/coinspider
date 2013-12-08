@@ -10,11 +10,12 @@ define([],function(){
         DEFAULT_ALERT_UP_PERCENT : 0,
         DEFAULT_ALERT_DOWN_PERCENT : 0,
         DEFAULT_NORMAL_RATE : 0.1,
-        DEFAULT_REFRESH_TIME : 15, //SECONDS
+        DEFAULT_REFRESH_TIME : 30, //SECONDS
         DEFAULT_CURRENCY : '$',
         DOLAR: '$',
         EURO : '€',
         DEFAULT_CONVERSION : '1,3545',
+        DEFAULT_NUMBER_DECIMAL : "3",
 
         LOG_ENABLE : 4,
         LOG_DISABLE : 0,
