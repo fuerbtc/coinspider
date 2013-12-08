@@ -132,6 +132,11 @@
       background-color: $green_background;
       border-color: $green_border;
     }
+
+    &.info {
+      background-color: $blue_background;
+      border-color: $blue_border;
+    }
   }
 }
 
