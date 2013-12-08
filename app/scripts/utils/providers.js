@@ -36,14 +36,15 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
 
     var providers = {
 
-        mtgox : {
+        mtgoxUSD : {
             id : 66,
-            symbol : 'mtgox',
+            symbol : 'mtgoxUSD',
             feedUrl : 'http://data.mtgox.com/api/1/BTCUSD/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/mtgoxUSD.html',
             iconUrl : 'https://www.mtgox.com/favicon.ico',
-            name : 'Mt.Gox',
+            name : 'Mt.Gox USD',
             crossdomain : true,
+            currency: Environment.DOLAR,
 
             adapter : function (data){
                 var result = false;
@@ -63,14 +64,15 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
                 return result;
             }
         },
-        bitstamp : {
+        bitstampUSD : {
             id : 77,
-            symbol : 'bitstamp',
+            symbol : 'bitstampUSD',
             feedUrl :  'https://www.bitstamp.net/api/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/bitstampUSD.html',
             iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
-            name : 'Bitstamp',
+            name : 'Bitstamp USD',
             crossdomain: false,
+            currency: Environment.DOLAR,
             adapter : function (data){
                 var result = false;
 
@@ -87,13 +89,39 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
                 return result;
             }
         },
-        btcebtc : {
+        btceBTCUSD : {
             id : 88,
-            symbol : 'btcebtc',
+            symbol : 'btceBTCUSD',
             feedUrl :  'https://btc-e.com/api/2/btc_usd/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/btceUSD.html',
             iconUrl : 'https://btc-e.com/favicon.ico',
-            name : 'Btc-e BTC',
+            name : 'Btc-e BTC-USD',
+            currency: Environment.DOLAR,
+            crossdomain: false,
+            adapter : function (data){
+                var result = false;
+
+                if (data.ticker != undefined){
+                    result = {};
+                    //Envian 5 decimales
+                    result[Environment.PROPERTY_TICKER_LAST] = data.ticker.last;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.ticker.buy;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.ticker.sell;
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(parseInt(data.ticker.updated)*1000)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.ticker.vol_cur;
+                }
+
+                return result;
+            }
+        },
+        btceLTCUSD : {
+            id : 99,
+            symbol : 'btceLTCUSD',
+            feedUrl :  'https://btc-e.com/api/2/ltc_usd/ticker',
+            siteUrl : 'http://bitcoincharts.com/markets/btceUSD.html',
+            iconUrl : 'https://btc-e.com/favicon.ico',
+            name : 'Btc-e LTC-USD',
+            currency: Environment.DOLAR,
             crossdomain: false,
             adapter : function (data){
                 var result = false;
@@ -119,6 +147,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             iconUrl : 'https://www.itbit.com/favicon.ico',
             name : 'itBit',
             crossdomain: false,
+            currency: Environment.DOLAR,
             adapter : function (data){
                 var result = false;
 
@@ -129,6 +158,55 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
                     result[Environment.PROPERTY_TICKER_SELL] = data.bid;
                     result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(data.currentTime)).format(Environment.DEFAULT_FORMAT_DATE);
                     result[Environment.PROPERTY_TICKER_VOLUME] = data.volume;
+                }
+
+                return result;
+            }
+        },
+        bitkonanUSD : {
+            id : 101,
+            symbol : 'bitkonanUSD',
+            feedUrl :  'https://bitkonan.com/api/ticker',
+            siteUrl : 'http://bitcoincharts.com/markets/bitkonanUSD.html',
+            iconUrl : 'https://bitkonan.com/favicon.ico',
+            name : 'BitKonan USD',
+            crossdomain: false,
+            currency: Environment.DOLAR,
+            adapter : function (data){
+                var result = false;
+
+                if (data.bid != undefined){
+                    result = {};
+                    result[Environment.PROPERTY_TICKER_LAST] = data.last;
+                    result[Environment.PROPERTY_TICKER_BUY] = data.ask;
+                    result[Environment.PROPERTY_TICKER_SELL] = data.bid;
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date(data.currentTime)).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = data.volume;
+                }
+
+                return result;
+            }
+        },
+        krakenUSD : {
+            id : 102,
+            symbol : 'krakenUSD',
+            feedUrl :  'https://api.kraken.com/0/public/Ticker?pair=XBTUSD',
+            siteUrl : 'https://kraken.com',
+            iconUrl : 'https://www.kraken.com/img/favicon.ico?v=1',
+            name : 'Kraken USD',
+            crossdomain: false,
+            currency: Environment.DOLAR,
+            adapter : function (data){
+                var result = false;
+
+                if (data.result.XXBTZUSD != undefined){
+                    var obj = data.result.XXBTZUSD;
+                    result = {};
+                    result[Environment.PROPERTY_TICKER_LAST] = obj.c[0];
+                    result[Environment.PROPERTY_TICKER_BUY] = obj.a[0];
+                    result[Environment.PROPERTY_TICKER_SELL] = obj.b[0];
+                    result[Environment.PROPERTY_TICKER_UPDATE] = moment(new Date()).format(Environment.DEFAULT_FORMAT_DATE);
+                    result[Environment.PROPERTY_TICKER_VOLUME] = obj.v[0];
                 }
 
                 return result;

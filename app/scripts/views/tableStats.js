@@ -52,7 +52,7 @@ define([
             var alertDown = config.get(Environment.PROPERTY_CONFIG_ALERT_DOWN);
 
             var getCss = function(current, previous){
-                var percentage = ((current - previous) / 100).toFixed(Environment.DEFAULT_NUMBER_DECIMAL);
+                var percentage = ((current - previous) / 100).toFixed(Environment.DEFAULT_SCALE_DECIMAL);
                 var alert = {
                     cssPrice : "",
                     cssAlert : "",
@@ -76,7 +76,7 @@ define([
             }
 
             var getFormattedNumber = function(val){
-                return parseFloat(val).toFixed(Environment.DEFAULT_NUMBER_DECIMAL);
+                return parseFloat(val).toFixed(Environment.DEFAULT_SCALE_DECIMAL);
             }
 
 

@@ -11,11 +11,11 @@ define([],function(){
         DEFAULT_ALERT_DOWN_PERCENT : 0,
         DEFAULT_NORMAL_RATE : 0.1,
         DEFAULT_REFRESH_TIME : 30, //SECONDS
-        DEFAULT_CURRENCY : '$',
-        DOLAR: '$',
-        EURO : '€',
+        DEFAULT_CURRENCY : 'USD',
+        DOLAR: 'USD',
+        EURO : 'EUR',
         DEFAULT_CONVERSION : '1,3545',
-        DEFAULT_NUMBER_DECIMAL : "3",
+        DEFAULT_SCALE_DECIMAL : "3",
 
         LOG_ENABLE : 4,
         LOG_DISABLE : 0,
