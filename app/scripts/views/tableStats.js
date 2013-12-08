@@ -59,14 +59,16 @@ define([
                     percentage : percentage
                 };
 
-                if (percentage >= -Environment.DEFAULT_NORMAL_RATE && percentage <= Environment.DEFAULT_NORMAL_RATE){
+                var absPercentage = Math.abs(percentage);
+
+                if (absPercentage >= -Environment.DEFAULT_NORMAL_RATE && absPercentage <= Environment.DEFAULT_NORMAL_RATE){
                     alert.cssPrice = Environment.CSS_NORMAL;
                 } else {
                     alert.cssPrice = current > previous ? Environment.CSS_SUCCESS : Environment.CSS_ERROR;
 
-                    if (percentage < Environment.DEFAULT_NORMAL_RATE && Math.abs(percentage) > alertDown ){
+                    if (percentage < Environment.DEFAULT_NORMAL_RATE && absPercentage > alertDown ){
                         alert.cssAlert = "down";
-                    }else if (percentage > Environment.DEFAULT_NORMAL_RATE && Math.abs(percentage) > alertUp) {
+                    }else if (percentage > Environment.DEFAULT_NORMAL_RATE && absPercentage > alertUp) {
                         alert.cssAlert = "up";
                     }
                 }

@@ -38,14 +38,30 @@ define([
             Events.on(Environment.EVENT_ENABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_ENABLE_TICKER - Model enabled : "+ id);
                 var model = tickers.get(id);
-                model.save({status : Environment.TICKER_ENABLE });
+
+                var obj = {};
+                obj[Environment.PROPERTY_TICKER_STATUS] = Environment.TICKER_ENABLE;
+                obj[Environment.PROPERTY_TICKER_ORDER] = tickers.getEnables().length;
+
+                model.save(obj);
                 this.refreshTicker(model);
             },this);
 
             Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_DISABLE_TICKER - Model disabled : "+ id);
-                tickers.get(id).save({status : Environment.TICKER_DISABLE });
 
+                var obj = {};
+                obj[Environment.PROPERTY_TICKER_STATUS] = Environment.TICKER_DISABLE;
+                tickers.get(id).save(obj);
+
+                //Updating order
+                var tickersEnables = tickers.getEnables();
+                var order = -1;
+                _.each(tickersEnables, function(model){
+                    var object = {};
+                    object[Environment.PROPERTY_TICKER_ORDER] = order++;
+                    model.save(object)
+                });
             },this);
 
             Events.on(Environment.EVENT_UPDATE_TICKERS,function(){

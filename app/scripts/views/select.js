@@ -29,7 +29,15 @@ define([
         },
 
         render: function() {
+            //De esta manera, obtengo la lista ordenada por el ID del proveedor
+//            var sortedById = this.collection.getModelsById();
+//          this.$el.html(this.template({ tickers: _.invoke(sortedById,'toJSON') }));
+
+            //De esta otra obtengo la lista ordenada segun el usuario
+            //Desventaja es que los proveedores en la lista nunca estaran en la misma posicion
+            //Pero me parece esta opcion como las  mas natural
             this.$el.html(this.template({ tickers: this.collection.toJSON() }));
+
 
             //Una vez renderizado, invoco al Plugin Jquery Chosen
             /*-- Chosen --*/

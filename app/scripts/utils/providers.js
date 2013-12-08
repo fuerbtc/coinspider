@@ -37,7 +37,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
     var providers = {
 
         mtgox : {
-            id : '66',
+            id : 66,
             symbol : 'mtgox',
             feedUrl : 'http://data.mtgox.com/api/1/BTCUSD/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/mtgoxUSD.html',
@@ -64,7 +64,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             }
         },
         bitstamp : {
-            id : '77',
+            id : 77,
             symbol : 'bitstamp',
             feedUrl :  'https://www.bitstamp.net/api/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/bitstampUSD.html',
@@ -88,7 +88,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             }
         },
         btcebtc : {
-            id : '88',
+            id : 88,
             symbol : 'btcebtc',
             feedUrl :  'https://btc-e.com/api/2/btc_usd/ticker',
             siteUrl : 'http://bitcoincharts.com/markets/btceUSD.html',
@@ -112,7 +112,7 @@ define(["utils/environment",'moment','moment_es'],function(Environment,moment){
             }
         },
         xbtusd : {
-            id : '100',
+            id : 100,
             symbol : 'xbtusd',
             feedUrl :  'https://www.itbit.com/api/feeds/ticker/XBTUSD',
             siteUrl : 'https://www.itbit.com',
