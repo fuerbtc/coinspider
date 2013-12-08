@@ -3,8 +3,8 @@
       return "<span class='currency'>" + ticker.currency + "</span>"
     }
 
-    var getHtmlDiff = function(alert){
-      return "<span class='diff " + alert.css + "'><i class='fa fa-arrow-" + alert.css + "'></i>("+ alert.percentage + "%)</span></span>";
+    var getHtmlDiff = function(obj){
+      return "<span class='diff " + obj.cssAlert + "'><i class='fa fa-arrow-" + obj.cssAlert + "'></i>("+ obj.percentage + "%)</span></span>";
     }
   %>
 
@@ -15,17 +15,17 @@
     <a href="<%= ticker.siteUrl %>" title="<%= ticker.name %>" target="_blank"><%= ticker.name %></a>
   </td>
   <td class="last">
-    <span class="price <%=ticker.css.last%>  <%= ticker.alert.last.css %>"><%= ticker.last %><%= getHtmlCurrency()%></span>
-    <%= getHtmlDiff(ticker.alert.last) %>
+    <span class="price <%= ticker.css.last.cssPrice %>  <%= ticker.css.last.cssAlert %>"><%= ticker.last %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.css.last) %>
   </td>
   <td class="buy">
-    <span class="price <%=ticker.css.buy%> <%= ticker.alert.buy.css %>"><%= ticker.buy %><%= getHtmlCurrency()%></span>
-    <%= getHtmlDiff(ticker.alert.buy) %>
+    <span class="price <%=ticker.css.buy.cssPrice %> <%= ticker.css.buy.cssAlert %>"><%= ticker.buy %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.css.buy) %>
 
   </td>
   <td class="sell">
-    <span class="price <%=ticker.css.sell%> <%= ticker.alert.sell.css %>"><%= ticker.sell %><%= getHtmlCurrency()%></span>
-    <%= getHtmlDiff(ticker.alert.sell) %>
+    <span class="price <%=ticker.css.sell.cssPrice %> <%= ticker.css.sell.cssAlert %>"><%= ticker.sell %><%= getHtmlCurrency()%></span>
+    <%= getHtmlDiff(ticker.css.sell) %>
   </td>
   <td class="volume">
     <%= ticker.volume %>

@@ -52,22 +52,23 @@ define([
             var alertDown = config.get(Environment.PROPERTY_CONFIG_ALERT_DOWN);
 
             var getCss = function(current, previous){
-                //If current is higher than previous is GOOD!!!
-                return current > previous ? Environment.CSS_SUCCESS : Environment.CSS_ERROR;
-            }
-
-            var getAlert = function(current, previous){
-
                 var percentage = ((current - previous) / 100).toFixed(2);
                 var alert = {
-                    css : "",
+                    cssPrice : "",
+                    cssAlert : "",
                     percentage : percentage
                 };
 
-                if (percentage < 0 && Math.abs(percentage) > alertDown ){
-                    alert.css = "down";
-                }else if (percentage > 0 && Math.abs(percentage) > alertUp) {
-                    alert.css = "up";
+                if (percentage >= -Environment.DEFAULT_NORMAL_RATE && percentage <= Environment.DEFAULT_NORMAL_RATE){
+                    alert.cssPrice = Environment.CSS_NORMAL;
+                } else {
+                    alert.cssPrice = current > previous ? Environment.CSS_SUCCESS : Environment.CSS_ERROR;
+
+                    if (percentage < Environment.DEFAULT_NORMAL_RATE && Math.abs(percentage) > alertDown ){
+                        alert.cssAlert = "down";
+                    }else if (percentage > Environment.DEFAULT_NORMAL_RATE && Math.abs(percentage) > alertUp) {
+                        alert.cssAlert = "up";
+                    }
                 }
                 return alert;
             }
@@ -83,25 +84,18 @@ define([
             attributes.currency = config.get('currency');
             attributes.symbol = this.model.get(Environment.PROPERTY_TICKER_SYMBOL);
 
-
             attributes.css = {
                 'last' : getCss(market.last,previous.last),
                 'buy' : getCss(market.buy,previous.buy),
                 'sell' : getCss(market.sell,previous.sell)
             };
 
-            attributes.alert = {
-                'last' : getAlert(market.last,previous.last),
-                'buy' : getAlert(market.buy,previous.buy),
-                'sell' : getAlert(market.sell,previous.sell)
-            }
-
             return attributes;
         },
 
         applyTransition: function(){
             $("#row-"+this.model.get("symbol") + " span").each(function(){
-                $(this).removeClass(Environment.CSS_SUCCESS + " " + Environment.CSS_ERROR);
+                $(this).removeClass(Environment.CSS_SUCCESS + " " + Environment.CSS_ERROR + " " + Environment.CSS_NORMAL);
             });
         }
 

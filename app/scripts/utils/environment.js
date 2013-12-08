@@ -9,6 +9,7 @@ define([],function(){
         DEFAULT_VALUE : 0,
         DEFAULT_ALERT_UP_PERCENT : 0,
         DEFAULT_ALERT_DOWN_PERCENT : 0,
+        DEFAULT_NORMAL_RATE : 0.1,
         DEFAULT_REFRESH_TIME : 15, //SECONDS
         DEFAULT_CURRENCY : '$',
         DOLAR: '$',
@@ -42,6 +43,7 @@ define([],function(){
 
         CSS_SUCCESS : 'success',
         CSS_ERROR : 'danger',
+        CSS_NORMAL : 'info',
 
         DEFAULT_FORMAT_DATE : 'h:mm:ss a',
 
