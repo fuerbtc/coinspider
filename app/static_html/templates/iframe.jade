@@ -20,6 +20,7 @@ head
   link(href="images/favicon.ico", title="Icon", type="image/x-icon", rel="icon")
   link(href="images/favicon.ico", title="Icon", type="image/x-icon", rel="shortcut icon")
 
+  // Place favicon.ico and apple-touch-icon.png in the root directory
   block css
   include css
   include scripts_head
@@ -29,10 +30,6 @@ body
     p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
 
   div.wrap
-    // header.top
-    div.top
-      include header
-    // end header.top
     // content
     div.content
       // outer
@@ -46,7 +43,5 @@ body
       //end outer
     //end content
 
-    include footer
-
   include ga
-  include scripts_bottom
+  include scripts_bottom_backbone

@@ -24,6 +24,7 @@
 
   "app" : {
      "author" : "Philippe Mindugui",
-     "description" : "CoinSpider"
+     "description" : "Realtime Bitcoin/Litecoin values from multiple exchangers and markets",
+     "keywords" : "bitcoin calculator, bitcoin converter, bitcoin cost, bitcoin exchange rate, bitcoin price, bitcoin rate, bitcoin value, bitcoin worth"
   }
 }
