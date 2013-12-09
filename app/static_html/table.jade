@@ -1,0 +1,51 @@
+!!! 5
+//if lt IE 7
+  <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+  <html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+  <html class="no-js lt-ie9">
+//if gt IE 8
+  <!--> <html class="no-js"> <!--
+block env
+head
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible", content="IE=edge")
+  title Table Update
+  meta(name="description", content= app.description)
+  meta(name="author", content= app.author)
+  meta(name="keywords", content= app.keywords)
+  meta(name="revisit-after", content="")
+  meta(name="viewport", content="width=device-width, initial-scale=1")
+  link(href="images/favicon.ico", title="Icon", type="image/x-icon", rel="icon")
+  link(href="images/favicon.ico", title="Icon", type="image/x-icon", rel="shortcut icon")
+
+
+  block css
+  include templates/css
+  include templates/scripts_head
+
+body
+  //if lt IE 10
+    p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+
+  table(border="0", cellspacing="1", cellpadding="1", class="tborder")
+    thead
+      tr
+        td(class="thead", colspan="5")
+          div
+            strong Cotizaciones
+    tbody(style="" ,id="dinamicTbody")
+      tr
+        td(id="mtgox", class="tcat", width="380", align="center", style="white-space: nowrap")
+          h3 MTGox
+          div.mtgoxUSD
+            span.value
+            span.currency
+          div.mtgoxEUR
+            span.value
+            span.currency
+
+  // build:js scripts/main.js
+  script(src=api.cdn.requirejs, data-main="scripts/mainforo")
+  // endbuild
