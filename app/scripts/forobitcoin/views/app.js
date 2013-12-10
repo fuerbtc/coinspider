@@ -19,7 +19,6 @@ define([
 
             debug.debug("[AppView] Loading Views");
             var tableStats =  Vm.create(me,'TableView',TableView,{collection: this.options.tickers});
-            tableStats.render();
         }
     });
 

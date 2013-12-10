@@ -212,22 +212,31 @@ define([
                 localStorage.clear();
             }
 
+            var currentTime = new Date().getTime()/1000;
+
+
             //Llamo al link para actualizar tasas
-            $.ajax({
-                url: 'http://query.yahooapis.com/v1/public/yql?q=select%20id%2CRate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22EURUSD%22%2C%22USDEUR%22%2C%22CNYUSD%22%2C%22CNYEUR%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys',
-                type: 'GET',
-                success: function(data) {
-                    if (data){
-                        debug.debug("[Sync] Success - Rating Data received. ");
-                        me.updateRates(data);
-                    }else {
-                        debug.debug("[Sync] Success - BUT NO RATING DATA RECEIVED. ");
+            //Para evitar Baneo de Yahoo, esta query solo se hara cada hora...
+            if ( (currentTime - config.get('update')) >= 3600){
+                $.ajax({
+                    url: 'http://query.yahooapis.com/v1/public/yql?q=select%20id%2CRate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22EURUSD%22%2C%22USDEUR%22%2C%22CNYUSD%22%2C%22CNYEUR%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys',
+                    type: 'GET',
+                    success: function(data) {
+                        if (data){
+                            debug.debug("[Sync] Success - Rating Data received. ");
+                            me.updateRates(data);
+                        }else {
+                            debug.debug("[Sync] Success - BUT NO RATING DATA RECEIVED. ");
+                        }
+                    },
+                    error : function(data){
+                        debug.debug("[KERNEL] FAIL! - Something wrong updating rating sources");
                     }
-                },
-                error : function(data){
-                    debug.debug("[KERNEL] FAIL! - Something wrong updating rating sources");
-                }
-            });
+                });
+                config.save({update : currentTime});
+            }else {
+                debug.debug("[KERNEL] No need to make Rating update");
+            }
         },
 
         updateRates : function (data){

@@ -163,6 +163,10 @@ define([
             });
 
             return this;
+        },
+
+        render2 : function() {
+          debug.debug("Aqui estamos");
         }
     });
 
