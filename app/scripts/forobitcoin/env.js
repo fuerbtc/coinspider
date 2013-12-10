@@ -11,6 +11,7 @@ define([],function(){
         DEFAULT_NORMAL_RATE : 1,
         DEFAULT_ALERT_UP_RATE : 5,
         DEFAULT_ALERT_DOWN_RATE : 5,
+        TIMER : 15,
 
         CSS_SUCCESS : 'success',
         CSS_ERROR : 'danger',
@@ -35,7 +36,8 @@ define([],function(){
         PROPERTY_TICKER_UPDATE : 'update',
         PROPERTY_TICKER_EXCHANGES: 'exchanges',
         PROPERTY_TICKER_EXCHANGE_OFFICIAL : 'official',
-        PROPERTY_TICKER_EXCHANGE_CURRENCIES : 'currencies'
+        PROPERTY_TICKER_EXCHANGE_CURRENCIES : 'currencies',
+        PROPERTY_TICKER_UPDATED : 'updated'
 
     }
 

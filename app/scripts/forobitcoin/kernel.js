@@ -22,6 +22,8 @@ define([
         initialize : function (){
             debug.debug("[KERNEL] Initializing kernel ...");
 
+            _(this).bindAll('refresh','populateTickers','loadTickers');
+
             //Loading Configuration
             this.initConfig();
 
@@ -31,6 +33,8 @@ define([
 
             //Loading previous data
             this.initTickers();
+
+           this.refresh(Env.TIMER);
         },
 
         initTickers : function(){
@@ -173,12 +177,14 @@ define([
                         tickers.create(localTicker);
                         debug.debug("[KERNEL] New Ticker created: " + localTicker.get(Env.PROPERTY_TICKER_SYMBOL)) ;
                     }else {
+                        toSave[Env.PROPERTY_TICKER_UPDATED] = localTicker.get(Env.PROPERTY_TICKER_UPDATED) + 1;
                         localTicker.save(toSave);
                         debug.debug("[KERNEL] Ticker updated: " + localTicker.get(Env.PROPERTY_TICKER_SYMBOL)) ;
                     }
                 }
             }
             debug.debug("[KERNEL] Loaded information about providers. " + tickers.size() + " Tickers loaded");
+            Events.trigger("fb-update-done");
         },
 
         initConfig : function(){
@@ -237,6 +243,14 @@ define([
 
                 var config = configs.get(1);
                 config.save({ rates : rates});
+            }
+        },
+
+        refresh : function (timer){
+            if (timer !== undefined){
+                timer = timer * 1000;
+                debug.debug("[KERNEL] Interval refresh " + timer);
+                window.setInterval(this.loadTickers,timer);
             }
         }
     });

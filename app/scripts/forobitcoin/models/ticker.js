@@ -26,7 +26,8 @@ define(['backbone','forobitcoin/env'],function(Backbone,Env){
                             update : 0
                         }
                     }
-                }
+                },
+                updated : 0
             }
         }
     });

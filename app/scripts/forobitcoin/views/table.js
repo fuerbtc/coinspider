@@ -20,7 +20,7 @@ define([
                 throw new Error("[ColumnView] No model attached to this column");
             }
 
-            Events.on('fb-update-ex',this.render,this);
+            this.model.on('change:'+Env.PROPERTY_TICKER_UPDATED,this.render,this);
 
             debug.debug("[ColumnView] Initialized ColumnView");
         },
@@ -31,10 +31,10 @@ define([
             this.$el.html(this.template({ticker : this.properties(), templatePrice : this.templatePrice}));
 
             //Aplico funcion para transicion
-//            var me = this;
-//            setTimeout(function(){
-//                me.applyTransition();
-//            },1000);
+            var me = this;
+            setTimeout(function(){
+                me.applyTransition();
+            },1000);
 
             return this;
         },
@@ -108,7 +108,9 @@ define([
         },
 
         applyTransition: function(){
-            //APLICO TRANSICION
+            $("#column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL) + " span").each(function(){
+                $(this).removeClass(Env.CSS_SUCCESS + " " + Env.CSS_ERROR + " " + Env.CSS_NORMAL);
+            });
         }
 
     });
@@ -118,11 +120,13 @@ define([
         el : '#coinspider',
 
         initialize : function(){
-            _(this).bindAll('add', 'remove');
+            _(this).bindAll('add');
             this.columnViewClass = column;
             this._columnViews = [];
 
             this.collection.each(this.add);
+
+            Events.on('fb-update-done',this.render,this);
 
             debug.debug("[TableView] Initialized TableView");
         },
@@ -150,29 +154,6 @@ define([
 
         },
 
-        remove : function(model) {
-            var ticker  = {};
-            if (model instanceof Object){
-                ticker = model;
-            }else {
-                ticker = this.collection.get(model);
-            }
-
-            if (ticker !== undefined){
-                var viewToRemove = _(this._columnViews).select(function(cv) { return cv.model === ticker; })[0];
-                this._columnViews = _(this._columnViews).without(viewToRemove);
-
-                if (this._rendered) {
-                    debug.debug("[TableView] Removing column inside table");
-                    $(viewToRemove.el).remove();
-
-                    if (this._columnViews.length <= 0){
-                        this.render();
-                    }
-                }
-            }
-        },
-
         render : function() {
             var $row = this.$el.find('tbody tr');
             $row.empty();
@@ -180,8 +161,6 @@ define([
             _(this._columnViews).each(function(childView) {
                 $row.append(childView.render().el);
             });
-
-            this._rendered = true;
 
             return this;
         }
