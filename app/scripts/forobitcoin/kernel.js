@@ -33,6 +33,7 @@ define([
 
             //Loading previous data
             this.initTickers();
+            this.loadTickers();
 
            this.refresh(Env.TIMER);
         },

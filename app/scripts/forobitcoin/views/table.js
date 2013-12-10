@@ -121,12 +121,10 @@ define([
 
         initialize : function(){
             _(this).bindAll('add');
+            this._rendered = false;
             this.columnViewClass = column;
             this._columnViews = [];
-
-            this.collection.each(this.add);
-
-            Events.on('fb-update-done',this.render,this);
+            Events.on('fb-update-done',this.reload,this);
 
             debug.debug("[TableView] Initialized TableView");
         },
@@ -165,8 +163,15 @@ define([
             return this;
         },
 
-        render2 : function() {
-          debug.debug("Aqui estamos");
+        reload : function(){
+
+            debug.debug("[TableView] Reloading Exchangers");
+            if (this.collection.size() !== this._columnViews.length){
+                this._columnViews = []
+                this.collection.each(this.add);
+            }
+
+            this.render();
         }
     });
 

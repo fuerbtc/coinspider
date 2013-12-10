@@ -8,10 +8,10 @@ define([],function(){
         STORAGE_TICKERS  : 'forobitcoin-ls-tickers',
         STORAGE_CONFIG : 'forobitcoin-ls-config',
         DEFAULT_SCALE_DECIMAL : 3,
-        DEFAULT_NORMAL_RATE : 0.5,
-        DEFAULT_ALERT_UP_RATE : 1,
-        DEFAULT_ALERT_DOWN_RATE : 1,
-        TIMER : 240,
+        DEFAULT_NORMAL_RATE : 1,
+        DEFAULT_ALERT_UP_RATE : 3,
+        DEFAULT_ALERT_DOWN_RATE : 3,
+        TIMER : 15,
 
         CSS_SUCCESS : 'success',
         CSS_ERROR : 'danger',
@@ -38,7 +38,6 @@ define([],function(){
         PROPERTY_TICKER_EXCHANGE_OFFICIAL : 'official',
         PROPERTY_TICKER_EXCHANGE_CURRENCIES : 'currencies',
         PROPERTY_TICKER_UPDATED : 'updated'
-
     }
 
     return constants;

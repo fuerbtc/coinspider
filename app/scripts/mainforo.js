@@ -87,11 +87,18 @@ require(['jquery',
                             currencies : ['EUR']
                         }
                     },
-                    btcchina : {
+                    btce : {
                         id : 3,
+                        name : 'Btc-e',
+                        symbol : 'btce',
+                        iconUrl : 'https://btc-e.com/favicon.ico',
+                        currencies : [ 'USD','EUR']
+                    },
+                    btcchina : {
+                        id : 4,
                         name : 'BTCChina',
                         symbol : 'btcchina',
-                        iconUrl : 'https://btc-e.com/favicon.ico',
+                        iconUrl : 'https://vip.btcchina.com/img/favicon.ico?v=2',
                         currencies  : [ 'CNY' ],
                         exchanges : {
                             official : 'CNY',
@@ -105,11 +112,9 @@ require(['jquery',
             debug.debug('[Main] Loading information about providers');
             var tickers =  kernel.getTickers();
 
-
             var appView = Vm.create({}, 'AppView', AppView, {tickers: tickers});
             appView.render();
-            //Con el render pintado, actualizo los tickers
-            kernel.loadTickers();
+
             debug.debug('[Main] Loaded Backbone Engine');
         });
 });

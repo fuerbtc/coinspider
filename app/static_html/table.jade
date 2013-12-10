@@ -33,12 +33,15 @@ body
   //if lt IE 10
     p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
 
-  table(border="1", cellspacing="1", cellpadding="1", class="tborder", id="coinspider", style="background-color : white;" )
+  table(border="0", cellspacing="1", cellpadding="1", class="tborder", id="coinspider", style="background-color : white;" )
     thead
       tr
-        td(class="thead", colspan="3")
+        td(class="thead", colspan="1")
           div
             strong Cotizaciones
+        td(class="coinspider-info", colspan="3")
+          a(href="http://goo.gl/NHpiMw", target="_blank", alt="Powered by CoinSpider")
+            i(class="fa fa-info-circle",title="Powered by CoinSpider",alt="Powered by CoinSpider")
     tbody
       tr
 
