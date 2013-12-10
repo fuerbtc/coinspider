@@ -17,7 +17,6 @@ define([
                 throw new Error("[ColumnView] No model attached to this column");
             }
 
-            _(this).bindAll('applyTransition');
             this.model.on("change:market",this.render,this);
 
             debug.debug("[ColumnView] Initialized ColumnView");
@@ -37,27 +36,37 @@ define([
         },
 
         properties : function(){
+            var getPercentage = function (current, previous){
+                var result = 0;
+                if (previous > 0){
+                    result = (((current - previous) / previous)*100).toFixed(Env.DEFAULT_SCALE_DECIMAL);
+                }
 
-            var attributes = {};
-            var market = this.model.get(Env.PROPERTY_TICKER_MARKET);
-            var previous = this.model.get(Env.PROPERTY_TICKER_PREVIOUS_MARKET);
-            var alertUp = Env.DEFAULT_ALERT_UP_RATE;
-            var alertDown = Env.DEFAULT_ALERT_DOWN_RATE;
-
+                return result;
+            }
             var getCss = function(current, previous){
-                var percentage = ((current - previous) / 100).toFixed(Env.DEFAULT_SCALE_DECIMAL);
+
+                var percentage = getPercentage(current,previous);
+                var absPercentage = Math.abs(percentage);
+
+                if (absPercentage > 1000){ //Una medida cautelar ante porcentajes muy grandfes
+                    percentage = 0;
+                    absPercentage = 0;
+                }
+
                 var alert = {
-                    cssPrice : "",
-                    cssAlert : "",
+                    price : "",
+                    alert : "",
                     percentage : percentage
                 };
 
-                var absPercentage = Math.abs(percentage);
+
+
 
                 if (absPercentage >= -Env.DEFAULT_NORMAL_RATE && absPercentage <= Env.DEFAULT_NORMAL_RATE){
                     alert.cssPrice = Env.CSS_NORMAL;
                 } else {
-                    alert.cssPrice = current > previous ? Env.CSS_SUCCESS : Env.CSS_ERROR;
+                    alert.cssPrice = current >= previous ? Env.CSS_SUCCESS : Env.CSS_ERROR;
 
                     if (percentage < Env.DEFAULT_NORMAL_RATE && absPercentage > alertDown ){
                         alert.cssAlert = "down";
@@ -72,23 +81,27 @@ define([
                 return parseFloat(val).toFixed(Env.DEFAULT_SCALE_DECIMAL);
             }
 
+            var alertUp = Env.DEFAULT_ALERT_UP_RATE;
+            var alertDown = Env.DEFAULT_ALERT_DOWN_RATE;
 
-            attributes.last = getFormattedNumber(market[Env.PROPERTY_TICKER_LAST]);
-            attributes.buy = getFormattedNumber(market[Env.PROPERTY_TICKER_BUY]);
-            attributes.sell = getFormattedNumber(market[Env.PROPERTY_TICKER_SELL]);
-            //attributes.update = market[Env.PROPERTY_TICKER_UPDATE];
-            //attributes.volume = getFormattedNumber(market[Env.PROPERTY_TICKER_VOLUME]);
-            //attributes.name = this.model.get(Env.PROPERTY_TICKER_NAME);
-            //attributes.iconUrl = this.model.get(Env.PROPERTY_TICKER_ICON_URL);
-            //attributes.siteUrl = this.model.get(Env.PROPERTY_TICKER_SITE_URL);
-            attributes.currency = this.model.get(Env.PROPERTY_TICKER_CURRENCY);
+            var attributes = {};
+            attributes.name = this.model.get(Env.PROPERTY_TICKER_NAME);
             attributes.symbol = this.model.get(Env.PROPERTY_TICKER_SYMBOL);
+            attributes.iconUrl = this.model.get(Env.PROPERTY_TICKER_ICON_URL);
 
-            attributes.css = {
-                'last' : getCss(market[Env.PROPERTY_TICKER_LAST],previous[Env.PROPERTY_TICKER_LAST]),
-                'buy' : getCss(market[Env.PROPERTY_TICKER_BUY],previous[Env.PROPERTY_TICKER_BUY]),
-                'sell' : getCss(market[Env.PROPERTY_TICKER_SELL],previous[Env.PROPERTY_TICKER_SELL])
-            };
+            var markets = this.model.get(Env.PROPERTY_TICKER_MARKETS);
+            attributes.markets = {};
+
+            for (var currency in markets) {
+                if (markets.hasOwnProperty(currency)) {
+                    var currencyObj = {};
+                    currencyObj[Env.PROPERTY_TICKER_LAST] = getFormattedNumber(markets[currency][Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_LAST]);
+
+                    var cssObj = getCss(markets[currency][Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_LAST],markets[currency][Env.PROPERTY_TICKER_PREVIOUS_MARKET][Env.PROPERTY_TICKER_LAST]);
+                    currencyObj['css'] = cssObj;
+                    attributes.markets[currency] = currencyObj;
+                }
+            }
 
             return attributes;
         },
@@ -101,21 +114,19 @@ define([
 
 
     var table = Backbone.View.extend({
-        el : '#exchangers-stats',
+        el : '#exchangersTable',
 
         initialize : function(){
-            _(this).bindAll('add', 'remove', 'boot');
+            _(this).bindAll('add', 'remove');
             this.columnViewClass = column;
             this._columnViews = [];
 
-            this.collection.each(this.boot);
+            this.collection.each(this.add);
 
             this.listenTo(this.collection,"change",this.onChangeModel);
 
             debug.debug("[TableView] Initialized TableView");
         },
-
-
 
         add : function(model) {
             var ticker  = {};
@@ -133,8 +144,8 @@ define([
                 this._columnViews.push(columnView);
 
                 if (this._rendered) {
-                    debug.debug("[TableView] Adding column ");
-                    //$(this.el).find('#exchangers-table tbody').append(column.render().el);
+                    debug.debug("[TableView] Adding column inside table ");
+                    $(this.el).find('#dynamicBody tr').append(columnView.render().el);
                 }else {
                     this.render();
                 }
@@ -166,18 +177,14 @@ define([
         },
 
         render : function() {
-            var me = this;
-            //When collection is empty. show Jumbotron
-            var $table = me.$el.find('#exchangers-table');
-            $table.fadeIn('slow');
-            me._rendered = true;
+            var $row = this.$el.find('#dynamicBody tr');
+            $row.empty();
 
-            var $body = $table.find('tbody');
-            $body.empty();
-
-            _(me._columnViews).each(function(childView) {
-                $body.append(childView.render().el);
+            _(this._columnViews).each(function(childView) {
+                $row.append(childView.render().el);
             });
+
+            this._rendered = true;
 
             return this;
         },

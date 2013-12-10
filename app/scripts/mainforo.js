@@ -55,16 +55,16 @@ require.config({
 });
 
 require(['jquery',
+    'vm',
     'forobitcoin/kernel',
     'forobitcoin/views/app'
     ],
-    function ($,Kernel,AppView) {
+    function ($,Vm,Kernel,AppView) {
         'use strict';
 
         var version = "0.1";
         //Production = 0
         //debug.setLevel(0);
-
 
         /**
          * Inicializa configuracion del sistema
@@ -75,33 +75,46 @@ require(['jquery',
         $(document).ready(function(){
 
             var kernel = new Kernel({ providers : {
-                USD : {
-                    markets : [
-                        {id:1,symbol:'mtgox'},
-                        {id:2,symbol:'bitstamp'}
-                    ]
+                    mtgox : {
+                        id : 1,
+                        name : 'Mt.Gox',
+                        symbol : 'mtgox',
+                        iconUrl : 'https://www.mtgox.com/favicon.ico',
+                        currencies : [ 'USD', 'EUR' ]
+                    },
+                    bitstamp : {
+                        id : 2,
+                        name : 'Bitstmap',
+                        symbol : 'bitstamp',
+                        iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
+                        currencies : [ 'USD'],
+                        exchanges : {
+                            official : 'USD',
+                            currencies : [ 'EUR']
+                        }
+                    },
+                    btcchina : {
+                        id : 3,
+                        name : 'BTCChina',
+                        symbol : 'btcchina',
+                        currencies  : [ 'CNY' ],
+                        exchanges : {
+                            official : 'CNY',
+                            currencies : [ 'USD','EUR']
+                        }
+                    }
                 },
-                EUR : {
-                    markets : [
-                        {id:3,symbol:'mtgox'},
-                        {id:4,symbol:'bitstamp'}
-                    ]
-                },
-                CNY : {
-                    markets : [
-                        {id:5,symbol:'btcchina'},
-                    ]
-                }
-            }
+                version : version
             });
 
             debug.debug('[Main] Loading information about providers');
             var tickers =  kernel.getTickers();
 
 
-            //var appView = Vm.create({}, 'AppView', AppView, {tickers: tickers});
-            //appView.render();
-            //Router.initialize({appView: appView});  // The router now has a copy of all main appview
+//            var appView = Vm.create({}, 'AppView', AppView, {tickers: tickers});
+//            appView.render();
+            //Con el render pintado, actualizo los tickers
+            kernel.loadTickers();
             debug.debug('[Main] Loaded Backbone Engine');
         });
 });

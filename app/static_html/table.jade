@@ -29,20 +29,20 @@ body
   //if lt IE 10
     p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
 
-  table(border="0", cellspacing="1", cellpadding="1", class="tborder")
+  table(border="0", cellspacing="1", cellpadding="1", class="tborder", id="exchangersTable", style="background-color : white;" )
     thead
       tr
         td(class="thead", colspan="5")
           div
             strong Cotizaciones
-    tbody(style="" ,id="dinamicTbody")
+    tbody(style="" ,id="dynamicBody")
       tr
         td(id="mtgox", class="tcat", width="380", align="center", style="white-space: nowrap")
           h3 MTGox
-          div.mtgoxUSD
+          div#mtgoxUSD.price
             span.value
             span.currency
-          div.mtgoxEUR
+          div#mtgoxEUR.pirce
             span.value
             span.currency
 

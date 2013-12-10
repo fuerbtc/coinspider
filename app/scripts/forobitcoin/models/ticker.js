@@ -34,23 +34,29 @@ define(['backbone','forobitcoin/env'],function(Backbone,Env){
                 siteUrl: 'http://google.com',
                 iconUrl : 'https://github.com/bitcoin/bitcoin/raw/master/share/pixmaps/bitcoin.ico',
                 feedUrl : 'http://google.com',
-                status : Env.TICKER_DISABLE,
-                market : {
-                    last : 0,
-                    buy : 0,
-                    sell : 0,
-                    volume : 0,
-                    update : 0
-                },
-                previousMarket : {
-                    last : 0,
-                    buy : 0,
-                    sell : 0,
-                    volume: 0,
-                    update : 0
-                },
-                crossdomain : false,
-                currency : 'USD'
+                status : Env.TICKER_ENABLE,
+                markets : {
+                    USD : {
+                        current : {
+                            last : 0,
+                            buy : 0,
+                            sell : 0,
+                            volume : 0,
+                            update : 0
+                        },
+                        previous : {
+                            last : 0,
+                            buy : 0,
+                            sell : 0,
+                            volume : 0,
+                            update : 0
+                        }
+
+                    }
+                    // Se repiten tantos como monedas
+                    // Existan
+
+                }
             }
         },
 
