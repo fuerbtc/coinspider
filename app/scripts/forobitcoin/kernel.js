@@ -86,7 +86,7 @@ define([
                     toSave[Env.PROPERTY_ID] =  provider[Env.PROPERTY_ID]
                     toSave[Env.PROPERTY_TICKER_NAME] = provider[Env.PROPERTY_TICKER_NAME];
                     toSave[Env.PROPERTY_TICKER_SYMBOL] = provider[Env.PROPERTY_TICKER_SYMBOL];
-                    toSave[Env.PROPERTY_TICKER_ICON_URL] = provider[Env.PROPERTY_TICKER_SYMBOL]
+                    toSave[Env.PROPERTY_TICKER_ICON_URL] = provider[Env.PROPERTY_TICKER_ICON_URL];
 
                     //Busco las monedas aceptadas en el exchanger
                     var currencies = provider['currencies'];
@@ -139,23 +139,25 @@ define([
                                 if (rate !== undefined){
                                     debug.debug('[KERNEL] Rate ' + rate);
                                     debug.debug("[KERNEL] Rate for Currency " + exchangesCurrencies[ix]);
-                                    var currencyObject = markets[exchangesCurrencies[ix]];
+                                    var currencyExchangeObject = markets[exchangesCurrencies[ix]];
+                                    var previousExchangeMarket = {};
+                                    var currentExchangeMarket = {};
 
-                                    if (currencyObject !== undefined) {
-                                        previousMarket = currencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET];
+                                    if (currencyExchangeObject !== undefined) {
+                                        previousExchangeMarket = currencyExchangeObject[Env.PROPERTY_TICKER_CURRENT_MARKET];
                                     } else {
-                                        currencyObject = {};
+                                        currencyExchangeObject = {};
                                     }
 
-                                    currentMarket[Env.PROPERTY_TICKER_LAST] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_LAST] * rate;
-                                    currentMarket[Env.PROPERTY_TICKER_BUY] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_BUY] * rate;
-                                    currentMarket[Env.PROPERTY_TICKER_SELL] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_SELL] *rate;
-                                    currentMarket[Env.PROPERTY_TICKER_VOLUME] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_VOLUME];
+                                    currentExchangeMarket[Env.PROPERTY_TICKER_LAST] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_LAST] * rate;
+                                    currentExchangeMarket[Env.PROPERTY_TICKER_BUY] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_BUY] * rate;
+                                    currentExchangeMarket[Env.PROPERTY_TICKER_SELL] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_SELL] *rate;
+                                    currentExchangeMarket[Env.PROPERTY_TICKER_VOLUME] = officialCurrencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET][Env.PROPERTY_TICKER_VOLUME];
 
-                                    currencyObject[Env.PROPERTY_TICKER_CURRENT_MARKET] = currentMarket;
-                                    currencyObject[Env.PROPERTY_TICKER_PREVIOUS_MARKET] = previousMarket;
+                                    currencyExchangeObject[Env.PROPERTY_TICKER_CURRENT_MARKET] = currentExchangeMarket;
+                                    currencyExchangeObject[Env.PROPERTY_TICKER_PREVIOUS_MARKET] = previousExchangeMarket;
 
-                                    markets[currencies[ix]] = currencyObject;
+                                    markets[exchangesCurrencies[ix]] = currencyExchangeObject;
                                     debug.debug("[KERNEL] Rate Data populated in Currency "  + exchangesCurrencies[ix]);
                                 }else{
                                     debug.debug("[KERNEL] No Rate Data founded for " + officialCurrency+exchangesCurrencies[ix]);

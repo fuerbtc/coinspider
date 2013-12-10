@@ -1,29 +1,3 @@
-/**
- * Ticker Class
- *
- * Object Descriptor
- * {
- *     name : ''.
- *     symbol : '',
- *     siteUrl : '',
- *     iconUrl : '',
- *     adapter : '',
- *     market : {
- *         last : '',
- *         buy : '',
- *         sell : '',
- *         date : ''
- *     },
- *     previousMarket : {
- *         last : '',
- *         buy : '',
- *         sell : '',
- *         date : ''
- *     }
- * }
- *
- * **/
-
 define(['backbone','forobitcoin/env'],function(Backbone,Env){
 
     var Ticker = Backbone.Model.extend({
@@ -51,19 +25,10 @@ define(['backbone','forobitcoin/env'],function(Backbone,Env){
                             volume : 0,
                             update : 0
                         }
-
                     }
-                    // Se repiten tantos como monedas
-                    // Existan
-
                 }
             }
-        },
-
-        getName : function(){
-            return this.symbol + "-" + this.currency;
         }
-
     });
 
     return Ticker;

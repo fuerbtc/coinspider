@@ -1,11 +1,10 @@
-<td id="<%= ticker.symbol %>" class="tcat" width="380" align="center" style="white-space: nowrap">
-  <h3> <%= ticker.name %> </h3>
-  <div id="<%= ticker.symbol %>-<%=ticker.currency %>" class="price">
-    <span class="value">
-      <%= ticker.last %>
-    </span>
-    <span class="currency">
-      <%= ticker.currency %>
-    </span>
-  </div>
-</td>
+<h3> <%= ticker.name %> <img src="<%= ticker.iconUrl %>" /> </h3>
+
+<% for (var currency in ticker.markets) {
+    if (ticker.markets.hasOwnProperty(currency)) {
+%>
+    <%= templatePrice({ currency : currency , symbol: ticker.symbol, price : ticker.markets[currency]}) %>
+<% }
+} %>
+
+

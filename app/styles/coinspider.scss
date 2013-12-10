@@ -1,0 +1,90 @@
+$background : #333;
+$blue: #428bca;
+$SidebarWidth: 220px;
+$miniSidebarWidth: 100px;
+
+$green : #468847;
+$green_background : #dff0d8;
+$green_border : #d6e9c6;
+
+$red : #b94a48;
+$red_background : #f2dede;
+$red_border : #eed3d7;
+
+$blue_background : #d9edf7;
+$blue_border : #bce8f1;
+
+
+#coinspider {
+  thead {
+
+  }
+
+  tbody {
+    h3 {
+      img { width: 16px;}
+    }
+
+    td {
+      padding: 0 1em 1em 1em;
+
+      .up {
+        color: #468847;
+        font-weight: bold;
+      }
+
+      .down {
+        color: #b94a48;
+        font-weight: bold;
+      }
+
+      .diff {
+        margin-left: 5px;
+        font-size: 0.8em;
+        display: none;
+        &.up {
+          display: inline;
+          color: $green;
+        }
+
+        &.down {
+          display: inline;
+          color: $red;
+        }
+      }
+
+
+
+      .currency {
+        text-align: right;
+
+        .price {
+          -webkit-transition: background-color 3s ease-out;
+          -moz-transition: background-color 3s ease-out;
+          -o-transition: background-color 3s ease-out;
+          -ms-transition: background-color 3s ease-out;
+          transition: background-color 3s ease-out;
+
+          .currency {
+            margin-left: 5px;
+          }
+
+          &.danger {
+            background-color: $red_background;
+            border-color: $red_border;
+          }
+
+          &.success {
+            background-color: $green_background;
+            border-color: $green_border;
+          }
+
+          &.info {
+            background-color: $blue_background;
+            border-color: $blue_border;
+          }
+        }
+      }
+    }
+  }
+}

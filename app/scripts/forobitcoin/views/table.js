@@ -5,26 +5,30 @@ define([
     'events',
     'forobitcoin/env',
     'text!forobitcoin/templates/column.html',
-], function($,Backbone,_,Events,Env,ColumnTemplate){
+    'text!forobitcoin/templates/price.html'
+], function($,Backbone,_,Events,Env,ColumnTemplate,PriceTemplate){
 
     var column = Backbone.View.extend({
         tagName : 'td',
-        template: _.template(ColumnTemplate),
+        className : 'exchangerCell',
+        template : _.template(ColumnTemplate),
 
 
         initialize : function() {
+            this.templatePrice = _.template(PriceTemplate);
             if (this.model === undefined){
                 throw new Error("[ColumnView] No model attached to this column");
             }
 
-            this.model.on("change:market",this.render,this);
+            Events.on('fb-update-ex',this.render,this);
 
             debug.debug("[ColumnView] Initialized ColumnView");
         },
 
         render: function() {
-            this.el.id = "column-" + this.model.getName();
-            this.$el.html(this.template({ticker : this.properties()}));
+            this.el.id = "column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL);
+
+            this.$el.html(this.template({ticker : this.properties(), templatePrice : this.templatePrice}));
 
             //Aplico funcion para transicion
 //            var me = this;
@@ -60,18 +64,15 @@ define([
                     percentage : percentage
                 };
 
-
-
-
                 if (absPercentage >= -Env.DEFAULT_NORMAL_RATE && absPercentage <= Env.DEFAULT_NORMAL_RATE){
-                    alert.cssPrice = Env.CSS_NORMAL;
+                    alert.price = Env.CSS_NORMAL;
                 } else {
-                    alert.cssPrice = current >= previous ? Env.CSS_SUCCESS : Env.CSS_ERROR;
+                    alert.price = current >= previous ? Env.CSS_SUCCESS : Env.CSS_ERROR;
 
                     if (percentage < Env.DEFAULT_NORMAL_RATE && absPercentage > alertDown ){
-                        alert.cssAlert = "down";
+                        alert.alert = "down";
                     }else if (percentage > Env.DEFAULT_NORMAL_RATE && absPercentage > alertUp) {
-                        alert.cssAlert = "up";
+                        alert.alert = "up";
                     }
                 }
                 return alert;
@@ -114,7 +115,7 @@ define([
 
 
     var table = Backbone.View.extend({
-        el : '#exchangersTable',
+        el : '#coinspider',
 
         initialize : function(){
             _(this).bindAll('add', 'remove');
@@ -122,8 +123,6 @@ define([
             this._columnViews = [];
 
             this.collection.each(this.add);
-
-            this.listenTo(this.collection,"change",this.onChangeModel);
 
             debug.debug("[TableView] Initialized TableView");
         },
@@ -145,9 +144,7 @@ define([
 
                 if (this._rendered) {
                     debug.debug("[TableView] Adding column inside table ");
-                    $(this.el).find('#dynamicBody tr').append(columnView.render().el);
-                }else {
-                    this.render();
+                    $(this.el).find('tbody tr').append(columnView.render().el);
                 }
             }
 
@@ -177,7 +174,7 @@ define([
         },
 
         render : function() {
-            var $row = this.$el.find('#dynamicBody tr');
+            var $row = this.$el.find('tbody tr');
             $row.empty();
 
             _(this._columnViews).each(function(childView) {
@@ -187,19 +184,6 @@ define([
             this._rendered = true;
 
             return this;
-        },
-
-        onChangeModel : function (elem){
-            debug.debug("[TableView] Model Updated")
-            if (elem.changed.status !== undefined){
-                if (elem.changed.status){
-                    debug.debug("[TableView] Adding to table");
-                    this.add(elem);
-                }else {
-                    debug.debug("[TableView] Removing from table");
-                    this.remove(elem);
-                }
-            }
         }
     });
 

@@ -1,0 +1,12 @@
+<div id="<%= symbol %><%= currency %>" class="currency">
+  <span class="price <%= price.css.price %> <%= price.css.alert %>">
+    <span class="value">
+      <%= price.last %>
+      <span class="currency">
+      <%= currency %>
+      </span>
+    </span>
+  </span>
+
+  <span class="diff <%= price.css.alert %>"><i class="fa fa-arrow-<%= price.css.alert %>"></i>( <%= price.css.percentage %> %)</span></span>
+</div>

@@ -22,29 +22,25 @@ head
 
 
   block css
-  include templates/css
+  // build:css(.tmp) styles/main.css
+  link(rel="stylesheet", href="styles/coinspider.css")
+  // endbuild
+  link(rel="stylesheet", href= api.cdn.fontAwesome)
+  link(rel="stylesheet", href= api.cdn.fontUbuntu)
   include templates/scripts_head
 
 body
   //if lt IE 10
     p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
 
-  table(border="0", cellspacing="1", cellpadding="1", class="tborder", id="exchangersTable", style="background-color : white;" )
+  table(border="1", cellspacing="1", cellpadding="1", class="tborder", id="coinspider", style="background-color : white;" )
     thead
       tr
-        td(class="thead", colspan="5")
+        td(class="thead", colspan="3")
           div
             strong Cotizaciones
-    tbody(style="" ,id="dynamicBody")
+    tbody
       tr
-        td(id="mtgox", class="tcat", width="380", align="center", style="white-space: nowrap")
-          h3 MTGox
-          div#mtgoxUSD.price
-            span.value
-            span.currency
-          div#mtgoxEUR.pirce
-            span.value
-            span.currency
 
   // build:js scripts/main.js
   script(src=api.cdn.requirejs, data-main="scripts/mainforo")
