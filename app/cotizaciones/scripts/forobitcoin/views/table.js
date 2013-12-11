@@ -79,7 +79,14 @@ define([
             }
 
             var getFormattedNumber = function(val){
-                return parseFloat(val).toFixed(Env.DEFAULT_SCALE_DECIMAL);
+                var result = 0;
+                if (isNaN(val)){
+                    result = parseFloat(val).toFixed(Env.DEFAULT_SCALE_DECIMAL);
+                }else {
+                    result = val;
+                }
+
+                return result;
             }
 
             var alertUp = Env.DEFAULT_ALERT_UP_RATE;
@@ -146,14 +153,14 @@ define([
 
                 if (this._rendered) {
                     debug.debug("[TableView] Adding column inside table ");
-                    $(this.el).find('tbody tr').append(columnView.render().el);
+                    $(this.el).find('tbody tr#exchangers').append(columnView.render().el);
                 }
             }
 
         },
 
         render : function() {
-            var $row = this.$el.find('tbody tr');
+            var $row = this.$el.find('tbody tr#exchangers');
             $row.empty();
 
             _(this._columnViews).each(function(childView) {

@@ -18,15 +18,14 @@ window.debug=(function(){var i=this,b=Array.prototype.slice,d=i.console,h={},f,g
  */
 require.config({
 
-    baseUrl: 'scripts',
+    baseUrl: 'cotizaciones/scripts',
 
     paths: {
         jquery: ['//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min','vendor/jquery-1.10.2.min'],
         backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min','vendor/backbone-1.0.0.min'],
         underscore: ['//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min','vendor/underscore-1.5.2.min'],
         localStorage : ['//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min','vendor/backbone.localStorage-1.1.7.min'],
-        text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min'],
-        backboneNestedModel : ['vendor/backbone-nested-v1.1.2.min']
+        text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min']
     },
     shim: {
         underscore: {
@@ -38,14 +37,7 @@ require.config({
                 'jquery'
             ],
             exports: 'Backbone'
-        },
-        backboneNestedModel : {
-            deps: [
-                'backbone',
-            ],
-            exports: 'BackboneNestedModel'
         }
-
     }
 });
 
