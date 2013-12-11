@@ -23,7 +23,7 @@ head
 
   block css
   // build:css(.tmp) styles/main.css
-  link(rel="stylesheet", href="styles/coinspider.css")
+  link(rel="stylesheet", href="cotizaciones/styles/coinspider.css")
   // endbuild
   link(rel="stylesheet", href= api.cdn.fontAwesome)
   link(rel="stylesheet", href= api.cdn.fontUbuntu)
@@ -33,18 +33,24 @@ body
   //if lt IE 10
     p.browsehappy You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
 
-  table(border="0", cellspacing="1", cellpadding="1", class="tborder", id="coinspider", style="background-color : white;" )
+  table(border="0", cellspacing="0", cellpadding="4", class="tborder", id="coinspider", style="background-color : white;" )
     thead
       tr
         td(class="thead", colspan="1")
           div
             strong Cotizaciones
-        td(class="coinspider-info", colspan="3")
+        td(class="thead coinspider-info", colspan="3")
           a(href="http://goo.gl/NHpiMw", target="_blank", alt="Powered by CoinSpider")
             i(class="fa fa-info-circle",title="Powered by CoinSpider",alt="Powered by CoinSpider")
     tbody
-      tr
+      tr#messages
+        td(class="tcat", colspan="5")
+          span.smalltext
+            strong Se actualiza cada 15 segundos.
+      tr#exchangers
+
 
   // build:js scripts/main.js
-  script(src=api.cdn.requirejs, data-main="scripts/mainforo")
+  script(src=api.cdn.requirejs, data-main="cotizaciones/scripts/mainforo")
   // endbuild
+  br
