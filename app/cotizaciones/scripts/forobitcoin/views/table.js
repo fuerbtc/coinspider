@@ -79,13 +79,12 @@ define([
             }
 
             var getFormattedNumber = function(val){
-                var result = 0;
-                if (isNaN(val)){
-                    result = parseFloat(val).toFixed(Env.DEFAULT_SCALE_DECIMAL);
-                }else {
-                    result = val;
-                }
+                var result = parseFloat(val).toFixed(Env.DEFAULT_SCALE_DECIMAL);
 
+                if (isNaN(result)){
+                    debug.debug("[TableView] NaN :" + val);
+                    result = -1;
+                }
                 return result;
             }
 

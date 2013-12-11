@@ -1,10 +1,14 @@
 <div id="<%= symbol %><%= currency %>" class="currency">
   <span class="price <%= price.css.price %> <%= price.css.alert %>">
-    <span class="value">
-      <%= price.last %>
-      <span class="currency">
-      <%= currency %>
-      </span>
+      <% if (price.last < -1) { %>
+        Offline
+      <% } else { %>
+        <span class="value">
+        <%= price.last %>
+        <span class="currency">
+        <%= currency %>
+        </span>
+      <% } %>
     </span>
   </span>
 

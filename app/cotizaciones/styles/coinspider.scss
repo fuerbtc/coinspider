@@ -29,12 +29,31 @@ $blue_border : #bce8f1;
 }
 
 #coinspider {
+  min-height: 155px;
+
+  thead{
+    tr{
+      td:nth-child(1){
+        border: 1px solid #81A2C4;
+        border-right: 0px;
+      }
+      td:nth-child(2){
+        border: 1px solid #81A2C4;
+        border-left: 0;
+      }
+    }
+  }
+
   tbody {
     tr {
       background-color: #f5f5f5;
     }
 
-    td {
+    td.tcat {
+      border: 1px solid #81A2C4;
+    }
+
+    td:not(.tcat) {
       h3 {
         text-align: center;
         img { width: 16px;}
@@ -79,7 +98,6 @@ $blue_border : #bce8f1;
 
           .currency {
             margin-left: 5px;
-            text-transform: lowercase;
           }
 
           &.danger {
