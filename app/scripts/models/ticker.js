@@ -64,27 +64,31 @@ define(['backbone','underscore','utils/environment'],function(Backbone,_,Env){
         },
 
         initialize : function(){
-            var errors =  validate();
-
-            if (errors.size > 0){
-                throw new Error(errors.join());
-            }
-
             //Iterate over each market and initialize elements
             var markets = this.get(Env.PROPERTY_TICKER_MARKETS);
-            _.each(markets,function(currency){
-                if (markets[currency][Env.PROPERTY_TICKER_MARKET_CURRENT] === undefined){
-                    markets[currency][Env.PROPERTY_TICKER_MARKET_CURRENT] = this._initMarketValue();
+            _.each(markets,function(currency,key){
+                if (currency[Env.PROPERTY_TICKER_MARKET_CURRENT] === undefined){
+                    currency[Env.PROPERTY_TICKER_MARKET_CURRENT] = this._initMarketValue();
                 }
 
-                if (markets[currency][Env.PROPERTY_TICKER_MARKET_PREVIOUS] === undefined){
-                    markets[currency][Env.PROPERTY_TICKER_MARKET_PREVIOUS] = this._initMarketValue();
+                if (currency[Env.PROPERTY_TICKER_MARKET_PREVIOUS] === undefined){
+                    currency[Env.PROPERTY_TICKER_MARKET_PREVIOUS] = this._initMarketValue();
                 }
 
-                var currencyInfo = this._getCurrencyInfo(currency);
-                markets[currency][Env.PROPERTY_TICKER_MARKET_COIN]  = currencyInfo.coin;
-                markets[currency][Env.PROPERTY_TICKER_MARKET_CURRENCY] = currencyInfo.currency;
-            });
+                var currencyInfo = this._getCurrencyInfo(key);
+                currency[Env.PROPERTY_TICKER_MARKET_COIN]  = currencyInfo.coin;
+                currency[Env.PROPERTY_TICKER_MARKET_CURRENCY] = currencyInfo.currency;
+
+                if (currency[Env.PROPERTY_TICKER_MARKET_FEED_CROSSDOMAIN] === undefined){
+                    currency[Env.PROPERTY_TICKER_MARKET_FEED_CROSSDOMAIN] = false;
+                }
+            },this);
+
+            var errors =  this.validate();
+
+            if (errors.length > 0){
+                throw new Error(errors.join());
+            }
         },
 
         validate : function(){
@@ -105,14 +109,13 @@ define(['backbone','underscore','utils/environment'],function(Backbone,_,Env){
             var markets = this.get(Env.PROPERTY_TICKER_MARKETS);
 
             if (markets === undefined || markets.length < 0 ){
-                error.push("Empty markets not allowed");
+                errors.push("Empty markets not allowed");
             }else {
-                _.each(markets,function(currency){
-                    isEmpty(currency +".feed",markets[currency][Env.PROPERTY_TICKER_MARKET_FEED]);
-                    isEmpty(currency +".crossdomain",markets[currency][Env.PROPERTY_TICKER_MARKET_FEED_CROSSDOMAIN]);
-                    isEmpty(currency +".coin",markets[currency][Env.PROPERTY_TICKER_MARKET_COIN]);
-                    isEmpty(currency +".currency",markets[currency][Env.PROPERTY_TICKER_MARKET_CURRENCY]);
-                });
+                _.each(markets,function(currency,key){
+                    isEmpty(key +".feed",currency[Env.PROPERTY_TICKER_MARKET_FEED]);
+                    isEmpty(key +".coin", currency[Env.PROPERTY_TICKER_MARKET_COIN]);
+                    isEmpty(key +".currency", currency[Env.PROPERTY_TICKER_MARKET_CURRENCY]);
+                },this);
             }
 
             return errors;
