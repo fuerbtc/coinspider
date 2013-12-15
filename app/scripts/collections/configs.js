@@ -1,10 +1,23 @@
 /**  Config Collection Class **
  */
 
-define(['backbone','utils/environment','models/config','localStorage'],function(Backbone,Environment,ConfigClass){
+define(['backbone',
+    'underscore',
+    'utils/environment',
+    'models/config',
+    'localStorage'
+],function(Backbone,_,Env,ConfigClass){
+
     var Configs = Backbone.Collection.extend({
         model: ConfigClass,
-        localStorage: new Backbone.LocalStorage(Environment.STORAGE_CONFIG)
+
+        initialize : function() {
+            if (_.undefined(this.options[Env.PROPERTY_STORAGE])){
+                this.localStorage =  new Backbone.LocalStorage(Env.STORAGE_CONFIG);
+            }else {
+                this.localStorage = new Backbone.LocalStorage(this.options[Env.PROPERTY_STORAGE]);
+            }
+        }
     });
 
     return Configs;
