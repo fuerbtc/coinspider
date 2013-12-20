@@ -46,6 +46,10 @@ Feel free to contribute to the project. Is it based on Node.js development philo
 
 ## Changelog
 
+V0.2
+- Added support for currency change
+- Added BTCChina provider.
+
 v0.1
 - Public release
 

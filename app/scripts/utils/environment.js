@@ -12,8 +12,8 @@ define([],function(){
         DEFAULT_NORMAL_RATE : 0.1,
         DEFAULT_REFRESH_TIME : 30, //SECONDS
         DEFAULT_CURRENCY : 'USD',
-        DOLAR: 'USD',
-        EURO : 'EUR',
+        CURRENCY_DOLAR: 'USD',
+        CURRENCY_EURO : 'EUR',
         DEFAULT_CONVERSION : '1,3545',
         DEFAULT_SCALE_DECIMAL : "3",
         VERSION : "version",
@@ -51,26 +51,36 @@ define([],function(){
 
         //Property Descriptors
         PROPERTY_ID : 'id',
+        PROPERTY_STORAGE : 'storage',
         PROPERTY_CONFIG_ENABLE_LOG : 'enableLog',
         PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER : 'enableMessageCounter',
         PROPERTY_CONFIG_REFRESH_TIMER : 'refreshTimer',
         PROPERTY_CONFIG_ALERT_UP : 'alertUp',
         PROPERTY_CONFIG_ALERT_DOWN : 'alertDown',
+        PROPERTY_CONFIG_VERSION : 'version',
+        PROPERTY_CONFIG_RATES : 'rates',
+        PROPERTY_CONFIG_RATES_UPDATE : 'updateRates',
 
+        //Properties Ticker Descriptor
         PROPERTY_TICKER_NAME : 'name',
         PROPERTY_TICKER_SYMBOL : 'symbol',
         PROPERTY_TICKER_SITE_URL : 'siteUrl',
         PROPERTY_TICKER_ICON_URL : 'iconUrl',
-        PROPERTY_TICKER_FEED_URL : 'feedUrl',
         PROPERTY_TICKER_STATUS : 'status',
-        PROPERTY_TICKER_MARKET : 'market',
+        PROPERTY_TICKER_MARKETS : 'markets',
+        PROPERTY_TICKER_MARKETS_UPDATE : 'marketsUpdate',
         PROPERTY_TICKER_LAST : 'last',
         PROPERTY_TICKER_BUY : 'buy',
         PROPERTY_TICKER_SELL : 'sell',
         PROPERTY_TICKER_VOLUME : 'volume',
         PROPERTY_TICKER_UPDATE : 'update',
-        PROPERTY_TICKER_PREVIOUS_MARKET : 'previousMarket',
-        PROPERTY_TICKER_CROSS_DOMAIN : 'crossdomain',
+        PROPERTY_TICKER_MARKET_CURRENT : 'current',
+        PROPERTY_TICKER_MARKET_PREVIOUS : 'previous',
+        PROPERTY_TICKER_MARKET_FEED : 'feed',
+        PROPERTY_TICKER_MARKET_COIN : 'coin',
+        PROPERTY_TICKER_MARKET_CURRENCY : 'currency',
+
+        PROPERTY_TICKER_MARKET_FEED_CROSSDOMAIN : 'crossdomain',
         PROPERTY_TICKER_ORDER : 'order'
     }
 

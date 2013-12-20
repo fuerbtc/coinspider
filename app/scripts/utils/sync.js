@@ -11,7 +11,7 @@ define([
     'collections/tickers',
     'utils/providers',
     'crossdomain'
-],function($,Backbone,_,Events,Environment,TickerClass,TickersClass,Providers){
+],function($,Backbone,_,Events,Env,TickerClass,TickersClass,Providers){
 
     var tickers = new TickersClass();
 
@@ -27,7 +27,7 @@ define([
 
             //Inicializo todos los providers en la Collection
             debug.debug("[Sync] Initializing Tickers ...");
-            this.initTickers(true);
+            this.initTickers();
         },
 
         /**
@@ -35,23 +35,28 @@ define([
          *
          */
         registerEvents : function () {
-            Events.on(Environment.EVENT_ENABLE_TICKER,function(id){
+
+            // EVENTO EVENT_ENABLE_TICKER - Ticker enable and immediately refresh current value
+            Events.on(Env.EVENT_ENABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_ENABLE_TICKER - Model enabled : "+ id);
                 var model = tickers.get(id);
 
                 var obj = {};
-                obj[Environment.PROPERTY_TICKER_STATUS] = Environment.TICKER_ENABLE;
-                obj[Environment.PROPERTY_TICKER_ORDER] = tickers.getEnables().length;
+                obj[Env.PROPERTY_TICKER_STATUS] = Env.TICKER_ENABLE;
+                obj[Env.PROPERTY_TICKER_ORDER] = tickers.getEnables().length;
 
                 model.save(obj);
+
+                //Cuando se activa, se manda a actualizar
                 this.refreshTicker(model);
             },this);
 
-            Events.on(Environment.EVENT_DISABLE_TICKER,function(id){
+            // EVENT : EVENT_DISABLE_TICKER - Ticker disabled and updating order in list
+            Events.on(Env.EVENT_DISABLE_TICKER,function(id){
                 debug.debug("[Sync] - EVENT_DISABLE_TICKER - Model disabled : "+ id);
 
                 var obj = {};
-                obj[Environment.PROPERTY_TICKER_STATUS] = Environment.TICKER_DISABLE;
+                obj[Env.PROPERTY_TICKER_STATUS] = Env.TICKER_DISABLE;
                 tickers.get(id).save(obj);
 
                 //Updating order
@@ -59,67 +64,64 @@ define([
                 var order = -1;
                 _.each(tickersEnables, function(model){
                     var object = {};
-                    object[Environment.PROPERTY_TICKER_ORDER] = order++;
+                    object[Env.PROPERTY_TICKER_ORDER] = order++;
                     model.save(object)
                 });
             },this);
 
-            Events.on(Environment.EVENT_UPDATE_TICKERS,function(){
+            // EVENT : EVENT_UPDATE_TICKERS - Update current value for enabled tickers
+            Events.on(Env.EVENT_UPDATE_TICKERS,function(){
                 debug.debug("[Sync] - EVENT_UPDATE_TICKERS - Refreshing Tickers ...");
-                this.refreshTickers(Environment.REFRESH_ENABLE_TICKERS);
+                this.refreshTickers(Env.REFRESH_ENABLE_TICKERS);
             },this);
         },
 
         /**
          * A partir de la informacion definida en providers.js se inicializa los tickers en TickerCollection
          *
+         * Cada actualizacion de provider hay que incrementar la version para que los tickers se vuelvan a cargar
+         *
          * @param override Indica al sistema que sobreescriba con valores por defecto la informacion almacenada en localstorage
          */
-        initTickers : function(override){
+        initTickers : function(){
             //Obtengo los tickers guardados en el localStorage
             debug.debug("[Sync] Fetch ticker collection ...");
             tickers.fetch();
             debug.debug("[Sync] Loaded " + tickers.length + " tickers from LocalStorage");
 
             //Searching for new providers
-            debug.debug("[Sync] Searching new provider definition. Override = " + override);
-            for (var key in Providers){
-                if (Providers.hasOwnProperty(key)){
-                    this.initTicker(Providers[key],override);
+            debug.debug("[Sync] Searching new providers definition.");
+
+            _.each(Providers, function(provider,key){
+                if (tickers.get(provider[Env.PROPERTY_ID]) === undefined){
+                    try {
+                        this.initTicker(provider);
+                    }catch (err){
+                        debug.debug("[Sync] Error reading properties for Provider " + provider[Env.PROPERTY_TICKER_NAME] + " Error: " + err.message);
+                    }
+                }else {
+                    debug.debug("[Sync] Loaded Ticker " + provider[Env.PROPERTY_TICKER_NAME] +  " from cache ...");
                 }
-            }
+            },this);
         },
 
         /**
-         * Crea o sobreescribe un Ticker en TickerCollection a partir de la descripcion definida providers.js
+         * Inicializa un Ticker en TickerCollection a partir de la descripcion definida providers.js
          * @param provider El objeto Provider. For more information read provider.js
          */
-        initTicker : function(provider,override){
-            if (provider.id !== undefined){
-                debug.debug("[Sync] Loading Ticker : " + provider.symbol);
-                var ticker = tickers.get(provider.id);
+        initTicker : function(provider){
 
-                var defaultData = {};
-                defaultData[Environment.PROPERTY_ID] = provider.id;
-                defaultData[Environment.PROPERTY_TICKER_NAME] = provider.name;
-                defaultData[Environment.PROPERTY_TICKER_SYMBOL] = provider.symbol;
-                defaultData[Environment.PROPERTY_TICKER_SITE_URL] = provider.siteUrl;
-                defaultData[Environment.PROPERTY_TICKER_ICON_URL] = provider.iconUrl;
-                defaultData[Environment.PROPERTY_TICKER_FEED_URL] = provider.feedUrl;
-                defaultData[Environment.PROPERTY_TICKER_VOLUME] = provider.volume;
-                defaultData[Environment.PROPERTY_TICKER_CROSS_DOMAIN] = provider.crossdomain;
+            if (provider && provider.id !== undefined){
+                debug.debug("[Sync] Creating New Ticker : " + provider.symbol);
 
-                if (ticker === undefined){
-                    ticker = new TickerClass();
-                    ticker.set(defaultData);
+                try {
+                    var ticker = new TickerClass(provider);
                     tickers.create(ticker);
-                    debug.debug("[Sync] Created " + provider.name);
-                }else if (override){
-                    ticker.save(defaultData);
-                    debug.debug("[Sync] Overrided " + provider.name);
+                    debug.debug("[Sync] Ready Ticker " + provider.name);
+                } catch (err){
+                    debug.debug("[Sync] Is not possible load  Ticker " + provider.name + ". Please check Providers list");
                 }
 
-                debug.debug("[Sync] Ready Ticker " + ticker.get(Environment.PROPERTY_TICKER_NAME));
             }
         },
 
@@ -135,12 +137,12 @@ define([
 
             switch (type){
                 default:
-                case Environment.REFRESH_ALL_TICKERS:
+                case Env.REFRESH_ALL_TICKERS:
                     debug.debug("[Sync] Updating all tickers ...")
                     tickers.each(this.refreshTicker);
                     this.lastTrigger = tickers.length; //Numero de veces que se debe esperar antes de enviar el evento que indica que la actualizacion ha terminado
                     break;
-                case Environment.REFRESH_ENABLE_TICKERS:
+                case Env.REFRESH_ENABLE_TICKERS:
                     debug.debug("[Sync] Updating tickers enabled ...")
                     var enableTickers = tickers.getEnables();
                     this.lastTrigger = enableTickers.length; //Numero de veces que se debe esperar antes de enviar el evento que indica que la actualizacion ha terminado
@@ -157,11 +159,11 @@ define([
          * @returns {boolean}
          */
         refreshTicker : function (model){
-            debug.debug("[Sync] Updating model " + model.get(Environment.PROPERTY_TICKER_NAME));
+            debug.debug("[Sync] Updating model " + model.get(Env.PROPERTY_TICKER_NAME));
             var me = this;
 
             var reqEngine = null;
-            var isCrossDomain = model.get(Environment.PROPERTY_TICKER_CROSS_DOMAIN);
+            var isCrossDomain = model.get(Env.PROPERTY_TICKER_CROSS_DOMAIN);
 
             if (isCrossDomain){
                 reqEngine = $.ajax;
@@ -170,7 +172,7 @@ define([
             }
 
             reqEngine({
-                url: model.get(Environment.PROPERTY_TICKER_FEED_URL),
+                url: model.get(Env.PROPERTY_TICKER_FEED_URL),
                 type: 'GET',
                 success: function(data) {
                     if (data){
@@ -182,7 +184,7 @@ define([
                     }
                 },
                 error : function(data){
-                    debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get(Environment.PROPERTY_ID) + " Name:" + model.get(Environment.PROPERTY_TICKER_NAME));
+                    debug.debug("[Sync] FAIL! - Something wrong updating -> Id:" + model.get(Env.PROPERTY_ID) + " Name:" + model.get(Env.PROPERTY_TICKER_NAME));
                     me._checkLastTrigger();
                 }
             });
@@ -200,13 +202,13 @@ define([
         updateTicker : function (data, model) {
             //Save accede a la collecion y busca el objeto del modelo,
             //si no esta lo guarda. Si esta, actualiza.
-            var provider = this.getProvider(model.get(Environment.PROPERTY_TICKER_SYMBOL));
+            var provider = this.getProvider(model.get(Env.PROPERTY_TICKER_SYMBOL));
             if (provider){
                 debug.debug("[Sync] Adapting data received");
                 var adaptedData = provider.adapter(data);
 
                 //Guardar ultimo mercado!
-                var previous = model.get(Environment.PROPERTY_TICKER_MARKET);
+                var previous = model.get(Env.PROPERTY_TICKER_MARKET);
 
                 model.save({
                     'previousMarket' : previous,
@@ -214,8 +216,8 @@ define([
                 });
 
                 //Get new market
-                var market = model.get(Environment.PROPERTY_TICKER_MARKET);
-                debug.debug("[Sync] Saved data:  " + model.get(Environment.PROPERTY_TICKER_NAME) + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
+                var market = model.get(Env.PROPERTY_TICKER_MARKET);
+                debug.debug("[Sync] Saved data:  " + model.get(Env.PROPERTY_TICKER_NAME) + "| Last " + market.last + "| Buy " + market.buy + "| Sell " + market.sell);
             }
         },
 
@@ -251,7 +253,7 @@ define([
             if (this.lastTrigger <= 0){
                 debug.debug("[Sync] Refresh tickers has finished");
                 debug.debug("[Sync] Triggering EVENT_UPDATE_TICKERS_FINISH");
-                Events.trigger(Environment.EVENT_UPDATE_TICKERS_FINISH);
+                Events.trigger(Env.EVENT_UPDATE_TICKERS_FINISH);
             }
         }
     })

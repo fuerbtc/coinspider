@@ -45,6 +45,14 @@ module.exports = function (grunt) {
             jade: {
                 files: ['<%= yeoman.app %>/static_html/**/*.jade'],
                 tasks: ['jade']
+            },
+
+            test : {
+                files : [
+                    '{<%= yeoman.app %>}/scripts/{,*/}*.js',
+                    'test/{,*/}*.js'
+                ],
+                tasks : ['shell:test']
             }
         },
         connect: {
@@ -66,9 +74,8 @@ module.exports = function (grunt) {
             test: {
                 options: {
                     base: [
-                        '<%= yeoman.tmp %>',
-                        'test',
-                        '<%= yeoman.app %>'
+                        '<%= yeoman.app %>',
+                        'test'
                     ]
                 }
             },
@@ -108,8 +115,9 @@ module.exports = function (grunt) {
         mocha: {
             all: {
                 options: {
-                    run: true,
-                    urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html']
+                    run:  false,
+                    urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html'],
+                    log : true
                 }
             }
         },
@@ -379,6 +387,16 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+
+        shell: {
+            test: {
+                command: 'mocha-phantomjs http://localhost:9000/index.html',
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            }
         }
 
     });
@@ -404,6 +422,15 @@ module.exports = function (grunt) {
         'autoprefixer',
         'connect:test',
         'mocha'
+    ]);
+
+    grunt.registerTask('livetest', [
+        'clean:server',
+        'concurrent:test',
+        'autoprefixer',
+        'connect:test',
+        'shell:test',
+        'watch:test'
     ]);
 
     grunt.registerTask('build', [

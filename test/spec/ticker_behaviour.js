@@ -1,5 +1,8 @@
-define(['models/ticker','utils/environment'],function(TickerClass,Env) {
-
+define([
+    'models/ticker',
+    'collections/tickers',
+    'utils/environment'
+],function(TickerClass,TickersClass,Env) {
 
     var providers = {
         mtgoxNoSymbol : {
@@ -27,7 +30,7 @@ define(['models/ticker','utils/environment'],function(TickerClass,Env) {
             }
         },
         mtgoxNoFeed : {
-            id : 11,
+            id : 12,
             siteUrl : 'https://www.mtgox.com/',
             iconUrl : 'https://www.mtgox.com/favicon.ico',
             symbol : 'mtgox',
@@ -51,7 +54,7 @@ define(['models/ticker','utils/environment'],function(TickerClass,Env) {
             }
         },
         mtgox : {
-            id : 11,
+            id : 13,
             siteUrl : 'https://www.mtgox.com/',
             iconUrl : 'https://www.mtgox.com/favicon.ico',
             symbol : 'mtgox',
@@ -74,13 +77,28 @@ define(['models/ticker','utils/environment'],function(TickerClass,Env) {
                     crossdomain : true
                 }
             }
+        },
+        bitstamp : {
+            id : 14,
+            siteUrl : 'https://www.bitstamp.net',
+            iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
+            name : 'Bitstamp',
+            symbol : 'bitstamp',
+
+            markets : {
+                BTCUSD : {
+                    feed : 'https://www.bitstamp.net/api/ticker',
+                    chart : 'http://bitcoincharts.com/markets/bitstampUSD.html',
+                    crossdomain : false
+                }
+            }
         }
-    }
+    };
 
 
     describe('Ticker', function() {
 
-        describe('constructor', function() {
+        describe('initialization', function() {
             it('should throw an error, Empty Ticker Initialization', function() {
                 try {
                    new TickerClass();
@@ -122,5 +140,56 @@ define(['models/ticker','utils/environment'],function(TickerClass,Env) {
             });
         });
 
+    });
+
+    describe('Collection Ticker', function() {
+        var STORAGE = "coinspider-test-tickers";
+
+        it('should be an empty collection when localStorage is empty', function(){
+            //window.localStorage.removeItem(STORAGE);
+            window.localStorage.setItem("Storage","Luis");
+
+            var tickers = new TickersClass();
+            tickers.fetch();
+
+            tickers.size().should.be.equal(0);
+        });
+
+        it('should be a ordered list of 2 tickers', function (){
+            var ticker1 = new TickerClass(providers.mtgox);
+            var ticker2 = new TickerClass(providers.bitstamp);
+
+            console.log(window.localStorage.getItem("Storage"));
+
+            ticker1.set({'order' : 2});
+            ticker2.set({'order' : 1});
+
+            var tickers = new TickersClass();
+            tickers.create(ticker1);
+            tickers.create(ticker2);
+
+
+
+            var jSon = tickers.toJSON();
+            jSon.should.have.deep.property("[0].symbol","bitstamp");
+            jSon.should.have.deep.property("[1].symbol","mtgox");
+        });
+
+        it('should be 0 enabled tickers from previous list', function (){
+            var tickers = new TickersClass();
+            tickers.fetch();
+
+            tickers.getEnabled().should.be.empty;
+        });
+
+//        it('should be 1 enabled tickers, after enabled one', function (){
+//            var tickers = new TickersClass();
+//            tickers.fetch();
+//
+//            var mtgox = tickers.get(13);
+//            mtgox.save({'status':true})
+//
+//            tickers.getEnabled().should.have.deep.property("[1].symbol","mtgox");
+//        });
     });
 });

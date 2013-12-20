@@ -3,18 +3,19 @@
 
 define(['backbone','underscore','utils/environment','models/ticker','localStorage'],function(Backbone,_,Env,TickerClass){
     var Tickers = Backbone.Collection.extend({
-        model: TickerClass,
+        model : TickerClass,
+        localStorage : new Backbone.LocalStorage(Env.STORAGE_TICKERS),
 
-        initialize : function() {
-            if (_.undefined(this.options[Env.PROPERTY_STORAGE])){
-                this.localStorage =  new Backbone.LocalStorage(Env.STORAGE_TICKERS);
-            }else {
-                this.localStorage = new Backbone.LocalStorage(this.options[Env.PROPERTY_STORAGE]);
-            }
+        initialize : function(models, options) {
+//            if (_.isUndefined(options) || _.isUndefined(options[Env.PROPERTY_STORAGE])){
+//                this.localStorage = new Backbone.LocalStorage(Env.STORAGE_TICKERS);
+//            }else {
+//                this.localStorage = new Backbone.LocalStorage(options[Env.PROPERTY_STORAGE]),
+//            }
 
         },
 
-        getEnables : function(){
+        getEnabled : function(){
             return this.filter(function(ticker){
                return ticker.get(Env.PROPERTY_TICKER_STATUS) === true;
             });
