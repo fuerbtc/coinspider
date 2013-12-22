@@ -13,7 +13,7 @@ require.config({
         'models' : 'scripts/models',
         'collections' : 'scripts/collections',
         'utils' : 'scripts/utils',
-        'localStorage' : ['scripts/vendor/backbone-ls-source']
+        'localStorage' : ['scripts/vendor/backbone.localStorage']
     },
     shim: {
         'underscore': {

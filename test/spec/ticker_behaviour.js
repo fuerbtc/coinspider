@@ -144,8 +144,6 @@ define([
     });
 
     describe('Collection Tickers', function() {
-        var STORAGE = "coinspider-test-tickers";
-
         var tickers = new TickersClass();
 
         before(function(){
