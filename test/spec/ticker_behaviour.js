@@ -1,9 +1,10 @@
 define([
+    'backbone',
     'models/ticker',
     'collections/tickers',
-    'utils/environment'
-],function(TickerClass,TickersClass,Env) {
-
+    'utils/environment',
+    'localStorage'
+],function(Backbone,TickerClass,TickersClass,Env) {
     var providers = {
         mtgoxNoSymbol : {
             id : 11,
@@ -98,35 +99,35 @@ define([
 
     describe('Ticker', function() {
 
-        describe('initialization', function() {
-            it('should throw an error, Empty Ticker Initialization', function() {
-                try {
-                   new TickerClass();
-                } catch (err) {
-                    err.should.to.be.instanceof(Error);
-                }
+        describe('working with', function() {
+            it('should be invalid due to empty values', function() {
+                var ticker = new TickerClass();
+                ticker.on("invalid",function(model,error){
+                    var err = error;
+                    err.should.exist.and.have.string("symbol");
+                })
+                ticker.save();
             });
 
-            it('should throw an error, Validation exception: symbol is empty', function(){
-                try {
-                    new TickerClass(providers.mtgoxNoSymbol).should.throw(Error);
-                } catch (err){
-                    err.should.to.be.instanceof(Error)
-                    err.message.should.have.string("symbol");
-                }
+            it('should be invalid. Required `symbol` property is empty', function(){
+                var ticker = new TickerClass(providers.mtgoxNoSymbol);
+                ticker.on("invalid",function(model,error){
+
+                    var err = error;
+                    err.should.exist.and.have.string("symbol");
+                })
+                ticker.save();
             })
 
-            it('should throw an error, Validation exception: feed for one market is empty', function(){
-                try {
-                    new TickerClass(providers.mtgoxNoFeed).should.throw(Error);
-                } catch (err){
-                    err.should.to.be.instanceof(Error);
-                    err.message.should.have.string("feed");
-                }
+            it('should be invalid. Required `feed` property for one market is empty', function(){
+                var ticker = new TickerClass(providers.mtgoxNoFeed);
+                ticker.on("invalid",function(model,error){
+                    error.should.exist.and.have.string("feed");
+                });
+                ticker.save();
             })
 
-            it('should be a valid initialization object',function(){
-
+            it('should be a valid Ticker object',function(){
                 var sample = new TickerClass(providers.mtgox);
 
                 sample.get(Env.PROPERTY_TICKER_NAME).should.be.equal("Mt.Gox");
@@ -142,54 +143,70 @@ define([
 
     });
 
-    describe('Collection Ticker', function() {
+    describe('Collection Tickers', function() {
         var STORAGE = "coinspider-test-tickers";
 
-        it('should be an empty collection when localStorage is empty', function(){
-            //window.localStorage.removeItem(STORAGE);
-            window.localStorage.setItem("Storage","Luis");
+        var tickers = new TickersClass();
 
-            var tickers = new TickersClass();
+        before(function(){
+            tickers.localStorage._clear();
             tickers.fetch();
-
-            tickers.size().should.be.equal(0);
         });
 
-        it('should be a ordered list of 2 tickers', function (){
-            var ticker1 = new TickerClass(providers.mtgox);
-            var ticker2 = new TickerClass(providers.bitstamp);
-
-            console.log(window.localStorage.getItem("Storage"));
-
-            ticker1.set({'order' : 2});
-            ticker2.set({'order' : 1});
-
-            var tickers = new TickersClass();
-            tickers.create(ticker1);
-            tickers.create(ticker2);
-
-
-
-            var jSon = tickers.toJSON();
-            jSon.should.have.deep.property("[0].symbol","bitstamp");
-            jSon.should.have.deep.property("[1].symbol","mtgox");
+        it("should use `localSync`", function(){
+            Backbone.getSyncMethod(tickers).should.be.equal(Backbone.localSync);
         });
 
-        it('should be 0 enabled tickers from previous list', function (){
-            var tickers = new TickersClass();
-            tickers.fetch();
-
-            tickers.getEnabled().should.be.empty;
+        it("should initially be empty", function(){
+            tickers.length.should.be.equal(0);
         });
 
-//        it('should be 1 enabled tickers, after enabled one', function (){
-//            var tickers = new TickersClass();
-//            tickers.fetch();
-//
-//            var mtgox = tickers.get(13);
-//            mtgox.save({'status':true})
-//
-//            tickers.getEnabled().should.have.deep.property("[1].symbol","mtgox");
-//        });
+        describe("on creating models", function(){
+            var ticker1 = new TickerClass(providers.mtgox),
+                ticker2 = new TickerClass(providers.bitstamp);
+
+            ticker1.on("invalid",function(model,error){
+                console.log("error???? " + error);
+            });
+
+            ticker2.on("invalid",function(model,error){
+                console.log("error2???? " + error);
+            });
+
+            before(function(){
+                ticker1.set({'order' : 2});
+                ticker2.set({'order' : 1, 'status' : true});
+                tickers.create(ticker1);
+                tickers.create(ticker2);
+            });
+
+            it('should be a ordered list of 2 tickers',function(){
+                var jSon = tickers.toJSON();
+                jSon.should.have.deep.property("[0].symbol","bitstamp");
+                jSon.should.have.deep.property("[1].symbol","mtgox");
+            });
+
+            it('should be 1 enabled ticker', function(){
+                //Esperamos array de modelos
+                tickers.getEnabled().should.have.deep.property("[0].attributes.symbol","bitstamp");
+            });
+
+            describe("on a new collection", function(){
+                var tickers2 = new TickersClass();
+
+                before(function(){
+                    tickers2.fetch();
+                });
+
+                it('should be  2 tickers in a new collection, equals to last collection', function (){
+                    tickers2.size().should.be.equal(2);
+
+                    var jSon2 = tickers2.toJSON();
+                    jSon2.should.have.deep.property("[0].symbol","bitstamp");
+                    jSon2.should.have.deep.property("[1].symbol","mtgox");
+                });
+
+            });
+        });
     });
 });

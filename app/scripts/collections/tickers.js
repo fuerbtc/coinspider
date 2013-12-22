@@ -4,16 +4,7 @@
 define(['backbone','underscore','utils/environment','models/ticker','localStorage'],function(Backbone,_,Env,TickerClass){
     var Tickers = Backbone.Collection.extend({
         model : TickerClass,
-        localStorage : new Backbone.LocalStorage(Env.STORAGE_TICKERS),
-
-        initialize : function(models, options) {
-//            if (_.isUndefined(options) || _.isUndefined(options[Env.PROPERTY_STORAGE])){
-//                this.localStorage = new Backbone.LocalStorage(Env.STORAGE_TICKERS);
-//            }else {
-//                this.localStorage = new Backbone.LocalStorage(options[Env.PROPERTY_STORAGE]),
-//            }
-
-        },
+        localStorage : new Backbone.LocalStorage(Env.STORAGE_TICKERS), //Default LocalStorage
 
         getEnabled : function(){
             return this.filter(function(ticker){

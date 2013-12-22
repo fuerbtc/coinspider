@@ -83,15 +83,13 @@ define(['backbone','underscore','utils/environment'],function(Backbone,_,Env){
                     currency[Env.PROPERTY_TICKER_MARKET_FEED_CROSSDOMAIN] = false;
                 }
             },this);
-
-            var errors =  this.validate();
-
-            if (errors.length > 0){
-                throw new Error(errors.join());
-            }
         },
 
         validate : function(){
+            if (this.get(Env.PROPERTY_TEST) != undefined){
+                return null;
+            }
+
             var errors = [];
 
             var isEmpty = function(property,value){
@@ -118,7 +116,7 @@ define(['backbone','underscore','utils/environment'],function(Backbone,_,Env){
                 },this);
             }
 
-            return errors;
+            return errors.length > 0 ? errors.join() : null;
         },
 
         _initMarketValue : function(){

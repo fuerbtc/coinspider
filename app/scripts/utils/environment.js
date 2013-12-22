@@ -51,6 +51,7 @@ define([],function(){
 
         //Property Descriptors
         PROPERTY_ID : 'id',
+        PROPERTY_TEST : 'test',
         PROPERTY_STORAGE : 'storage',
         PROPERTY_CONFIG_ENABLE_LOG : 'enableLog',
         PROPERTY_CONFIG_ENABLE_MESSAGE_COUNTER : 'enableMessageCounter',

@@ -13,9 +13,7 @@ require.config({
         'models' : 'scripts/models',
         'collections' : 'scripts/collections',
         'utils' : 'scripts/utils',
-        'localStorage' : ['scripts/vendor/backbone.localStorage']
-
-
+        'localStorage' : ['scripts/vendor/backbone-ls-source']
     },
     shim: {
         'underscore': {
@@ -35,8 +33,8 @@ require.config({
         chai: {
             exports: 'chai'
         }
-    },
-    urlArgs: 'bust=' + (new Date()).getTime()
+    }
+    //urlArgs: 'bust=' + (new Date()).getTime()
 });
 
 require(['jquery','require','chai','mocha'], function($,require,chai){
@@ -49,8 +47,6 @@ require(['jquery','require','chai','mocha'], function($,require,chai){
 
     var specs = [];
     specs.push('spec/ticker_behaviour');
-
-    console.log("Hola");
 
     require(specs,
         function() {
