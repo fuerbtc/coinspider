@@ -36,18 +36,17 @@ body
   table(border="0", cellspacing="0", cellpadding="4", class="tborder", id="coinspider", style="background-color : white;" )
     thead
       tr
-        td(class="thead", colspan="1")
+        td(class="thead")
           div
             strong Cotizaciones
-        td(class="thead coinspider-info", colspan="3")
+        td(class="thead coinspider-info")
           a(href="http://goo.gl/NHpiMw", target="_blank", alt="Powered by CoinSpider")
             i(class="fa fa-info-circle",title="Powered by CoinSpider",alt="Powered by CoinSpider")
     tbody
-      tr#messages
-        td(class="tcat", colspan="5")
-          span.smalltext
-            strong Se actualiza cada 15 segundos.
-      tr#exchangers
+      tr#coinspider-container
+        td(colspan="2")
+          table#coinspider-table
+            tbody
 
 
   // build:js scripts/main.js

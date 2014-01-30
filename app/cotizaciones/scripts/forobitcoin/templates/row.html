@@ -1,0 +1,12 @@
+<td class="symbol trow1">
+  <img src="<%= ticker.iconUrl %>" /> <strong><%= ticker.name %></strong>
+</td>
+
+<% for (var currency in ticker.markets) {
+if (ticker.markets.hasOwnProperty(currency)) {
+%>
+<%= templatePrice({ currency : currency , symbol: ticker.symbol, price : ticker.markets[currency]}) %>
+<% }
+} %>
+
+

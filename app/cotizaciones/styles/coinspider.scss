@@ -14,6 +14,10 @@ $red_border : #eed3d7;
 $blue_background : #d9edf7;
 $blue_border : #bce8f1;
 
+@import "compass/css3";
+
+@import "compass/utilities";
+
 
 .coinspider-info {
   text-align: right;
@@ -28,91 +32,93 @@ $blue_border : #bce8f1;
   }
 }
 
-#coinspider {
-  min-height: 155px;
 
+
+#coinspider {
   thead{
     tr{
       td:nth-child(1){
-        border: 1px solid #81A2C4;
-        border-right: 0px;
+        @include border-top-right-radius(0);
       }
       td:nth-child(2){
-        border: 1px solid #81A2C4;
-        border-left: 0;
+        @include border-top-left-radius(0);
       }
     }
   }
 
   tbody {
-    tr {
-      background-color: #f5f5f5;
+    tr#coinspider-container{
+      td {
+        padding: 0;
+      }
     }
+  }
 
-    td.tcat {
-      border: 1px solid #81A2C4;
-    }
+  #coinspider-table {
+    width: 100%;
+    border-spacing: 0;
+    tbody {
+      tr {
+        background-color: #f5f5f5;
 
-    td:not(.tcat) {
-      h3 {
-        text-align: center;
-        img { width: 16px;}
-      }
-
-      padding: 0 1em 1em 1em;
-
-      .up {
-        color: #468847;
-        font-weight: bold;
-      }
-
-      .down {
-        color: #b94a48;
-        font-weight: bold;
-      }
-
-      .diff {
-        margin-left: 5px;
-        font-size: 0.8em;
-        display: none;
-        &.up {
-          display: inline;
-          color: $green;
+        td.symbol {
+          img { width: 16px;}
         }
 
-        &.down {
-          display: inline;
-          color: $red;
-        }
-      }
+        td:not(.tcat) {
+          padding: 0 1em 0 1em;
+          text-align: center;
 
-      .currency {
-        text-align: center;
+          .up {
+            color: #468847;
+            font-weight: bold;
+          }
 
-        .price {
-          -webkit-transition: background-color 3s ease-out;
-          -moz-transition: background-color 3s ease-out;
-          -o-transition: background-color 3s ease-out;
-          -ms-transition: background-color 3s ease-out;
-          transition: background-color 3s ease-out;
+          .down {
+            color: #b94a48;
+            font-weight: bold;
+          }
 
-          .currency {
+          .diff {
             margin-left: 5px;
+            font-size: 0.8em;
+            display: none;
+            &.up {
+              display: inline;
+              color: $green;
+            }
+
+            &.down {
+              display: inline;
+              color: $red;
+            }
           }
 
-          &.danger {
-            background-color: $red_background;
-            border-color: $red_border;
-          }
+          .price {
+            -webkit-transition: background-color 3s ease-out;
+            -moz-transition: background-color 3s ease-out;
+            -o-transition: background-color 3s ease-out;
+            -ms-transition: background-color 3s ease-out;
+            transition: background-color 3s ease-out;
 
-          &.success {
-            background-color: $green_background;
-            border-color: $green_border;
-          }
+            .key {
+              margin-left: 5px;
+            }
 
-          &.info {
-            background-color: $blue_background;
-            border-color: $blue_border;
+            &.danger {
+              background-color: $red_background;
+              border-color: $red_border;
+            }
+
+            &.success {
+              background-color: $green_background;
+              border-color: $green_border;
+            }
+
+            &.info {
+              background-color: $blue_background;
+              border-color: $blue_border;
+            }
           }
         }
       }

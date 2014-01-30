@@ -49,9 +49,9 @@ require(['jquery',
     function ($,Vm,Kernel,AppView,Test) {
         'use strict';
 
-        var version = "0.1";
+        var version = "0.1.1";
         //Production = 0
-        //debug.setLevel(0);
+        //debug.setLevel(4);
 
         /**
          * Inicializa configuracion del sistema
@@ -70,7 +70,7 @@ require(['jquery',
                     },
                     bitstamp : {
                         id : 2,
-                        name : 'Bitstmap',
+                        name : 'Bitstamp',
                         symbol : 'bitstamp',
                         iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
                         currencies : [ 'USD'],

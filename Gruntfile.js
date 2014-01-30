@@ -127,7 +127,8 @@ module.exports = function (grunt) {
                 httpGeneratedImagesPath: '/<%= yeoman.static %>/images/generated',
                 httpFontsPath: '/<%= yeoman.static %>/styles/fonts',
                 relativeAssets: false,
-                assetCacheBuster: false
+                assetCacheBuster: false,
+                debugInfo: false
             },
             dist: {
                 options: {

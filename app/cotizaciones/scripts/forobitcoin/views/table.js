@@ -4,29 +4,29 @@ define([
     'underscore',
     'events',
     'forobitcoin/env',
-    'text!forobitcoin/templates/column.html',
+    'text!forobitcoin/templates/row.html',
     'text!forobitcoin/templates/price.html'
-], function($,Backbone,_,Events,Env,ColumnTemplate,PriceTemplate){
+], function($,Backbone,_,Events,Env,RowTemplate,PriceTemplate){
 
-    var column = Backbone.View.extend({
-        tagName : 'td',
-        className : 'exchangerCell',
-        template : _.template(ColumnTemplate),
+    var row = Backbone.View.extend({
+        tagName : 'tr',
+        className : 'exchangerRow',
+        template : _.template(RowTemplate),
 
 
         initialize : function() {
             this.templatePrice = _.template(PriceTemplate);
             if (this.model === undefined){
-                throw new Error("[ColumnView] No model attached to this column");
+                throw new Error("[RowView] No model attached to this row");
             }
 
             this.model.on('change:'+Env.PROPERTY_TICKER_UPDATED,this.render,this);
 
-            debug.debug("[ColumnView] Initialized ColumnView");
+            debug.debug("[RowView] Initialized ColumnView");
         },
 
         render: function() {
-            this.el.id = "column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL);
+            this.el.id = "row-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL);
 
             this.$el.html(this.template({ticker : this.properties(), templatePrice : this.templatePrice}));
 
@@ -53,7 +53,7 @@ define([
                 var percentage = getPercentage(current,previous);
                 var absPercentage = Math.abs(percentage);
 
-                if (absPercentage > 1000){ //Una medida cautelar ante porcentajes muy grandfes
+                if (absPercentage > 1000){ //Una medida cautelar ante porcentajes muy grandes
                     percentage = 0;
                     absPercentage = 0;
                 }
@@ -69,9 +69,9 @@ define([
                 } else {
                     alert.price = current >= previous ? Env.CSS_SUCCESS : Env.CSS_ERROR;
 
-                    if (percentage < Env.DEFAULT_NORMAL_RATE && absPercentage > alertDown ){
+                    if (percentage < Env.DEFAULT_NORMAL_RATE && absPercentage > Env.DEFAULT_ALERT_DOWN_RATE ){
                         alert.alert = "down";
-                    }else if (percentage > Env.DEFAULT_NORMAL_RATE && absPercentage > alertUp) {
+                    }else if (percentage > Env.DEFAULT_NORMAL_RATE && absPercentage > Env.DEFAULT_ALERT_UP_RATE) {
                         alert.alert = "up";
                     }
                 }
@@ -87,9 +87,6 @@ define([
                 }
                 return result;
             }
-
-            var alertUp = Env.DEFAULT_ALERT_UP_RATE;
-            var alertDown = Env.DEFAULT_ALERT_DOWN_RATE;
 
             var attributes = {};
             attributes.name = this.model.get(Env.PROPERTY_TICKER_NAME);
@@ -114,7 +111,7 @@ define([
         },
 
         applyTransition: function(){
-            $("#column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL) + " span").each(function(){
+            $("#row-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL) + " span").each(function(){
                 $(this).removeClass(Env.CSS_SUCCESS + " " + Env.CSS_ERROR + " " + Env.CSS_NORMAL);
             });
         }
@@ -123,13 +120,13 @@ define([
 
 
     var table = Backbone.View.extend({
-        el : '#coinspider',
+        el : '#coinspider-table',
 
         initialize : function(){
             _(this).bindAll('add');
-            this._rendered = false;
-            this.columnViewClass = column;
-            this._columnViews = [];
+
+            this.rowViewClass = row;
+            this._rowViews = [];
             Events.on('fb-update-done',this.reload,this);
 
             debug.debug("[TableView] Initialized TableView");
@@ -144,26 +141,21 @@ define([
             }
 
             if (ticker !== undefined){
-                var columnView = new this.columnViewClass({
+                var rowView = new this.rowViewClass({
                     model : ticker
                 });
 
-                this._columnViews.push(columnView);
-
-                if (this._rendered) {
-                    debug.debug("[TableView] Adding column inside table ");
-                    $(this.el).find('tbody tr#exchangers').append(columnView.render().el);
-                }
+                this._rowViews.push(rowView);
             }
 
         },
 
         render : function() {
-            var $row = this.$el.find('tbody tr#exchangers');
-            $row.empty();
+            var $tbody = this.$el.find('tbody');
+            $tbody.empty();
 
-            _(this._columnViews).each(function(childView) {
-                $row.append(childView.render().el);
+            _(this._rowViews).each(function(childView) {
+                $tbody.append(childView.render().el);
             });
 
             return this;
@@ -172,8 +164,8 @@ define([
         reload : function(){
 
             debug.debug("[TableView] Reloading Exchangers");
-            if (this.collection.size() !== this._columnViews.length){
-                this._columnViews = []
+            if (this.collection.size() !== this._rowViews.length){
+                this._rowViews = []
                 this.collection.each(this.add);
             }
 
