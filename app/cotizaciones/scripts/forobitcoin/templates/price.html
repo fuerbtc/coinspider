@@ -1,4 +1,4 @@
-<td id="<%= symbol %><%= currency %>" class="trow1">
+<span id="<%= symbol %><%= currency %>" class="currency">
   <span class="price <%= price.css.price %> <%= price.css.alert %>">
       <% if (price.last < -1) { %>
         Offline
@@ -13,4 +13,4 @@
   </span>
 
   <span class="diff <%= price.css.alert %>"><i class="fa fa-arrow-<%= price.css.alert %>"></i>( <%= price.css.percentage %> %)</span></span>
-</td>
+</span>

@@ -181,14 +181,8 @@ module.exports = function (grunt) {
                         jquery: 'vendor/jquery-1.10.2.min',
                         backbone: 'vendor/backbone-1.0.0.min',
                         underscore: 'vendor/underscore-1.5.2.min',
-                        bootstrap : 'vendor/bootstrap-3.0.2.min',
                         localStorage : 'vendor/backbone.localStorage-1.1.7.min',
-                        crossdomain : 'vendor/jquery-xdomainajax-0.11',
-                        nouislider : 'vendor/jquery-nouislider-4.3.0.min',
-                        text : 'vendor/require-text-2.0.10.min',
-                        moment: 'vendor/moment-2.4.0.min',
-                        moment_es : 'vendor/moment_es-2.4.0',
-                        chosen : 'vendor/jquery-chosen-1.0.min'
+                        text : 'vendor/require-text-2.0.10.min'
                     }
                 }
             }
@@ -210,7 +204,7 @@ module.exports = function (grunt) {
                 dest: '<%= yeoman.dist %>'
             },
             //html: '<%= yeoman.app %>/index.html'
-            html: '<%= yeoman.tmp %>/index.html'
+            html: '<%= yeoman.tmp %>/table.html'
         },
         usemin: {
             options: {
@@ -308,8 +302,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         dot: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
+                        cwd: '<%= yeoman.app %>/<%= yeoman.static %>',
+                        dest: '<%= yeoman.dist %>/<%= yeoman.static %>',
                         src: [
                             '*.{ico,png,txt}',
                             '.htaccess',

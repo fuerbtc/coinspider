@@ -7,6 +7,8 @@ $green : #468847;
 $green_background : #dff0d8;
 $green_border : #d6e9c6;
 
+$gray_forobitcoin : #f5f5f5;
+
 $red : #b94a48;
 $red_background : #f2dede;
 $red_border : #eed3d7;
@@ -35,6 +37,7 @@ $blue_border : #bce8f1;
 
 
 #coinspider {
+  width:100%;
   thead{
     tr{
       td:nth-child(1){
@@ -48,8 +51,11 @@ $blue_border : #bce8f1;
 
   tbody {
     tr#coinspider-container{
+      background-color: $gray_forobitcoin;
+
       td {
         padding: 0;
+        text-align: center;
       }
     }
   }
@@ -57,68 +63,78 @@ $blue_border : #bce8f1;
   #coinspider-table {
     width: 100%;
     border-spacing: 0;
+    min-height: 30px;
+
     tbody {
       tr {
-        background-color: #f5f5f5;
+        background-color: $gray_forobitcoin;
 
-        td.symbol {
-          img { width: 16px;}
-        }
-
-        td:not(.tcat) {
-          padding: 0 1em 0 1em;
-          text-align: center;
-
-          .up {
-            color: #468847;
-            font-weight: bold;
+        td {
+          span.symbol {
+            img { width: 16px;}
+            padding: 0 0.5em;
+            vertical-align: middle;
+            display: inline-block;
           }
 
-          .down {
-            color: #b94a48;
-            font-weight: bold;
-          }
+          span.currency {
+            text-align: center;
+            vertical-align: middle;
 
-          .diff {
-            margin-left: 5px;
-            font-size: 0.8em;
-            display: none;
-            &.up {
-              display: inline;
+            .up {
               color: $green;
+              font-weight: bold;
             }
 
-            &.down {
-              display: inline;
+            .down {
               color: $red;
+              font-weight: bold;
+            }
+
+            .diff {
+              font-size: 0.8em;
+              display: none;
+              &.up {
+                display: inline;
+                color: $green;
+              }
+
+              &.down {
+                display: inline;
+                color: $red;
+              }
+            }
+
+            .price {
+              -webkit-transition: background-color 3s ease-out;
+              -moz-transition: background-color 3s ease-out;
+              -o-transition: background-color 3s ease-out;
+              -ms-transition: background-color 3s ease-out;
+              transition: background-color 3s ease-out;
+
+              .key {
+
+              }
+
+              &.danger {
+                background-color: $red_background;
+                border-color: $red_border;
+              }
+
+              &.success {
+                background-color: $green_background;
+                border-color: $green_border;
+              }
+
+              &.info {
+                background-color: $blue_background;
+                border-color: $blue_border;
+              }
             }
           }
 
-          .price {
-            -webkit-transition: background-color 3s ease-out;
-            -moz-transition: background-color 3s ease-out;
-            -o-transition: background-color 3s ease-out;
-            -ms-transition: background-color 3s ease-out;
-            transition: background-color 3s ease-out;
-
-            .key {
-              margin-left: 5px;
-            }
-
-            &.danger {
-              background-color: $red_background;
-              border-color: $red_border;
-            }
-
-            &.success {
-              background-color: $green_background;
-              border-color: $green_border;
-            }
-
-            &.info {
-              background-color: $blue_background;
-              border-color: $blue_border;
-            }
+          span.currency:not(:last-child):after {
+            content: "  /  ";
           }
         }
       }

@@ -7,7 +7,7 @@ define([],function(){
         //LocalStorage Collections
         STORAGE_TICKERS  : 'forobitcoin-ls-tickers',
         STORAGE_CONFIG : 'forobitcoin-ls-config',
-        DEFAULT_SCALE_DECIMAL : 3,
+        DEFAULT_SCALE_DECIMAL : 2,
         DEFAULT_NORMAL_RATE : 0,
         DEFAULT_ALERT_UP_RATE : 0,
         DEFAULT_ALERT_DOWN_RATE : 0,

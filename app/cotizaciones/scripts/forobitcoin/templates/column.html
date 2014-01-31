@@ -1,4 +1,6 @@
-<h3> <%= ticker.name %> <img src="<%= ticker.iconUrl %>" /> </h3>
+<span class="symbol">
+  <img src="<%= ticker.iconUrl %>" title="<%= ticker.name %>"/>
+</span>
 
 <% for (var currency in ticker.markets) {
     if (ticker.markets.hasOwnProperty(currency)) {
@@ -6,5 +8,3 @@
     <%= templatePrice({ currency : currency , symbol: ticker.symbol, price : ticker.markets[currency]}) %>
 <% }
 } %>
-
-

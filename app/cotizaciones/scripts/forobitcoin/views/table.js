@@ -4,20 +4,20 @@ define([
     'underscore',
     'events',
     'forobitcoin/env',
-    'text!forobitcoin/templates/row.html',
+    'text!forobitcoin/templates/column.html',
     'text!forobitcoin/templates/price.html'
 ], function($,Backbone,_,Events,Env,RowTemplate,PriceTemplate){
 
-    var row = Backbone.View.extend({
-        tagName : 'tr',
-        className : 'exchangerRow',
+    var column = Backbone.View.extend({
+        tagName : 'td',
+        className : 'trow1',
         template : _.template(RowTemplate),
 
 
         initialize : function() {
             this.templatePrice = _.template(PriceTemplate);
             if (this.model === undefined){
-                throw new Error("[RowView] No model attached to this row");
+                throw new Error("[RowView] No model attached to this column");
             }
 
             this.model.on('change:'+Env.PROPERTY_TICKER_UPDATED,this.render,this);
@@ -26,7 +26,7 @@ define([
         },
 
         render: function() {
-            this.el.id = "row-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL);
+            this.el.id = "column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL);
 
             this.$el.html(this.template({ticker : this.properties(), templatePrice : this.templatePrice}));
 
@@ -111,7 +111,7 @@ define([
         },
 
         applyTransition: function(){
-            $("#row-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL) + " span").each(function(){
+            $("#column-" + this.model.get(Env.PROPERTY_TICKER_SYMBOL) + " span").each(function(){
                 $(this).removeClass(Env.CSS_SUCCESS + " " + Env.CSS_ERROR + " " + Env.CSS_NORMAL);
             });
         }
@@ -125,8 +125,8 @@ define([
         initialize : function(){
             _(this).bindAll('add');
 
-            this.rowViewClass = row;
-            this._rowViews = [];
+            this.columnViewClass = column;
+            this._columnViews = [];
             Events.on('fb-update-done',this.reload,this);
 
             debug.debug("[TableView] Initialized TableView");
@@ -141,20 +141,20 @@ define([
             }
 
             if (ticker !== undefined){
-                var rowView = new this.rowViewClass({
+                var columnView = new this.columnViewClass({
                     model : ticker
                 });
 
-                this._rowViews.push(rowView);
+                this._columnViews.push(columnView);
             }
 
         },
 
         render : function() {
-            var $tbody = this.$el.find('tbody');
+            var $tbody = this.$el.find('tbody tr');
             $tbody.empty();
 
-            _(this._rowViews).each(function(childView) {
+            _(this._columnViews).each(function(childView) {
                 $tbody.append(childView.render().el);
             });
 
@@ -164,8 +164,8 @@ define([
         reload : function(){
 
             debug.debug("[TableView] Reloading Exchangers");
-            if (this.collection.size() !== this._rowViews.length){
-                this._rowViews = []
+            if (this.collection.size() !== this._columnViews.length){
+                this._columnViews = []
                 this.collection.each(this.add);
             }
 

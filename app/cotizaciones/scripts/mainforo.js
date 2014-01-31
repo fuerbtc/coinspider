@@ -22,11 +22,22 @@ require.config({
 
     paths: {
         jquery: ['//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min','vendor/jquery-1.10.2.min'],
-        backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min','vendor/backbone-1.0.0.min'],
         underscore: ['//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min','vendor/underscore-1.5.2.min'],
-        localStorage : ['//cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.0/backbone.localStorage-min','vendor/backbone.localStorage-1.1.7.min'],
+        backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min','vendor/backbone-1.0.0.min'],
+        localStorage : ['vendor/backbone.localStorage-1.1.7.min'],
         text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','vendor/require-text-2.0.10.min']
     },
+    map: {
+        // '*' means all modules will get 'jquery-private'
+        // for their 'jquery' dependency.
+        '*': { 'jquery': 'jquery-private' },
+
+        // 'jquery-private' wants the real jQuery module
+        // though. If this line was not here, there would
+        // be an unresolvable cyclic dependency.
+        'jquery-private': { 'jquery': 'jquery' }
+    },
+
     shim: {
         underscore: {
             exports: '_'
@@ -37,6 +48,11 @@ require.config({
                 'jquery'
             ],
             exports: 'Backbone'
+        },
+        localStorage: {
+            deps: [
+                'backbone',
+            ]
         }
     }
 });
@@ -51,7 +67,7 @@ require(['jquery',
 
         var version = "0.1.1";
         //Production = 0
-        //debug.setLevel(4);
+        debug.setLevel(0);
 
         /**
          * Inicializa configuracion del sistema
@@ -65,14 +81,14 @@ require(['jquery',
                         id : 1,
                         name : 'Mt.Gox',
                         symbol : 'mtgox',
-                        iconUrl : 'https://www.mtgox.com/favicon.ico',
+                        iconUrl : 'cotizaciones/images/mtgox.png',
                         currencies : [ 'USD', 'EUR' ]
                     },
                     bitstamp : {
                         id : 2,
                         name : 'Bitstamp',
                         symbol : 'bitstamp',
-                        iconUrl : 'https://www.bitstamp.net/s/icons/favicon.ico',
+                        iconUrl : 'cotizaciones/images/bitstamp.png',
                         currencies : [ 'USD'],
                         exchanges : {
                             official : 'USD',
@@ -83,14 +99,14 @@ require(['jquery',
                         id : 3,
                         name : 'Btc-e',
                         symbol : 'btce',
-                        iconUrl : 'https://btc-e.com/favicon.ico',
+                        iconUrl : 'cotizaciones/images/btce.png',
                         currencies : [ 'USD','EUR']
                     },
                     btcchina : {
                         id : 4,
                         name : 'BTCChina',
                         symbol : 'btcchina',
-                        iconUrl : 'https://vip.btcchina.com/img/favicon.ico?v=2',
+                        iconUrl : 'cotizaciones/images/btcchina.png',
                         currencies  : [ 'CNY' ],
                         exchanges : {
                             official : 'CNY',
